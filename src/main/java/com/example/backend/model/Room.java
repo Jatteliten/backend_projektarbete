@@ -1,4 +1,4 @@
 package com.example.backend.model;
 
-public class RoomController {
+public class Room {
 }
