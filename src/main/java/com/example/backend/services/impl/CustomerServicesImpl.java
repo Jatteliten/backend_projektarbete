@@ -12,6 +12,7 @@ import com.example.backend.services.CustomerServices;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,5 +61,20 @@ public class CustomerServicesImpl implements CustomerServices {
 
     public DetailedCustomerDto getDetailedCustomerById(Long id){
         return customerToDetailedCustomerDto(cr.findById(id).get());
+    }
+
+    @Override
+    public void addCustomer(DetailedCustomerDto detailedCustomerDto) {
+        cr.save(detailedCustomerDtoToCustomer(detailedCustomerDto));
+    }
+
+    @Override
+    public void deleteCustomer(DetailedCustomerDto detailedCustomerDto) {
+        Optional<Customer> optionalCustomer = cr.findById(detailedCustomerDto.getId());
+        if (optionalCustomer.isPresent()) {
+            cr.deleteById(detailedCustomerDto.getId());
+        } else {
+            //lägg till ev felmeddelande
+        }
     }
 }

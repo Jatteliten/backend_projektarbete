@@ -2,6 +2,7 @@ package com.example.backend.services.impl;
 
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
+import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
@@ -13,6 +14,7 @@ import com.example.backend.services.BookingServices;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingServicesImpl implements BookingServices {
@@ -60,5 +62,20 @@ public class BookingServicesImpl implements BookingServices {
 
     public DetailedBookingDto getDetailedBookingById(Long id){
         return bookingToDetailedBookingDto(br.findById(id).get());
+    }
+
+    @Override
+    public void addBooking(DetailedBookingDto detailedBookingDto) {
+        br.save(detailedBookingDtoToBooking(detailedBookingDto));
+    }
+
+    @Override
+    public void deleteBooking(DetailedBookingDto detailedBookingDto) {
+        Optional<Booking> optionalBooking = br.findById(detailedBookingDto.getId());
+        if (optionalBooking.isPresent()) {
+            cr.deleteById(detailedBookingDto.getId());
+        } else {
+            //lägg till ev felmeddelande
+        }
     }
 }
