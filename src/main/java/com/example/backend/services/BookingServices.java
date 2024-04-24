@@ -19,9 +19,9 @@ public class BookingServices {
     }
 
     public DetailedBookingDto BookingToDetailedBookingDto(Booking b){
-        return DetailedBookingDto.builder().id(b.getId()).beds(b.getExtraBeds())
+        return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
                 .startDate(b.getStartDate()).endDate(b.getEndDate())
-                .miniRoom(new MiniRoomDto())
+                .miniRoom(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
                 .miniCustomer(new MiniCustomerDto());
         id, beds, start date, end date, MiniRoom, MiniCustomer
     }
