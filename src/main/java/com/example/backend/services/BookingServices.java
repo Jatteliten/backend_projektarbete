@@ -1,10 +1,11 @@
 package com.example.backend.services;
 
-import com.example.backend.Dto.DetailedBookingDto;
-import com.example.backend.Dto.MiniBookingDto;
-import com.example.backend.Dto.MiniCustomerDto;
-import com.example.backend.Dto.MiniRoomDto;
+import com.example.backend.Dto.BookingViews.DetailedBookingDto;
+import com.example.backend.Dto.BookingViews.MiniBookingDto;
+import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
+import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
+import com.example.backend.model.Customer;
 import com.example.backend.repos.BookingRepo;
 import org.springframework.stereotype.Service;
 
@@ -18,23 +19,33 @@ public class BookingServices {
         this.br = br;
     }
 
-    public DetailedBookingDto BookingToDetailedBookingDto(Booking b){
+    public DetailedBookingDto bookingToDetailedBookingDto(Booking b){
         return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
                 .startDate(b.getStartDate()).endDate(b.getEndDate())
-                .miniRoom(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
-                .miniCustomer(new MiniCustomerDto());
-        id, beds, start date, end date, MiniRoom, MiniCustomer
+                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
+                .miniCustomerDto(createMiniCustomerDtoFromBookingCustomer(b.getCustomer())).build();
     }
 
-    public MiniBookingDto BookingToMiniBookingDto(Booking b){
+    public MiniBookingDto bookingToMiniBookingDto(Booking b){
         return MiniBookingDto.builder().id(b.getId()).startDate(b.getStartDate())
                 .endDate(b.getEndDate())
-                .miniRoom(new MiniRoomDto())
-                .miniCustomer(new MiniCustomerDto());
-        id, start date, end date, MiniRoom, MiniCustomer
+                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
+                .miniCustomerDto(createMiniCustomerDtoFromBookingCustomer(b.getCustomer())).build();
+    }
+
+    private MiniCustomerDto createMiniCustomerDtoFromBookingCustomer(Customer c){
+        return new MiniCustomerDto(c.getId(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPhoneNumber());
     }
 
     public List<DetailedBookingDto> getAllDetailedBookings(){
-        br.findAll().stream().map(b -> BookingToDetailedBookingDto(b)).toList();
+        return br.findAll().stream().map(b -> bookingToDetailedBookingDto(b)).toList();
+    }
+
+    public List<MiniBookingDto> getAllMiniBookings(){
+        return br.findAll().stream().map(b -> bookingToMiniBookingDto(b)).toList();
+    }
+
+    public DetailedBookingDto getDetailedBookingById(Long id){
+        return bookingToDetailedBookingDto(br.findById(id).get());
     }
 }
