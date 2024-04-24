@@ -1,4 +1,4 @@
-package com.example.backend.Dto;
+package com.example.backend.Dto.CustomerViews;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MiniCustomerDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
 }

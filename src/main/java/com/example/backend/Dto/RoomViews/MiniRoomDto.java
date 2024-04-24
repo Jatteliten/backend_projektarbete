@@ -1,4 +1,4 @@
-package com.example.backend.Dto;
+package com.example.backend.Dto.RoomViews;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DetailedBookingDto {
+public class MiniRoomDto {
+    private Long id;
+    private int size;
 }
