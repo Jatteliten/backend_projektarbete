@@ -12,7 +12,7 @@ public class CustomerControllerIsCreatedTest {
     private CustomerController customerController;
 
     @Test
-    public void contextLoads(){
+    public void contextLoads() throws Exception{
         assertThat(customerController).isNotNull();
     }
 }

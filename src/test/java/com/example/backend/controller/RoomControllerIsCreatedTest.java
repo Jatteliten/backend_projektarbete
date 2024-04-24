@@ -12,7 +12,7 @@ public class RoomControllerIsCreatedTest {
     private RoomController roomController;
 
     @Test
-    public void contextLoad(){
+    public void contextLoad() throws Exception{
         assertThat(roomController).isNotNull();
     }
 }
