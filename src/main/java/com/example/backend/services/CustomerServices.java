@@ -41,7 +41,7 @@ public class CustomerServices {
     }
 
     private List<Booking> createBookingListFromMiniBookingsDtoList(List<MiniBookingDtoForCustomer> b){
-        return b.stream().map(bb -> br.findById(bb.getId()).get()).collect(Collectors.toList());
+        return b.stream().map(bb -> br.findById(bb.getId()).get()).toList();
     }
 
     private List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b){
