@@ -2,8 +2,6 @@ package com.example.backend.controller;
 
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
-import com.example.backend.model.Booking;
-import com.example.backend.repos.BookingRepo;
 import com.example.backend.services.BookingServices;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

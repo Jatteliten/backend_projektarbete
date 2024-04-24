@@ -1,7 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.Dto.BookingViews.DetailedBookingDto;
-import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.services.CustomerServices;

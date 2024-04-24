@@ -1,11 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
-import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.DetailedRoomDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
-import com.example.backend.model.Room;
-import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.RoomServices;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
