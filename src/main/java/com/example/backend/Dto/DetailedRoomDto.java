@@ -1,4 +1,4 @@
-package Dto;
+package com.example.backend.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DetailedBookingDto {
+public class DetailedRoomDto {
 }
