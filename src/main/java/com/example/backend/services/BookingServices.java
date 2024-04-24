@@ -6,13 +6,11 @@ import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
-import com.example.backend.model.Room;
 import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
