@@ -2,7 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
-import com.example.backend.services.BookingServices;
+import com.example.backend.services.impl.BookingServicesImpl;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,9 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/booking")
 public class BookingController {
-    private final BookingServices bs;
+    private final BookingServicesImpl bs;
 
-    public BookingController(BookingServices bs){
+    public BookingController(BookingServicesImpl bs){
         this.bs = bs;
     }
 
