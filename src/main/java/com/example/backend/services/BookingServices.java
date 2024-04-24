@@ -32,14 +32,14 @@ public class BookingServices {
         return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
                 .startDate(b.getStartDate()).endDate(b.getEndDate())
                 .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
-                .miniCustomerDto(createMiniCustomerDtoFromBookingCustomer(b.getCustomer())).build();
+                .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 
     public MiniBookingDto bookingToMiniBookingDto(Booking b){
         return MiniBookingDto.builder().id(b.getId()).startDate(b.getStartDate())
                 .endDate(b.getEndDate())
                 .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
-                .miniCustomerDto(createMiniCustomerDtoFromBookingCustomer(b.getCustomer())).build();
+                .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 
     public Booking detailedBookingDtoToBooking(DetailedBookingDto b){
@@ -48,7 +48,7 @@ public class BookingServices {
                 .customer(cr.findById(b.getMiniCustomerDto().getId()).get()).build();
     }
 
-    private MiniCustomerDto createMiniCustomerDtoFromBookingCustomer(Customer c){
+    private MiniCustomerDto createMiniCustomerDtoFromCustomer(Customer c){
         return new MiniCustomerDto(c.getId(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPhoneNumber());
     }
 
