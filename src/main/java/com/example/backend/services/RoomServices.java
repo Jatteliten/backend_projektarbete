@@ -31,4 +31,8 @@ public class RoomServices {
     public List<MiniRoomDto> getAllMiniRooms(){
         return rr.findAll().stream().map(r -> roomToMiniRoomDto(r)).toList();
     }
+
+    public DetailedRoomDto getDetailedRoomById(Long id){
+        return roomToDetailedRoomDto(rr.findById(id).get());
+    }
 }

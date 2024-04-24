@@ -1,6 +1,5 @@
 package com.example.backend.services;
 
-import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDtoForCustomer;
 import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
@@ -43,5 +42,9 @@ public class CustomerServices {
 
     public List<MiniCustomerDto> getAllMiniCustomers(){
         return cr.findAll().stream().map(c -> customerToMiniCustomerDto(c)).toList();
+    }
+
+    public DetailedCustomerDto getDetailedCustomerById(Long id){
+        return customerToDetailedCustomerDto(cr.findById(id).get());
     }
 }
