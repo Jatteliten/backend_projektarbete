@@ -6,6 +6,7 @@ import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
+import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerServices {
     private final CustomerRepo cr;
+    private final BookingRepo br;
 
-    public CustomerServices(CustomerRepo cr){
+    public CustomerServices(CustomerRepo cr, BookingRepo br){
         this.cr = cr;
+        this.br = br;
     }
 
     public DetailedCustomerDto customerToDetailedCustomerDto(Customer c){
@@ -29,6 +32,16 @@ public class CustomerServices {
     public MiniCustomerDto customerToMiniCustomerDto(Customer c){
         return MiniCustomerDto.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
                 .email(c.getEmail()).phoneNumber(c.getPhoneNumber()).build();
+    }
+
+    public Customer detailedCustomerDtoToCustomer(DetailedCustomerDto c){
+        return Customer.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
+                .email(c.getEmail()).phoneNumber(c.getPhoneNumber())
+                .bookings(createBookingListFromMiniBookingsDtoList(c.getMiniBookingDto())).build();
+    }
+
+    private List<Booking> createBookingListFromMiniBookingsDtoList(List<MiniBookingDtoForCustomer> b){
+        return b.stream().map(bb -> br.findById(bb.getId()).get()).collect(Collectors.toList());
     }
 
     private List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b){

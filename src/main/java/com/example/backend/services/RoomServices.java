@@ -24,6 +24,10 @@ public class RoomServices {
         return MiniRoomDto.builder().id(r.getId()).size(r.getSize()).build();
     }
 
+    public Room detailedRoomDtoToRoom(DetailedRoomDto r){
+        return Room.builder().id(r.getId()).size(r.getSize()).build();
+    }
+
     public List<DetailedRoomDto> getAllDetailedRooms(){
         return rr.findAll().stream().map(r -> roomToDetailedRoomDto(r)).toList();
     }

@@ -6,17 +6,26 @@ import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
+import com.example.backend.model.Room;
 import com.example.backend.repos.BookingRepo;
+import com.example.backend.repos.CustomerRepo;
+import com.example.backend.repos.RoomRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class BookingServices {
     private final BookingRepo br;
 
-    public BookingServices(BookingRepo br){
+    private final CustomerRepo cr;
+    private final RoomRepo rr;
+
+    public BookingServices(BookingRepo br, CustomerRepo cr, RoomRepo rr){
         this.br = br;
+        this.cr = cr;
+        this.rr = rr;
     }
 
     public DetailedBookingDto bookingToDetailedBookingDto(Booking b){
@@ -31,6 +40,12 @@ public class BookingServices {
                 .endDate(b.getEndDate())
                 .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
                 .miniCustomerDto(createMiniCustomerDtoFromBookingCustomer(b.getCustomer())).build();
+    }
+
+    public Booking detailedBookingDtoToBooking(DetailedBookingDto b){
+        return Booking.builder().id(b.getId()).startDate(b.getStartDate()).endDate(b.getEndDate())
+                .extraBeds(b.getExtraBeds()).room(rr.findById(b.getMiniRoomDto().getId()).get())
+                .customer(cr.findById(b.getMiniCustomerDto().getId()).get()).build();
     }
 
     private MiniCustomerDto createMiniCustomerDtoFromBookingCustomer(Customer c){
