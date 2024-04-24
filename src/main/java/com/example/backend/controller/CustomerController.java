@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.repos.CustomerRepository;
+import com.example.backend.repos.CustomerRepo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerRepo customerRepo;
 
-    public CustomerController(CustomerRepository customerRepository){
-        this.customerRepository = customerRepository;
+    public CustomerController(CustomerRepo customerRepo){
+        this.customerRepo = customerRepo;
     }
 
 
