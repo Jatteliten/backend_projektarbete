@@ -64,15 +64,14 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     @Override
-    public void addCustomer(DetailedCustomerDto detailedCustomerDto) {
-        cr.save(detailedCustomerDtoToCustomer(detailedCustomerDto));
+    public void addCustomer(Customer c) {
+        cr.save(c);
     }
 
     @Override
-    public void deleteCustomer(DetailedCustomerDto detailedCustomerDto) {
-        Optional<Customer> optionalCustomer = cr.findById(detailedCustomerDto.getId());
-        if (optionalCustomer.isPresent()) {
-            cr.deleteById(detailedCustomerDto.getId());
+    public void deleteCustomer(Customer c) {
+        if (c != null) {
+            cr.delete(c);
         } else {
             //lägg till ev felmeddelande
         }

@@ -13,6 +13,6 @@ public interface BookingServices {
     public List<DetailedBookingDto> getAllDetailedBookings();
     public List<MiniBookingDto> getAllMiniBookings();
     public DetailedBookingDto getDetailedBookingById(Long id);
-    public void addBooking(DetailedBookingDto detailedBookingDto);
-    public void deleteBooking(DetailedBookingDto detailedBookingDto);
+    public void addBooking(Booking b);
+    public void deleteBooking(Booking b);
 }

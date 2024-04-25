@@ -14,6 +14,6 @@ public interface CustomerServices {
     public List<DetailedCustomerDto> getAllDetailedCustomers();
     public List<MiniCustomerDto> getAllMiniCustomers();
     public DetailedCustomerDto getDetailedCustomerById(Long id);
-    public void addCustomer(DetailedCustomerDto detailedCustomerDto);
-    public void deleteCustomer(DetailedCustomerDto detailedCustomerDto);
+    public void addCustomer(Customer c);
+    public void deleteCustomer(Customer c);
 }

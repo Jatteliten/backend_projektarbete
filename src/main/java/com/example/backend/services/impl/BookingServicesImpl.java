@@ -64,15 +64,14 @@ public class BookingServicesImpl implements BookingServices {
     }
 
     @Override
-    public void addBooking(DetailedBookingDto detailedBookingDto) {
-        br.save(detailedBookingDtoToBooking(detailedBookingDto));
+    public void addBooking(Booking b) {
+        br.save(b);
     }
 
     @Override
-    public void deleteBooking(DetailedBookingDto detailedBookingDto) {
-        Optional<Booking> optionalBooking = br.findById(detailedBookingDto.getId());
-        if (optionalBooking.isPresent()) {
-            cr.deleteById(detailedBookingDto.getId());
+    public void deleteBooking(Booking b) {
+        if (b != null) {
+            br.delete(b);
         } else {
             //lägg till ev felmeddelande
         }
