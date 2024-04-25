@@ -1,6 +1,5 @@
 package com.example.backend.Dto.CustomerViews;
 
-import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDtoForCustomer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
