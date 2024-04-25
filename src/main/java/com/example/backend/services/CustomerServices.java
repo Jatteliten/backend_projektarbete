@@ -1,6 +1,5 @@
 package com.example.backend.services;
 
-import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.model.Customer;
@@ -16,4 +15,5 @@ public interface CustomerServices {
     public DetailedCustomerDto getDetailedCustomerById(Long id);
     public void addCustomer(Customer c);
     public void deleteCustomer(Customer c);
+
 }

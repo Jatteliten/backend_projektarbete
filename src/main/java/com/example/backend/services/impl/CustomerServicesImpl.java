@@ -76,4 +76,9 @@ public class CustomerServicesImpl implements CustomerServices {
             //lägg till ev felmeddelande
         }
     }
+
+    public Customer findByEmail(String email){
+        return cr.findByEmail(email);
+    }
+
 }
