@@ -6,12 +6,14 @@ import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
+import com.example.backend.model.Room;
 import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,5 +77,46 @@ public class BookingServicesImpl implements BookingServices {
         } else {
             //lägg till ev felmeddelande
         }
+    }
+
+    public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate){
+        if (beds == null || startDate== null || endDate == null  ) return rr.findAll();
+
+
+        List<Room> occupiedRooms = br.findAll().stream()
+                .filter(b -> checkNotAvailable(b,startDate,endDate))
+                .map(b -> b.getRoom()).toList();
+
+        List<Room> availableRooms = rr.findAll().stream().filter( room -> !occupiedRooms.contains(room)
+        ).toList();
+
+
+        return availableRooms.stream().filter(room -> room.getSize() >= beds+extraBeds).toList();
+    }
+
+    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
+        if ((startDate.isBefore(booking.getEndDate()) || startDate.equals(booking.getEndDate())) &&
+                (endDate.isAfter(booking.getStartDate()) || endDate.equals(booking.getStartDate()))) {
+            return true;
+        }
+        return false;
+    }
+
+    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
+        Customer bookingCustomer = cr.findByEmail(email);
+        Room room = rr.findById(roomId).get();
+
+        br.save(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+
+    }
+    private int calculateExtraBeds(Room room){
+        return switch (room.getSize()){
+            case 1 -> 0;
+            case 2 -> 0;
+            case 3 -> 1;
+            case 4 -> 2;
+            default -> 0;
+        };
+
     }
 }
