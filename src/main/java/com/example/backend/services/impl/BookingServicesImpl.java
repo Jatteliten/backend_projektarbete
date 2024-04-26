@@ -13,7 +13,6 @@ import com.example.backend.services.BookingServices;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookingServicesImpl implements BookingServices {
@@ -75,5 +74,9 @@ public class BookingServicesImpl implements BookingServices {
         } else {
             //lägg till ev felmeddelande
         }
+    }
+
+    public Booking findById(Long id){
+        return br.findById(id).get();
     }
 }
