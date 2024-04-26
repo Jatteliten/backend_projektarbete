@@ -6,8 +6,9 @@
 </head>
 <body>
 
-<h2>Fill Out Form To Update</h2>
-<form action="/Customer/update/final" method="post">
+<h2 th:text="${validationMess}">Fill Out Form To Update</h2>
+
+<form action="/Customer/update/final" method="post" onsubmit="return validateForm()">
     <!-- För att man inte ska råka ändra Id är den hidden -->
     <input type="hidden" id="id" name="id" th:value="${id}">
 
@@ -26,5 +27,44 @@
     <input type="submit" value="Update"><br>
 </form>
 
+<script>
+    function validateForm() {
+        const fName = document.getElementById("fName").value;
+        const lName = document.getElementById("lName").value;
+        const email = document.getElementById("email").value;
+        const phoneNr = document.getElementById("phoneNr").value;
+
+        const letterPattern = /^[A-Za-z]+$/;
+
+        if (!letterPattern.test(fName) || !letterPattern.test(lName)) {
+            alert("First Name and Last Name must contain only letters!");
+            return false;
+        }
+
+        if (fName.length < 2 || lName.length < 2) {
+            alert("First Name and Last Name must be at least two characters long!");
+            return false;
+        }
+
+        const emailPattern = /@/;
+        if (!emailPattern.test(email)) {
+            alert("Email must contain '@'!");
+            return false;
+        }
+
+        const phonePattern = /^(07|\+46)\d+$/;
+        if (!phonePattern.test(phoneNr)) {
+            alert("Phone Number must start with '07' or '+46' and contain only numbers!");
+            return false;
+        }
+
+        if (fName === "" || lName === "" || email === "" || phoneNr === "") {
+            alert("All fields are required!");
+            return false;
+        }
+        return true;
+    }
+
+</script>
 </body>
 </html>
