@@ -6,13 +6,19 @@ import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
+import com.example.backend.model.Room;
 import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingServicesImpl implements BookingServices {
@@ -74,6 +80,55 @@ public class BookingServicesImpl implements BookingServices {
         } else {
             //lägg till ev felmeddelande
         }
+    }
+
+    public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate){
+        if (beds == null || startDate== null || endDate == null  ) return Collections.emptyList();
+
+
+        List<Room> occupiedRooms = br.findAll().stream()
+                .filter(b -> checkNotAvailable(b,startDate,endDate))
+                .map(b -> b.getRoom()).toList();
+
+        List<Room> availableRooms = rr.findAll().stream().filter( room -> !occupiedRooms.contains(room)
+        ).toList();
+
+
+        return availableRooms.stream().filter(room -> room.getSize() >= beds+extraBeds).toList();
+    }
+
+    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
+
+        LocalDate bookedStartDate = booking.getStartDate();
+        LocalDate bookedEndDate = booking.getEndDate();
+
+        boolean isStartWithin = !startDate.isBefore(bookedStartDate) && !startDate.isAfter(bookedEndDate);
+        boolean isEndWithin = !endDate.isBefore(bookedStartDate) && !endDate.isAfter(bookedEndDate);
+
+        boolean isBookedStartWithin = !bookedStartDate.isBefore(startDate) && !bookedStartDate.isAfter(endDate);
+        boolean isBookedEndWithin = !bookedEndDate.isBefore(startDate) && !bookedEndDate.isAfter(endDate);
+
+        return isStartWithin || isEndWithin || isBookedStartWithin || isBookedEndWithin;
+
+    }
+
+    @Modifying
+    @Transactional
+    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
+        Customer bookingCustomer = cr.findByEmail(email);
+        Room room = rr.findById(roomId).get();
+        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+        cr.save(bookingCustomer);
+    }
+    private int calculateExtraBeds(Room room){
+        return switch (room.getSize()){
+            case 1 -> 0;
+            case 2 -> 0;
+            case 3 -> 1;
+            case 4 -> 2;
+            default -> 0;
+        };
+
     }
 
     public Booking findById(Long id){

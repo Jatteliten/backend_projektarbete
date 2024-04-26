@@ -1,13 +1,17 @@
 package com.example.backend;
 
+import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
+import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -18,9 +22,10 @@ public class BackendApplication {
 
 
     @Bean
-    public CommandLineRunner commandLineRunner(RoomRepo roomRepo, CustomerRepo customerRepo) {
+    public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
 
+            /*
             Room r1 = new Room(1);
             Room r2 = new Room(1);
             Room r3 = new Room(1);
@@ -43,13 +48,21 @@ public class BackendApplication {
             roomRepo.save(r9);
             roomRepo.save(r10);
 
-            Customer c1 = new Customer(1, "Lise", "Martinsen", "test@gmail.com", "072552322");
-            Customer c2 = new Customer(2, "Filip", "Martinsen", "test2@gmail.com", "1234567");
-            Customer c3 = new Customer(3, "Anna", "Martinsen", "test3@gmail.com", "0986543");
+            Customer c1 = new Customer("Daniel", "Isaksson", "Daniel@hej.se", "0000");
 
-            customerRepo.save(c1);
-            customerRepo.save(c2);
-            customerRepo.save(c3);
+            cr.save(c1);
+
+            Booking b1 = new Booking(LocalDate.of(2022, 10, 10),
+                    LocalDate.of(2022, 10, 12), 1, r1, c1);
+
+            Booking b2 = new Booking(LocalDate.of(2022, 11, 11),
+                    LocalDate.of(2022, 11, 16), 1, r1, c1);
+
+            br.save(b1);
+            br.save(b2);
+             */
+
+
 
         });
     }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,11 @@ public class CustomerServicesImpl implements CustomerServices {
 
     public MiniCustomerDto customerToMiniCustomerDto(Customer c) {
         return MiniCustomerDto.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
+                .email(c.getEmail()).phoneNumber(c.getPhoneNumber()).build();
+    }
+
+    public Customer miniCustomerDtoToCustomer(MiniCustomerDto c) {
+        return Customer.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
                 .email(c.getEmail()).phoneNumber(c.getPhoneNumber()).build();
     }
 
@@ -83,6 +89,23 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     @Override
+    public MiniCustomerDto getMiniCustomerById(Long id) {
+        Customer customer = cr.findById(id).get();
+        return customerToMiniCustomerDto(customer);
+    }
+
+    @Override
+    public void updateCustomer(Long id, String fName, String lName, String email, String phoneNr) {
+        Customer customer = cr.findById(id).get();
+        customer.setFirstName(fName.trim());
+        customer.setLastName(lName.trim());
+        customer.setEmail(email.trim());
+        customer.setPhoneNumber(phoneNr.trim());
+
+        cr.save(customer);
+    }
+
+    @Override
     public void addCustomer(Customer c) {
         cr.save(c);
     }
@@ -100,7 +123,6 @@ public class CustomerServicesImpl implements CustomerServices {
             //lägg till ev felmeddelande
         }
     }
-
     public Customer findByEmail(String email){
         return cr.findByEmail(email);
     }

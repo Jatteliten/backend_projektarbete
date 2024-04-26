@@ -3,6 +3,7 @@ package com.example.backend.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,7 @@ public class Booking {
     private Room room;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     public Booking(LocalDate startDate, LocalDate endDate, int extraBeds, Room room, Customer customer){

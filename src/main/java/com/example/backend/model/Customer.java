@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -39,7 +40,7 @@ public class Customer {
     @Size(min = 10, max = 15, message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
-    @OneToMany
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
     public Customer(long id, String firstName, String lastName, String email, String phoneNumber) {
@@ -55,6 +56,10 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addBooking(Booking b){
+        bookings.add(b);
     }
 
 }
