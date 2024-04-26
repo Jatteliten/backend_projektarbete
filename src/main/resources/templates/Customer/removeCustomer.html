@@ -6,5 +6,33 @@
 </head>
 <body>
 
+
+<h2>Search for customer</h2>
+<form action="/Customer/filter/delete" method="post">
+    <label for="input"></label><br>
+    <input type="text" id="input" name="input" value=""><br><br>
+    <input type="submit" value="Search"><br>
+</form>
+
+
+<h2 th:text="${header}"></h2>
+<div class="allProducts" th:unless="${#lists.isEmpty(allCustomers)}">
+    <table>
+        <tbody>
+        <tr th:each="cust : ${allCustomers}">
+            <td th:text="${cust.id}"></td>
+            <td th:text="${cust.firstName}"></td>
+            <td th:text="${cust.lastName}"></td>
+            <td th:text="${cust.email}"></td>
+            <td th:text="${cust.phoneNumber}"></td>
+            <td><a th:href="@{'/Customer/deleteById/' + ${cust.id}}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<a href="/Customer/allWithDelete">
+    <button>All Customers</button>
+</a>
+
 </body>
 </html>

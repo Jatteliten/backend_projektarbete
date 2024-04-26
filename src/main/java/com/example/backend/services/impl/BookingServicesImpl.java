@@ -119,4 +119,8 @@ public class BookingServicesImpl implements BookingServices {
         };
 
     }
+
+    public Booking findById(Long id){
+        return br.findById(id).get();
+    }
 }
