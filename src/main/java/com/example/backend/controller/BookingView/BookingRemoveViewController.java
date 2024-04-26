@@ -38,6 +38,7 @@ public class BookingRemoveViewController {
             return "Booking/removeBooking.html";
         }
 
+        model.addAttribute("bookingId", id);
         return "Booking/removeBookingSuccess.html";
     }
 
