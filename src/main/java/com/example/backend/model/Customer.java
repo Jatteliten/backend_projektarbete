@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class Customer {
     private String email;
     private String phoneNumber;
 
-    @OneToMany
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
     public Customer(long id, String firstName, String lastName, String email, String phoneNumber) {
