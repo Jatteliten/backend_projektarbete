@@ -35,10 +35,10 @@ public class CustomerAddViewController {
         if(test == null){
             cs.addCustomer(new Customer(firstName, lastName, email, pNr));
             model.addAttribute("header", "Customer added!");
-            return "Customer/addCustomer.html";
+            return addCustomer();
         }else{
-            model.addAttribute("header", "Error. Please try again.");
-            return "Customer/addCustomer.html";
+            model.addAttribute("header", "Customer already exists.");
+            return addCustomer();
         }
     }
 }
