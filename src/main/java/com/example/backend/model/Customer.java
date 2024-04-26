@@ -5,10 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,19 +21,12 @@ public class Customer {
     @GeneratedValue
     private long id;
 
-    @NotEmpty(message = "First name is required")
     private String firstName;
 
-    @NotEmpty(message = "Last name is required")
     private String lastName;
 
-    @NotEmpty(message = "Email is required")
-    @Email(message = "Invalid email format")
     private String email;
 
-    @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp = "^[+\\d]+$", message = "Phone number must contain only digits")
-    @Size(min = 10, max = 15, message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

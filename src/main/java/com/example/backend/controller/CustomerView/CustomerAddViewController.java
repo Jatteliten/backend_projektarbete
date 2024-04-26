@@ -30,6 +30,12 @@ public class CustomerAddViewController {
         model.addAttribute("pNr", pNr);
         model.addAttribute("email", email);
 
+        String inputFeedback = validateInput(firstName, lastName, pNr, email);
+        if (!inputFeedback.isEmpty()) {
+            model.addAttribute("header", "Error:" + inputFeedback);
+            return addCustomer();
+        }
+
         Customer test = cs.findByEmail(email);
 
         if(test == null){
@@ -40,5 +46,21 @@ public class CustomerAddViewController {
             model.addAttribute("header", "Customer already exists.");
             return addCustomer();
         }
+    }
+
+
+    private String validateInput(String firstName, String lastName, String pNr, String email) {
+        String errorMessage = "";
+        if (firstName.isEmpty() || lastName.isEmpty() || pNr.isEmpty() || email.isEmpty()) {
+            errorMessage = errorMessage + " One or several fields are blank.";
+            return errorMessage;
+        }
+        if (!email.contains("@")) {
+            errorMessage = errorMessage + " Email address is filled out incorrectly.";
+        }
+        if (pNr.length() < 10 || pNr.length() > 15) {
+            errorMessage = errorMessage + " Phone number is too short or too long.";
+        }
+        return errorMessage;
     }
 }
