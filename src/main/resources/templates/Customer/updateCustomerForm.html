@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Fill Out Form To Update</h2>
+<form action="/Customer/update/final" method="post">
+    <!-- För att man inte ska råka ändra Id är den hidden -->
+    <input type="hidden" id="id" name="id" th:value="${id}">
+
+    <label for="fName">First Name:</label><br>
+    <input type="text" id="fName" name="fName" th:value="${fName}"><br>
+
+    <label for="lName">Last Name:</label><br>
+    <input type="text" id="lName" name="lName" th:value="${lName}"><br>
+
+    <label for="email">Email:</label><br>
+    <input type="text" id="email" name="email" th:value="${email}"><br>
+
+    <label for="phoneNr">Phone Number:</label><br>
+    <input type="text" id="phoneNr" name="phoneNr" th:value="${phoneNumber}"><br><br>
+
+    <input type="submit" value="Update"><br>
+</form>
+
+</body>
+</html>
