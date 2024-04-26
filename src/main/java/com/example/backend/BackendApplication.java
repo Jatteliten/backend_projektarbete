@@ -1,6 +1,8 @@
 package com.example.backend;
 
+import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
+import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +18,7 @@ public class BackendApplication {
 
 
     @Bean
-    public CommandLineRunner commandLineRunner(RoomRepo roomRepo) {
+    public CommandLineRunner commandLineRunner(RoomRepo roomRepo, CustomerRepo customerRepo) {
         return (args -> {
 
             Room r1 = new Room(1);
@@ -40,6 +42,14 @@ public class BackendApplication {
             roomRepo.save(r8);
             roomRepo.save(r9);
             roomRepo.save(r10);
+
+            Customer c1 = new Customer(1, "Lise", "Martinsen", "test@gmail.com", "072552322");
+            Customer c2 = new Customer(2, "Filip", "Martinsen", "test2@gmail.com", "1234567");
+            Customer c3 = new Customer(3, "Anna", "Martinsen", "test3@gmail.com", "0986543");
+
+            customerRepo.save(c1);
+            customerRepo.save(c2);
+            customerRepo.save(c3);
 
         });
     }
