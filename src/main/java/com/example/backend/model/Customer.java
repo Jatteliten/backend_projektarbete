@@ -44,4 +44,8 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
+    public void addBooking(Booking b){
+        bookings.add(b);
+    }
+
 }

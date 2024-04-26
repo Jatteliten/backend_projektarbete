@@ -105,8 +105,14 @@ public class BookingServicesImpl implements BookingServices {
     public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
         Customer bookingCustomer = cr.findByEmail(email);
         Room room = rr.findById(roomId).get();
+        Booking newBooking = new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer);
 
-        br.save(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+        br.save(newBooking);
+
+        bookingCustomer.addBooking(newBooking);
+
+        cr.save(bookingCustomer);
+
 
     }
     private int calculateExtraBeds(Room room){
