@@ -10,6 +10,7 @@ import java.util.List;
 public interface CustomerServices {
     public DetailedCustomerDto customerToDetailedCustomerDto(Customer c);
     public MiniCustomerDto customerToMiniCustomerDto(Customer c);
+    public Customer miniCustomerDtoToCustomer(MiniCustomerDto c);
     public Customer detailedCustomerDtoToCustomer(DetailedCustomerDto c);
     public List<DetailedCustomerDto> getAllDetailedCustomers();
     public List<MiniCustomerDto> getAllMiniCustomers();
@@ -18,6 +19,7 @@ public interface CustomerServices {
     public void addCustomer(Customer c);
     public void deleteCustomer(Customer c);
     public void deleteCustomerById(Long id);
-
+    public void updateCustomer(Long id, String fName, String lName, String email, String phoneNr);
     public List<MiniCustomerDto> findCustomers(String searchWord);
+    public MiniCustomerDto getMiniCustomerById(Long id);
 }
