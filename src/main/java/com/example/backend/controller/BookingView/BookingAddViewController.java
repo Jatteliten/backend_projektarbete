@@ -29,6 +29,8 @@ public class BookingAddViewController {
         model.addAttribute("listOfRooms",rooms);
         model.addAttribute("buttonText","Book Room");
         model.addAttribute("error",error);
+        model.addAttribute("start",startDate);
+        model.addAttribute("end",endDate);
         return "Booking/addBooking.html";
     }
     @RequestMapping("/BookingSuccess")

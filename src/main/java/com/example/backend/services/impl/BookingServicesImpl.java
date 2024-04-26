@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +83,7 @@ public class BookingServicesImpl implements BookingServices {
     }
 
     public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate){
-        if (beds == null || startDate== null || endDate == null  ) return rr.findAll();
+        if (beds == null || startDate== null || endDate == null  ) return Collections.emptyList();
 
 
         List<Room> occupiedRooms = br.findAll().stream()
@@ -97,11 +98,18 @@ public class BookingServicesImpl implements BookingServices {
     }
 
     private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
-        if ((startDate.isBefore(booking.getEndDate()) || startDate.equals(booking.getEndDate())) &&
-                (endDate.isAfter(booking.getStartDate()) || endDate.equals(booking.getStartDate()))) {
-            return true;
-        }
-        return false;
+
+        LocalDate bookedStartDate = booking.getStartDate();
+        LocalDate bookedEndDate = booking.getEndDate();
+
+        boolean isStartWithin = !startDate.isBefore(bookedStartDate) && !startDate.isAfter(bookedEndDate);
+        boolean isEndWithin = !endDate.isBefore(bookedStartDate) && !endDate.isAfter(bookedEndDate);
+
+        boolean isBookedStartWithin = !bookedStartDate.isBefore(startDate) && !bookedStartDate.isAfter(endDate);
+        boolean isBookedEndWithin = !bookedEndDate.isBefore(startDate) && !bookedEndDate.isAfter(endDate);
+
+        return isStartWithin || isEndWithin || isBookedStartWithin || isBookedEndWithin;
+
     }
 
     @Modifying
@@ -111,17 +119,6 @@ public class BookingServicesImpl implements BookingServices {
         Room room = rr.findById(roomId).get();
         bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
         cr.save(bookingCustomer);
-//        Booking newBooking = new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer);
-//        br.save(newBooking);
-//        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
-//        cr.save(bookingCustomer);
-//        br.save(newBooking);
-//
-//        bookingCustomer.addBooking(newBooking);
-//
-//        cr.save(bookingCustomer);
-
-
     }
     private int calculateExtraBeds(Room room){
         return switch (room.getSize()){
