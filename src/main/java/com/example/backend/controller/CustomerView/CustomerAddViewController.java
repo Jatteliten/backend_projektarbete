@@ -34,12 +34,11 @@ public class CustomerAddViewController {
 
         if(test == null){
             cs.addCustomer(new Customer(firstName, lastName, email, pNr));
-            return "Customer/addCustomerSuccess.html";
+            model.addAttribute("header", "Customer added!");
+            return "Customer/addCustomer.html";
         }else{
-            return "Customer/errorCustomer.html";
+            model.addAttribute("header", "Error. Please try again.");
+            return "Customer/addCustomer.html";
         }
     }
-
-
-
 }
