@@ -11,7 +11,9 @@ import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -102,16 +104,22 @@ public class BookingServicesImpl implements BookingServices {
         return false;
     }
 
+    @Modifying
+    @Transactional
     public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
         Customer bookingCustomer = cr.findByEmail(email);
         Room room = rr.findById(roomId).get();
-        Booking newBooking = new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer);
-
-        br.save(newBooking);
-
-        bookingCustomer.addBooking(newBooking);
-
+        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
         cr.save(bookingCustomer);
+//        Booking newBooking = new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer);
+//        br.save(newBooking);
+//        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+//        cr.save(bookingCustomer);
+//        br.save(newBooking);
+//
+//        bookingCustomer.addBooking(newBooking);
+//
+//        cr.save(bookingCustomer);
 
 
     }
