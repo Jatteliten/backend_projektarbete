@@ -25,6 +25,7 @@ public class BackendApplication {
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
 
+            /*
             Room r1 = new Room(1);
             Room r2 = new Room(1);
             Room r3 = new Room(1);
@@ -59,6 +60,7 @@ public class BackendApplication {
 
             br.save(b1);
             br.save(b2);
+             */
 
 
 
