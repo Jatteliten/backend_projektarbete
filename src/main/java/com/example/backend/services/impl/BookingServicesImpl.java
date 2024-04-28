@@ -18,13 +18,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class BookingServicesImpl implements BookingServices {
@@ -87,7 +87,7 @@ public class BookingServicesImpl implements BookingServices {
             //lägg till ev felmeddelande
         }
     }
-
+    @Override
     public String filterRooms(@Valid AddBookingView addBookingView, Model model){
 
         if (addBookingView.isStartPage()){
@@ -124,7 +124,7 @@ public class BookingServicesImpl implements BookingServices {
 
     }
 
-    private List<String> validate(AddBookingView addBookingView){
+    public List<String> validate(AddBookingView addBookingView){
         List<String> error = new ArrayList<>();
         if (addBookingView.getStartDate().isBefore(LocalDate.now())){
             error.add("Cant book room before todays date");
@@ -136,7 +136,7 @@ public class BookingServicesImpl implements BookingServices {
     }
 
 
-    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
+    public boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
 
         LocalDate bookedStartDate = booking.getStartDate();
         LocalDate bookedEndDate = booking.getEndDate();
@@ -150,15 +150,7 @@ public class BookingServicesImpl implements BookingServices {
         return isStartWithin || isEndWithin || isBookedStartWithin || isBookedEndWithin;
 
     }
-
-//    @Modifying
-//    @Transactional
-//    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
-//        Customer bookingCustomer = cr.findByEmail(email);
-//        Room room = rr.findById(roomId).get();
-//        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
-//        cr.save(bookingCustomer);
-//    }
+    @Override
     @Modifying
     @Transactional
     public String bookRoom(BookingSuccessView bookingSuccessView, Model model) {
@@ -173,7 +165,7 @@ public class BookingServicesImpl implements BookingServices {
         model.addAttribute("roomId",bookingSuccessView.getRoomId());
         return "Booking/BookingSuccess.html";
     }
-    private int calculateExtraBeds(Room room){
+    public int calculateExtraBeds(Room room){
         return switch (room.getSize()){
             case 1 -> 0;
             case 2 -> 0;

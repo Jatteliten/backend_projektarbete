@@ -38,6 +38,11 @@ public class AddBookingView {
         this.extraBeds = extraBeds;
     }
 
+    public AddBookingView(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public AddBookingView(Boolean startPage) {
         this.startPage = startPage;
     }

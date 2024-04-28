@@ -41,4 +41,8 @@ public class Booking {
         this.customer = customer;
     }
 
+    public Booking(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
