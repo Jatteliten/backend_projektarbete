@@ -1,5 +1,6 @@
 package com.example.backend.services.impl;
 
+import com.example.backend.Dto.BookingViews.AddBookingView;
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
@@ -11,11 +12,15 @@ import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
+import jakarta.validation.Valid;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -82,20 +87,53 @@ public class BookingServicesImpl implements BookingServices {
         }
     }
 
-    public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate){
-        if (beds == null || startDate== null || endDate == null  ) return Collections.emptyList();
+    public String filterRooms(@Valid AddBookingView addBookingView, Model model){
 
+        if (addBookingView.isStartPage()){
+            List<Room> rooms = Collections.emptyList();
+            model.addAttribute("listOfRooms",rooms);
+            return "Booking/addBooking.html";
+        }
+
+
+        List<String> error = validate(addBookingView);
+        if (!error.isEmpty()){
+            List<Room> rooms = Collections.emptyList();
+            model.addAttribute("listOfRooms",rooms);
+            model.addAttribute("error",error);
+            return "Booking/addBooking.html";
+        }
 
         List<Room> occupiedRooms = br.findAll().stream()
-                .filter(b -> checkNotAvailable(b,startDate,endDate))
-                .map(b -> b.getRoom()).toList();
+                    .filter(b -> checkNotAvailable(b,addBookingView.getStartDate(),addBookingView.getEndDate()))
+                    .map(b -> b.getRoom()).toList();
 
         List<Room> availableRooms = rr.findAll().stream().filter( room -> !occupiedRooms.contains(room)
-        ).toList();
+        ).toList().stream().filter(room -> room.getSize() >= addBookingView.getBeds()+addBookingView.getExtraBeds()).toList();
 
 
-        return availableRooms.stream().filter(room -> room.getSize() >= beds+extraBeds).toList();
+        model.addAttribute("title","Available rooms");
+        model.addAttribute("listOfRooms",availableRooms);
+        model.addAttribute("buttonText","Book Room");
+        model.addAttribute("start",addBookingView.getStartDate());
+        model.addAttribute("end",addBookingView.getEndDate());
+        model.addAttribute("error",error);
+        return "Booking/addBooking.html";
+
+
     }
+
+    private List<String> validate(AddBookingView addBookingView){
+        List<String> error = new ArrayList<>();
+        if (addBookingView.getStartDate().isBefore(LocalDate.now())){
+            error.add("Cant book room before todays date");
+        }
+        if (addBookingView.getStartDate().isAfter(addBookingView.getEndDate())){
+            error.add("Cant book room with start date before end date");
+        }
+        return error;
+    }
+
 
     private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
 
@@ -134,4 +172,5 @@ public class BookingServicesImpl implements BookingServices {
     public Booking findById(Long id){
         return br.findById(id).get();
     }
+
 }

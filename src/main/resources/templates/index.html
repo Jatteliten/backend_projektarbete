@@ -17,9 +17,12 @@
             <td><a href="#">
                 <button>Register Customer</button>
             </a></td>
-            <td><a href="/Booking/availableRooms">
-                <button>Place Booking</button>
-            </a></td>
+            <td>
+                <form id="bookingForm" action="/Booking/availableRooms" method="post">
+                    <input type="hidden" id="startPage" name="startPage" value="true">
+                    <button type="submit">Place Booking</button>
+                </form>
+            </td>
         </tr>
         <tr>
             <td><a href="/Customer/allWithUpdate">
