@@ -24,7 +24,7 @@
 
 <h4 th:text="${message}"></h4>
 
-<h3>Search for customer</h3>
+<h3>Search for Booking</h3>
 <form action="/Booking/filter/update" method="post">
     <label for="input"></label><br>
     <input type="text" id="input" name="input" value=""><br><br>
@@ -82,8 +82,11 @@
         </tr>
         <!-- Update and Cancel Links -->
         <tr>
-            <td><a class="buttonPadding" th:href="@{'/Booking/update/' + ${b.id}}">Update</a>
-                <a class="buttonPadding" th:href="@{'/Booking/cancel/' + ${b.id}}">Cancel</a></td>
+            <td>
+                <!-- <a class="buttonPadding" th:href="@{updateBookingForm.html}"> -->
+             <a class="buttonPadding" th:href="@{/Booking/update/availableRooms(id=${b.id}, custId=${b.miniCustomerDto.id})}">Update</a>
+                <a class="buttonPadding" th:href="@{'/Booking/cancel/' + ${b.id}}">Cancel</a>
+            </td>
         </tr>
         <tr>
             <td class="spacer"></td>

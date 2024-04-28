@@ -2,7 +2,10 @@ package com.example.backend.controller.BookingView;
 
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
+import com.example.backend.model.Room;
 import com.example.backend.services.impl.BookingServicesImpl;
+import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.impl.RoomServicesImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -18,9 +22,13 @@ import java.util.List;
 public class BookingUpdateViewController {
 
     private final BookingServicesImpl bookingServices;
+    private final RoomServicesImpl roomServices;
+    private final CustomerServicesImpl customerServices;
 
-    public BookingUpdateViewController(BookingServicesImpl bookingServices) {
+    public BookingUpdateViewController(BookingServicesImpl bookingServices, RoomServicesImpl roomServices, CustomerServicesImpl customerServices) {
         this.bookingServices = bookingServices;
+        this.roomServices = roomServices;
+        this.customerServices = customerServices;
     }
 
     @RequestMapping("/allWithUpdate")
@@ -44,53 +52,63 @@ public class BookingUpdateViewController {
         return "Booking/updateBooking.html";
     }
 
-    @RequestMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, Model model) {
+    @RequestMapping("/update/availableRooms")
+    public String findRooms(@RequestParam(required = false) Long id,
+                            @RequestParam(required = false) Long custId,
+                            @RequestParam(required = false) Integer beds,
+                            @RequestParam(required = false) Integer extraBeds,
+                            @RequestParam(required = false) LocalDate startDate,
+                            @RequestParam(required = false) LocalDate endDate,
+                            Model model) {
+
         MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
-        model.addAttribute("bookingId", id);
-        model.addAttribute("startDate", miniBookingDto.getStartDate());
-        model.addAttribute("endD ate", miniBookingDto.getEndDate());
+        MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
 
-        //Kanske vore bra att lista alla lediga rum så att man kan
-        //skriva in id på det rum man vill byta till
-        model.addAttribute("roomId", miniBookingDto.getMiniRoomDto().getId());
-        //roomSize fältet bör inte kunna ändras i formuläret. Det ska bara visas för att ge info.
-        model.addAttribute("roomSize", miniBookingDto.getMiniRoomDto().getSize());
+        //model.addAttribute("startDate", miniBookingDto.getStartDate());
+        //model.addAttribute("endDate", miniBookingDto.getEndDate());
+        model.addAttribute("oldBookingId", id);
+        model.addAttribute("custId", custId);
 
-        //Sida men ifylld form redo att ändras.
-        return "Customer/updateBookingForm.html";
+
+        model.addAttribute("custFirstName", customer.getFirstName());
+        model.addAttribute("custLastName", customer.getLastName());
+        model.addAttribute("custEmail", customer.getEmail());
+        model.addAttribute("custPhoneNr", customer.getPhoneNumber());
+
+        List<Room> rooms = bookingServices.filterRooms(beds, extraBeds, startDate, endDate);
+        String error = null;
+        model.addAttribute("title", "Available rooms");
+        model.addAttribute("listOfRooms", rooms);
+        model.addAttribute("buttonText", "Book Room");
+        model.addAttribute("error", error);
+        model.addAttribute("start", startDate);
+        model.addAttribute("end", endDate);
+
+        return "Booking/updateBookingForm.html";
     }
 
-    //Ska kallas på när man fyllt i formulär
-    @PostMapping("/update/final")
-    public String updateByAll(@RequestParam Long bookingId,
-                              @RequestParam LocalDate startDate,
-                              @RequestParam LocalDate endDate,
-                              @RequestParam Long roomId,
-                              Model model) {
+    @RequestMapping("/update/BookingSuccess")
+    public String bookingSuccess(@RequestParam Long oldBookingId,
+                                 @RequestParam String email,
+                                 @RequestParam Long roomId,
+                                 @RequestParam LocalDate startDateB,
+                                 @RequestParam LocalDate endDateB, Model model) {
 
-        // 1. Kolla att rummet är ledigt de nya datumen, även om man bytt rum
-        // 2. Om allt är ok, uppdatera bokningen.
-        // Om inte ladda om sidan med formuläret och skicka med lämpligt felmeddelande.
+        cancel(oldBookingId, model);
 
-        boolean isAvailable = bookingServices.isAvailable(bookingId, startDate, endDate, roomId);
-        if (isAvailable) {
-            bookingServices.updateBooking(bookingId, startDate, endDate, roomId);
-            model.addAttribute("message", "Customer updated successfully!");
-            return allWithUpdate(model);
-        } else {
-            //för att meddelandet ska skickas med måste jag väl anropa metoden med model?
-            //men hur får jag då med Id som måste vara med i pathen?
-            model.addAttribute("message", "Booking not available!");
-            return "Booking/update/{bookingId}";
-        }
-
+        String error = null;
+        System.out.println(roomId);
+        model.addAttribute("error", error);
+        model.addAttribute("email", email);
+        model.addAttribute("roomId", roomId);
+        bookingServices.bookRoom(email, roomId, startDateB, endDateB);
+        return "Booking/BookingSuccess.html";
     }
 
-    @RequestMapping("cancel/{id}")
+    @RequestMapping("/cancel/{id}")
     public String cancel(@PathVariable Long id, Model model) {
         bookingServices.deleteBookingById(id);
-        model.addAttribute("message", "Customer cancelled!");
+        model.addAttribute("message", "Booking cancelled!");
         return allWithUpdate(model);
     }
 }

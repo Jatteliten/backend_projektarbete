@@ -114,7 +114,6 @@ public class BookingServicesImpl implements BookingServices {
 
     public void deleteBookingById(Long id) {
         Booking booking = br.findById(id).get();
-        //Hur blir det med cascading här? Customer och Room raderas väl inte?
         br.delete(booking);
     }
 
@@ -134,7 +133,6 @@ public class BookingServicesImpl implements BookingServices {
 
     public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate) {
         if (beds == null || startDate == null || endDate == null) return Collections.emptyList();
-
 
         List<Room> occupiedRooms = br.findAll().stream()
                 .filter(b -> checkNotAvailable(b, startDate, endDate))
