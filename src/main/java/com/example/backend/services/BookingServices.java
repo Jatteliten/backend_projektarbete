@@ -2,8 +2,11 @@ package com.example.backend.services;
 
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
+import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.model.Booking;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface BookingServices {
@@ -15,4 +18,10 @@ public interface BookingServices {
     public DetailedBookingDto getDetailedBookingById(Long id);
     public void addBooking(Booking b);
     public void deleteBooking(Booking b);
+
+    public List<MiniBookingDto> findBookings(String searchWord);
+    public MiniBookingDto getMiniBookingById(Long id);
+    public void deleteBookingById(Long id);
+    public void updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId);
+    public boolean isAvailable(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId);
 }

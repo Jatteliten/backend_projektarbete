@@ -25,7 +25,6 @@ public class BackendApplication {
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
 
-            /*
             Room r1 = new Room(1);
             Room r2 = new Room(1);
             Room r3 = new Room(1);
@@ -49,8 +48,10 @@ public class BackendApplication {
             roomRepo.save(r10);
 
             Customer c1 = new Customer("Daniel", "Isaksson", "Daniel@hej.se", "0000");
+            Customer c2 = new Customer("Lise", "Martinsen", "Lise@hej.se", "0000");
 
             cr.save(c1);
+            cr.save(c2);
 
             Booking b1 = new Booking(LocalDate.of(2022, 10, 10),
                     LocalDate.of(2022, 10, 12), 1, r1, c1);
@@ -58,9 +59,15 @@ public class BackendApplication {
             Booking b2 = new Booking(LocalDate.of(2022, 11, 11),
                     LocalDate.of(2022, 11, 16), 1, r1, c1);
 
+            Booking b3 = new Booking(LocalDate.of(2022, 11, 11),
+                    LocalDate.of(2022, 11, 14), 1, r4, c2);
+
             br.save(b1);
             br.save(b2);
-             */
+            br.save(b3);
+
+
+
 
 
 
