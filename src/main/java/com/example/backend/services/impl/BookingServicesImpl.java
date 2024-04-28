@@ -1,6 +1,7 @@
 package com.example.backend.services.impl;
 
 import com.example.backend.Dto.BookingViews.AddBookingView;
+import com.example.backend.Dto.BookingViews.BookingSuccessView;
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
@@ -150,13 +151,27 @@ public class BookingServicesImpl implements BookingServices {
 
     }
 
+//    @Modifying
+//    @Transactional
+//    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
+//        Customer bookingCustomer = cr.findByEmail(email);
+//        Room room = rr.findById(roomId).get();
+//        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+//        cr.save(bookingCustomer);
+//    }
     @Modifying
     @Transactional
-    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
-        Customer bookingCustomer = cr.findByEmail(email);
-        Room room = rr.findById(roomId).get();
-        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+    public String bookRoom(BookingSuccessView bookingSuccessView, Model model) {
+        Customer bookingCustomer = cr.findByEmail(bookingSuccessView.getEmail());
+        Room room = rr.findById(bookingSuccessView.getRoomId()).get();
+        bookingCustomer.addBooking(new Booking(bookingSuccessView.getStartDateB(),bookingSuccessView.getEndDateB(),calculateExtraBeds(room),room,bookingCustomer));
         cr.save(bookingCustomer);
+
+        String error = null;
+        model.addAttribute("error",error);
+        model.addAttribute("email",bookingSuccessView.getEmail());
+        model.addAttribute("roomId",bookingSuccessView.getRoomId());
+        return "Booking/BookingSuccess.html";
     }
     private int calculateExtraBeds(Room room){
         return switch (room.getSize()){
@@ -172,5 +187,7 @@ public class BookingServicesImpl implements BookingServices {
     public Booking findById(Long id){
         return br.findById(id).get();
     }
+
+
 
 }
