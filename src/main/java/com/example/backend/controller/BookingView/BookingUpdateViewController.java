@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -63,12 +62,10 @@ public class BookingUpdateViewController {
 
         MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
         MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
-
         //model.addAttribute("startDate", miniBookingDto.getStartDate());
         //model.addAttribute("endDate", miniBookingDto.getEndDate());
         model.addAttribute("oldBookingId", id);
         model.addAttribute("custId", custId);
-
 
         model.addAttribute("custFirstName", customer.getFirstName());
         model.addAttribute("custLastName", customer.getLastName());
@@ -83,7 +80,6 @@ public class BookingUpdateViewController {
         model.addAttribute("error", error);
         model.addAttribute("start", startDate);
         model.addAttribute("end", endDate);
-
         return "Booking/updateBookingForm.html";
     }
 
