@@ -20,7 +20,6 @@ configurations {
 repositories {
     mavenCentral()
 }
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -33,6 +32,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
 }
+
+
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

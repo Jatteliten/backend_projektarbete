@@ -1,9 +1,12 @@
 package com.example.backend.controller.CustomerView;
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
+import com.example.backend.model.Customer;
 import com.example.backend.services.impl.CustomerServicesImpl;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,28 +32,35 @@ public class CustomerUpdateViewController {
         return "Customer/updateCustomer.html";
     }
 
-    //När man väljer customer som ska uppdateras sätts fälten i formuläret till
-    // den valda customerns värden.
     @RequestMapping("/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         MiniCustomerDto miniCustomerDto = customerServices.getMiniCustomerById(id);
+        model.addAttribute("customer", miniCustomerDto);
+        /*
         model.addAttribute("id", id);
         model.addAttribute("fName", miniCustomerDto.getFirstName());
         model.addAttribute("lName", miniCustomerDto.getLastName());
         model.addAttribute("email", miniCustomerDto.getEmail());
         model.addAttribute("phoneNumber", miniCustomerDto.getPhoneNumber());
+
+         */
         return "Customer/updateCustomerForm.html";
     }
 
     //Ska kallas på när man fyllt i formulär
     @PostMapping("/update/final")
-    public String updateByAll(@RequestParam Long id,
-                              @RequestParam String fName,
-                              @RequestParam String lName,
-                              @RequestParam String email,
-                              @RequestParam String phoneNr,
-                              Model model) {
-        customerServices.updateCustomer(id, fName, lName, email, phoneNr);
+    public String updateByAll(@Valid Customer customer, BindingResult result, Model model) {
+
+        if (result.hasErrors()) {
+            return "Customer/updateCustomerForm.html";
+        }
+
+        customerServices.updateCustomer(customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhoneNumber());
+
         model.addAttribute("message", "Customer updated successfully!");
         return allWithUpdate(model);
     }
