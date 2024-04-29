@@ -117,12 +117,12 @@ public class CustomerServicesImpl implements CustomerServices {
      */
 
     @Override
-    public String addCustomer(Customer c) throws ValidationException {
+    public String addCustomer(Customer c) {
         Set<ConstraintViolation<Customer>> violations = validator.validate(c);
         if (!violations.isEmpty()) {
             StringBuilder errorMessages = new StringBuilder();
             for (ConstraintViolation<Customer> violation : violations) {
-                errorMessages.append(violation.getMessage()).append("\n");
+                errorMessages.append(violation.getMessage()).append("<br>");
             }
             return String.valueOf(errorMessages);
         }
