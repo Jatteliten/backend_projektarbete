@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +24,17 @@ public class Customer {
     @GeneratedValue
     private long id;
 
+    @NotEmpty(message = "First name is required")
     private String firstName;
 
+    @NotEmpty(message = "Last name is required")
     private String lastName;
 
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Email is not valid")
     private String email;
 
+    @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

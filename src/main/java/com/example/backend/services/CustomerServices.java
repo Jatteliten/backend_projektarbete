@@ -16,7 +16,7 @@ public interface CustomerServices {
     public List<MiniCustomerDto> getAllMiniCustomers();
     public DetailedCustomerDto getDetailedCustomerById(Long id);
 
-    public void addCustomer(Customer c);
+    public String addCustomer(Customer c);
     public void deleteCustomer(Customer c);
     public void deleteCustomerById(Long id);
     public void updateCustomer(Long id, String fName, String lName, String email, String phoneNr);

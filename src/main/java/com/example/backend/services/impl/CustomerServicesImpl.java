@@ -9,21 +9,26 @@ import com.example.backend.model.Customer;
 import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.services.CustomerServices;
+import jakarta.validation.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomerServicesImpl implements CustomerServices {
     private final CustomerRepo cr;
     private final BookingRepo br;
+    private Validator validator;
 
     public CustomerServicesImpl(CustomerRepo cr, BookingRepo br) {
         this.cr = cr;
         this.br = br;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
     }
 
     public DetailedCustomerDto customerToDetailedCustomerDto(Customer c) {
@@ -104,12 +109,28 @@ public class CustomerServicesImpl implements CustomerServices {
 
         cr.save(customer);
     }
-
+    /*
     @Override
-    public void addCustomer(Customer c) {
+    public void addCustomer(@Valid Customer c) {
         cr.save(c);
     }
+     */
 
+    @Override
+    public String addCustomer(Customer c) throws ValidationException {
+        Set<ConstraintViolation<Customer>> violations = validator.validate(c);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            for (ConstraintViolation<Customer> violation : violations) {
+                errorMessages.append(violation.getMessage()).append("\n");
+            }
+            return String.valueOf(errorMessages);
+        }
+        else {
+            cr.save(c);
+            return "Success!";
+        }
+    }
     @Override
     public void deleteCustomerById(Long id) {
         cr.deleteById(id);
