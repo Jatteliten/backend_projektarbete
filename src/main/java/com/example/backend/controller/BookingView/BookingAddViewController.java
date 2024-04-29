@@ -25,6 +25,12 @@ public class BookingAddViewController {
                             Model model){
         List<Room> rooms = bookingServices.filterRooms(beds, extraBeds,startDate, endDate);
         String error = null;
+
+        if (startDate != null && startDate.isBefore(LocalDate.now())){
+            rooms.clear();
+            error = "Start date must be in the future";
+        }
+
         model.addAttribute("title","Available rooms");
         model.addAttribute("listOfRooms",rooms);
         model.addAttribute("buttonText","Book Room");
