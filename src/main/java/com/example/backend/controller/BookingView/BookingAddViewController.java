@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -27,8 +28,13 @@ public class BookingAddViewController {
         String error = null;
 
         if (startDate != null && startDate.isBefore(LocalDate.now())){
-            rooms.clear();
+            rooms = Collections.emptyList();
             error = "Start date must be in the future";
+        }
+
+        if (endDate != null &&endDate.isBefore(startDate)){
+            rooms = Collections.emptyList();
+            error = "End date must be after start date";
         }
 
         model.addAttribute("title","Available rooms");
