@@ -1,7 +1,9 @@
 package com.example.backend.controller.BookingView;
 
+import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.impl.BookingServicesImpl;
+import com.example.backend.services.impl.CustomerServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import java.util.List;
 public class BookingAddViewController {
     @Autowired
     BookingServicesImpl bookingServices;
+    @Autowired
+    CustomerServicesImpl customerServices;
 
     @RequestMapping("/availableRooms")
     public String findRooms(@RequestParam(required = false) Integer beds,
@@ -48,8 +52,20 @@ public class BookingAddViewController {
     @RequestMapping("/BookingSuccess")
     public String bookingSuccess(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
                                  @RequestParam LocalDate endDateB,Model model){
+
         String error = null;
-        System.out.println(roomId);
+        Customer bookingCustomer = customerServices.findByEmail(email);
+        if (bookingCustomer == null) {
+            List<Room> rooms = Collections.emptyList();
+            error = "No customer found";
+            model.addAttribute("title","Available rooms");
+            model.addAttribute("listOfRooms",rooms);
+            model.addAttribute("buttonText","Book Room");
+            model.addAttribute("error",error);
+            return "Booking/addBooking.html";
+        }
+
+
         model.addAttribute("error",error);
         model.addAttribute("email",email);
         model.addAttribute("roomId",roomId);
