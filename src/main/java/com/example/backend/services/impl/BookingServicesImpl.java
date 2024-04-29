@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookingServicesImpl implements BookingServices {
@@ -26,45 +24,45 @@ public class BookingServicesImpl implements BookingServices {
     private final CustomerRepo cr;
     private final RoomRepo rr;
 
-    public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr){
+    public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr) {
         this.br = br;
         this.cr = cr;
         this.rr = rr;
     }
 
-    public DetailedBookingDto bookingToDetailedBookingDto(Booking b){
+    public DetailedBookingDto bookingToDetailedBookingDto(Booking b) {
         return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
                 .startDate(b.getStartDate()).endDate(b.getEndDate())
                 .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
                 .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 
-    public MiniBookingDto bookingToMiniBookingDto(Booking b){
+    public MiniBookingDto bookingToMiniBookingDto(Booking b) {
         return MiniBookingDto.builder().id(b.getId()).startDate(b.getStartDate())
                 .endDate(b.getEndDate())
                 .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
                 .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 
-    public Booking detailedBookingDtoToBooking(DetailedBookingDto b){
+    public Booking detailedBookingDtoToBooking(DetailedBookingDto b) {
         return Booking.builder().id(b.getId()).startDate(b.getStartDate()).endDate(b.getEndDate())
                 .extraBeds(b.getExtraBeds()).room(rr.findById(b.getMiniRoomDto().getId()).get())
                 .customer(cr.findById(b.getMiniCustomerDto().getId()).get()).build();
     }
 
-    private MiniCustomerDto createMiniCustomerDtoFromCustomer(Customer c){
+    private MiniCustomerDto createMiniCustomerDtoFromCustomer(Customer c) {
         return new MiniCustomerDto(c.getId(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPhoneNumber());
     }
 
-    public List<DetailedBookingDto> getAllDetailedBookings(){
+    public List<DetailedBookingDto> getAllDetailedBookings() {
         return br.findAll().stream().map(b -> bookingToDetailedBookingDto(b)).toList();
     }
 
-    public List<MiniBookingDto> getAllMiniBookings(){
+    public List<MiniBookingDto> getAllMiniBookings() {
         return br.findAll().stream().map(b -> bookingToMiniBookingDto(b)).toList();
     }
 
-    public DetailedBookingDto getDetailedBookingById(Long id){
+    public DetailedBookingDto getDetailedBookingById(Long id) {
         return bookingToDetailedBookingDto(br.findById(id).get());
     }
 
@@ -82,22 +80,72 @@ public class BookingServicesImpl implements BookingServices {
         }
     }
 
-    public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate){
-        if (beds == null || startDate== null || endDate == null  ) return Collections.emptyList();
+    @Override
+    public List<MiniBookingDto> findBookings(String searchWord) {
+        List<MiniBookingDto> bookingMatches = new ArrayList<>();
+        searchWord = searchWord.toLowerCase();
+        List<MiniBookingDto> allBookings = getAllMiniBookings();
+        for (MiniBookingDto b : allBookings) {
+            if (
+                    b.getId().toString().contains(searchWord) ||
+                            //går det att göra såhär med ett datum-objekt?
+                            b.getStartDate().toString().contains(searchWord) ||
+                            b.getEndDate().toString().contains(searchWord) ||
 
+                            b.getMiniRoomDto().getId().toString().contains(searchWord) ||
+                            //b.getMiniRoomDto().getSize() == Integer.parseInt(searchWord)||
+
+                            b.getMiniCustomerDto().getId().toString().contains(searchWord) ||
+                            b.getMiniCustomerDto().getEmail().toLowerCase().contains(searchWord) ||
+                            b.getMiniCustomerDto() .getFirstName().toLowerCase().contains(searchWord) ||
+                            b.getMiniCustomerDto() .getLastName().toLowerCase().contains(searchWord) ||
+                            b.getMiniCustomerDto().getPhoneNumber().toLowerCase().contains(searchWord)
+            ) {
+                bookingMatches.add(b);
+            }
+        }
+        return bookingMatches;
+    }
+
+    public MiniBookingDto getMiniBookingById(Long id) {
+        Booking booking = br.findById(id).get();
+        return bookingToMiniBookingDto(booking);
+    }
+
+    public void deleteBookingById(Long id) {
+        Booking booking = br.findById(id).get();
+        br.delete(booking);
+    }
+
+    public void updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId) {
+        Booking booking = br.findById(bookingId).get();
+        booking.setStartDate(startDate);
+        booking.setEndDate(endDate);
+        Room room = rr.findById(roomId).get();
+        booking.setRoom(room);
+    }
+
+    @Override
+    public boolean isAvailable(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId) {
+        //Kolla om det redan finns funktioner för detta.
+        return false;
+    }
+
+    public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate) {
+        if (beds == null || startDate == null || endDate == null) return Collections.emptyList();
 
         List<Room> occupiedRooms = br.findAll().stream()
-                .filter(b -> checkNotAvailable(b,startDate,endDate))
+                .filter(b -> checkNotAvailable(b, startDate, endDate))
                 .map(b -> b.getRoom()).toList();
 
-        List<Room> availableRooms = rr.findAll().stream().filter( room -> !occupiedRooms.contains(room)
+        List<Room> availableRooms = rr.findAll().stream().filter(room -> !occupiedRooms.contains(room)
         ).toList();
 
 
-        return availableRooms.stream().filter(room -> room.getSize() >= beds+extraBeds).toList();
+        return availableRooms.stream().filter(room -> room.getSize() >= beds + extraBeds).toList();
     }
 
-    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate){
+    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate) {
 
         LocalDate bookedStartDate = booking.getStartDate();
         LocalDate bookedEndDate = booking.getEndDate();
@@ -117,11 +165,12 @@ public class BookingServicesImpl implements BookingServices {
     public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
         Customer bookingCustomer = cr.findByEmail(email);
         Room room = rr.findById(roomId).get();
-        bookingCustomer.addBooking(new Booking(startDate,endDate,calculateExtraBeds(room),room,bookingCustomer));
+        bookingCustomer.addBooking(new Booking(startDate, endDate, calculateExtraBeds(room), room, bookingCustomer));
         cr.save(bookingCustomer);
     }
-    private int calculateExtraBeds(Room room){
-        return switch (room.getSize()){
+
+    private int calculateExtraBeds(Room room) {
+        return switch (room.getSize()) {
             case 1 -> 0;
             case 2 -> 0;
             case 3 -> 1;
@@ -131,7 +180,7 @@ public class BookingServicesImpl implements BookingServices {
 
     }
 
-    public Booking findById(Long id){
+    public Booking findById(Long id) {
         return br.findById(id).get();
     }
 }

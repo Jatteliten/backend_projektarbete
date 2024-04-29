@@ -40,4 +40,10 @@ public class RoomServicesImpl implements RoomServices {
     public DetailedRoomDto getDetailedRoomById(Long id){
         return roomToDetailedRoomDto(rr.findById(id).get());
     }
+
+    @Override
+    public boolean roomExists(Long id) {
+        Room room = rr.findById(id).orElse(null);
+        return room != null;
+    }
 }

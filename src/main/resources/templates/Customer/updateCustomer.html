@@ -23,7 +23,7 @@
 <br>
 
 <h2 th:text="${header}"></h2>
-<div class="allProducts" th:unless="${#lists.isEmpty(allCustomers)}">
+<div class="allCustomers" th:unless="${#lists.isEmpty(allCustomers)}">
     <table>
         <tbody>
         <tr th:each="cust : ${allCustomers}">
