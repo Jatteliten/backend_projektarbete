@@ -117,7 +117,7 @@ public class CustomerServicesImpl implements CustomerServices {
         if (!violations.isEmpty()) {
             StringBuilder errorMessages = new StringBuilder();
             for (ConstraintViolation<Customer> violation : violations) {
-                errorMessages.append(violation.getMessage()).append("<br>");
+                errorMessages.append(" - ").append(violation.getMessage());
             }
             return String.valueOf(errorMessages);
         }
