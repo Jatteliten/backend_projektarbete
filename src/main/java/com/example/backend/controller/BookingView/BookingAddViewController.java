@@ -62,7 +62,7 @@ public class BookingAddViewController {
         Customer bookingCustomer = customerServices.findByEmail(email);
         if (bookingCustomer == null) {
             List<Room> rooms = List.of(roomServices.findById(roomId));
-            error = "No customer found with email: "+email+" found.";
+            error = "No customer with email: "+email+" found.";
             model.addAttribute("title","Available rooms");
             model.addAttribute("listOfRooms",rooms);
             model.addAttribute("buttonText","Book Room");
@@ -76,7 +76,16 @@ public class BookingAddViewController {
         model.addAttribute("error",error);
         model.addAttribute("email",email);
         model.addAttribute("roomId",roomId);
-        bookingServices.bookRoom(email,roomId,startDateB,endDateB);
+        error = bookingServices.bookRoom(email,roomId,startDateB,endDateB);
+        if (!error.contains("Success!")){
+            model.addAttribute("title","Available rooms");
+            model.addAttribute("listOfRooms",Collections.emptyList());
+            model.addAttribute("buttonText","Book Room");
+            model.addAttribute("error",error);
+            model.addAttribute("start",startDateB);
+            model.addAttribute("end",endDateB);
+            return "Booking/addBooking.html";
+        }
         return "Booking/BookingSuccess.html";
     }
 }

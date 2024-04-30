@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +26,13 @@ public class Booking {
     @GeneratedValue
     private Long id;
 
+    @Future(message = "Start date must be in the future")
     private LocalDate startDate;
+    @Future(message = "End date must be in the future")
     private LocalDate endDate;
+
+    @PositiveOrZero(message = "Cant be a negative number")
+    @Max(value = 2, message = "Maximum of two extra beds")
     private int extraBeds;
 
     @ManyToOne
