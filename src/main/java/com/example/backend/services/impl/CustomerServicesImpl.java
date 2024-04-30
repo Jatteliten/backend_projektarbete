@@ -100,14 +100,15 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     @Override
-    public void updateCustomer(Long id, String fName, String lName, String email, String phoneNr) {
-        Customer customer = cr.findById(id).get();
-        customer.setFirstName(fName.trim());
-        customer.setLastName(lName.trim());
-        customer.setEmail(email.trim());
-        customer.setPhoneNumber(phoneNr.trim());
+    public String updateCustomer(MiniCustomerDto c) {
 
-        cr.save(customer);
+        Customer customer = cr.findById(c.getId()).get();
+        customer.setFirstName(c.getFirstName().trim());
+        customer.setLastName(c.getLastName().trim());
+        customer.setEmail(c.getEmail().trim());
+        customer.setPhoneNumber(c.getPhoneNumber().trim());
+
+        return addCustomer(customer);
     }
 
     @Override

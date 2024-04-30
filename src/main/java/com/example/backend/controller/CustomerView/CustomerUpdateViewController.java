@@ -44,13 +44,7 @@ public class CustomerUpdateViewController {
     @PostMapping("/update/final")
     public String updateByAll(MiniCustomerDto customer, Model model) {
 
-        customerServices.updateCustomer(customer.getId(),
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getEmail(),
-                customer.getPhoneNumber());
-
-        model.addAttribute("message", "Customer updated successfully!");
+        model.addAttribute("message", customerServices.updateCustomer(customer));
         return allWithUpdate(model);
     }
 
