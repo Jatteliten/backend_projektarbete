@@ -46,4 +46,10 @@ public class RoomServicesImpl implements RoomServices {
         Room room = rr.findById(id).orElse(null);
         return room != null;
     }
+
+    @Override
+    public Room findById(Long id) {
+        return rr.findById(id).get();
+    }
+
 }

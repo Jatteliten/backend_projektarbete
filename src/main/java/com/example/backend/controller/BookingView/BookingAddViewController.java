@@ -1,7 +1,11 @@
 package com.example.backend.controller.BookingView;
 
+import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
+import com.example.backend.services.RoomServices;
 import com.example.backend.services.impl.BookingServicesImpl;
+import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.impl.RoomServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -16,6 +21,10 @@ import java.util.List;
 public class BookingAddViewController {
     @Autowired
     BookingServicesImpl bookingServices;
+    @Autowired
+    CustomerServicesImpl customerServices;
+    @Autowired
+    RoomServicesImpl roomServices;
 
     @RequestMapping("/availableRooms")
     public String findRooms(@RequestParam(required = false) Integer beds,
@@ -25,6 +34,17 @@ public class BookingAddViewController {
                             Model model){
         List<Room> rooms = bookingServices.filterRooms(beds, extraBeds,startDate, endDate);
         String error = null;
+
+        if (startDate != null && startDate.isBefore(LocalDate.now())){
+            rooms = Collections.emptyList();
+            error = "Start date must be in the future";
+        }
+
+        if (endDate != null &&endDate.isBefore(startDate)){
+            rooms = Collections.emptyList();
+            error = "End date must be after start date";
+        }
+
         model.addAttribute("title","Available rooms");
         model.addAttribute("listOfRooms",rooms);
         model.addAttribute("buttonText","Book Room");
@@ -36,8 +56,23 @@ public class BookingAddViewController {
     @RequestMapping("/BookingSuccess")
     public String bookingSuccess(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
                                  @RequestParam LocalDate endDateB,Model model){
+
+
         String error = null;
-        System.out.println(roomId);
+        Customer bookingCustomer = customerServices.findByEmail(email);
+        if (bookingCustomer == null) {
+            List<Room> rooms = List.of(roomServices.findById(roomId));
+            error = "No customer found with email: "+email+" found.";
+            model.addAttribute("title","Available rooms");
+            model.addAttribute("listOfRooms",rooms);
+            model.addAttribute("buttonText","Book Room");
+            model.addAttribute("error",error);
+            model.addAttribute("start",startDateB);
+            model.addAttribute("end",endDateB);
+            return "Booking/addBooking.html";
+        }
+
+
         model.addAttribute("error",error);
         model.addAttribute("email",email);
         model.addAttribute("roomId",roomId);
