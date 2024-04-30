@@ -19,16 +19,18 @@
 
 <h3>Search for customer</h3>
 <form action="/Customer/filter/update" method="post">
-    <label for="input"></label><br>
-    <input type="text" id="input" name="input" value=""><br><br>
-    <input type="submit" value="Search"><br>
+        <div class="form-group">
+        <label for="input"></label><br>
+        <input type="text" id="input" name="input" value=""><br><br>
+        <input type="submit" class="btn btn-outline-secondary" value="Search"><br>
+    </div>
 </form>
 
 <br>
 
 <h2 th:text="${header}"></h2>
 <div class="allCustomers" th:unless="${#lists.isEmpty(allCustomers)}">
-    <table>
+    <table class="table">
         <tbody>
         <tr th:each="cust : ${allCustomers}">
             <td th:text="${cust.id}"></td>
@@ -43,7 +45,7 @@
 </div>
 <br>
 <a href="/Customer/allWithUpdate">
-    <button>All Customers</button>
+    <button class="btn btn-outline-secondary" >All Customers</button>
 </a>
 <br>
 <a href="/">

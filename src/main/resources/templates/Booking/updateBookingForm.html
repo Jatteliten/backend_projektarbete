@@ -56,7 +56,7 @@
         <label for="endDate">End Date:</label>
         <input type="date" id="endDate" name="endDate" required><br>
 
-        <button type="submit">Search available rooms</button>
+        <button type="submit" class="btn btn-outline-secondary">Search available rooms</button>
     </form>
 </div>
 
@@ -64,8 +64,8 @@
 <br>
 <div th:text="${error} ? ${error} : 'Book a room'"></div>
 <br>
-<table border="1">
-    <thead>
+<table class="table" border="1">
+    <thead class="thead-dark">
     <th th:text="${title}"></th>
     <th>Email</th>
     </thead>
@@ -76,25 +76,26 @@
 
     <tr th:each="room : ${listOfRooms}">
         <form action="/Booking/update/BookingSuccess" method="post">
+            <div class="form-group">
+                <input type="hidden" name="oldBookingId" th:value="${oldBookingId}">
+                <input type="hidden" name="extraBeds" th:value="${extraBeds}">
 
-            <input type="hidden" name="oldBookingId" th:value="${oldBookingId}">
-            <input type="hidden" name="extraBeds" th:value="${extraBeds}">
-
-            <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
-            <input type="hidden" name="email" th:value="${custEmail}">
-            <td th:text="${custEmail}"></td>
-            <td>
-                <label for="startDateB">Start Date:</label>
-                <input type="date" id="startDateB" name="startDateB" th:value="${start}" required readonly>
-            </td>
-            <td>
-                <label for="endDateB">End Date:</label>
-                <input type="date" id="endDateB" name="endDateB" th:value="${end}" required readonly>
-            </td>
-            <td>
-                <input type="hidden" name="roomId" th:value="${room.id}">
-                <button type="submit" th:value="${buttonText}">Update booking</button>
-            </td>
+                <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
+                <input type="hidden" name="email" th:value="${custEmail}">
+                <td th:text="${custEmail}"></td>
+                <td>
+                    <label for="startDateB">Start Date:</label>
+                    <input type="date" id="startDateB" name="startDateB" th:value="${start}" required readonly>
+                </td>
+                <td>
+                    <label for="endDateB">End Date:</label>
+                    <input type="date" id="endDateB" name="endDateB" th:value="${end}" required readonly>
+                </td>
+                <td>
+                    <input type="hidden" name="roomId" th:value="${room.id}">
+                    <button type="submit" class="btn btn-outline-secondary" th:value="${buttonText}">Update booking</button>
+                </td>
+            </div>
         </form>
     </tr>
 

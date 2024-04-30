@@ -30,27 +30,26 @@
 
 <h3>Search for Booking</h3>
 <form action="/Booking/filter/update" method="post">
-    <label for="input"></label><br>
-    <input type="text" id="input" name="input" value=""><br><br>
-    <input type="submit" value="Search"><br>
+    <div class="form-group">
+        <label for="input"></label><br>
+        <input type="text" id="input" name="input" value=""><br><br>
+        <input type="submit" class="btn btn-outline-secondary" value="Search"><br>
+    </div>
 </form>
 
 <br>
 
 <h2 th:text="${header}"></h2>
 <div class="allBookings" th:unless="${#lists.isEmpty(allBookings)}">
-    <table>
+    <table class="table">
         <tbody th:each="b : ${allBookings}">
         <!-- Booking ID -->
         <tr>
-            <td class="miniHeader" th:text="'Booking nr: ' + ${b.id}"></td>
+            <td class="table-active" th:text="'Booking nr: ' + ${b.id}"></td>
         </tr>
         <!-- Booking Start and End Date -->
         <tr>
             <td th:text="${b.startDate} + ' to ' + ${b.endDate}"></td>
-        </tr>
-        <tr>
-            <td class="spacer"></td>
         </tr>
         <!-- Room Information -->
         <tr>
@@ -61,9 +60,6 @@
         </tr>
         <tr>
             <td th:text="'Size: ' + ${b.miniRoomDto.size}"></td>
-        </tr>
-        <tr>
-            <td class="spacer"></td>
         </tr>
         <!-- Customer Information -->
         <tr>
@@ -81,9 +77,6 @@
         <tr>
             <td th:text="${'Phone Number: ' + b.miniCustomerDto.phoneNumber}"></td>
         </tr>
-        <tr>
-            <td class="spacer"></td>
-        </tr>
         <!-- Update and Cancel Links -->
         <tr>
             <td>
@@ -92,12 +85,6 @@
                 <a class="buttonPadding" th:href="@{'/Booking/cancel/' + ${b.id}}">Cancel</a>
             </td>
         </tr>
-        <tr>
-            <td class="spacer"></td>
-        </tr>
-        <tr>
-            <td class="spacer"></td>
-        </tr>
         </tbody>
 
     </table>
@@ -105,7 +92,7 @@
 
 <br>
 <a href="/Booking/allWithUpdate">
-    <button>All Bookings</button>
+    <button class="btn btn-outline-secondary">All Bookings</button>
 </a>
 <br>
 <a href="/">

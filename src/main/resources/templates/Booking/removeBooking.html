@@ -12,9 +12,11 @@
 
     <h2 th:text="${header}"></h2>
     <form action="removeBookingSuccess" method="post">
-        <label for="id">Booking id:</label><br>
-        <input type="text" id="id" name="id"><br>
-        <input type="submit" value="Submit">
+        <div class="form-group">
+            <label for="id">Booking id:</label><br>
+            <input type="text" id="id" name="id"><br>
+            <input type="submit" class="btn btn-outline-secondary" value="Submit">
+        </div>
     </form>
 
     <a href="/">

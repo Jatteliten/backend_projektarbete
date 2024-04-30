@@ -14,15 +14,17 @@
     <h2 th:text="${header}" style="color: darkred">Lägg till kund</h2>
 
     <form action="addCustomerSuccess" method="post">
-        <label for="firstName">First name:</label><br>
-        <input type="text" id="firstName" name="firstName"><br>
-        <label for="lastName">Last name:</label><br>
-        <input type="text" id="lastName" name="lastName"><br><br>
-        <label for="email">e-mail:</label><br>
-        <input type="text" id="email" name="email"><br><br>
-        <label for="pNr">Phone number:</label><br>
-        <input type="text" id="pNr" name="pNr"><br><br>
-        <input type="submit" value="Submit">
+        <div class="form-group">
+            <label for="firstName">First name:</label><br>
+            <input type="text" id="firstName" name="firstName"><br>
+            <label for="lastName">Last name:</label><br>
+            <input type="text" id="lastName" name="lastName"><br><br>
+            <label for="email">e-mail:</label><br>
+            <input type="text" id="email" name="email"><br><br>
+            <label for="pNr">Phone number:</label><br>
+            <input type="text" id="pNr" name="pNr"><br><br>
+            <input type="submit" class="btn btn-outline-secondary" value="Submit">
+        </div>
     </form>
 
     <a href="/">
