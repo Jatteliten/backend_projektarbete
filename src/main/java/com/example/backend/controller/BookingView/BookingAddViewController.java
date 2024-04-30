@@ -2,7 +2,6 @@ package com.example.backend.controller.BookingView;
 
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
-import com.example.backend.services.RoomServices;
 import com.example.backend.services.impl.BookingServicesImpl;
 import com.example.backend.services.impl.CustomerServicesImpl;
 import com.example.backend.services.impl.RoomServicesImpl;
@@ -51,6 +50,7 @@ public class BookingAddViewController {
         model.addAttribute("error",error);
         model.addAttribute("start",startDate);
         model.addAttribute("end",endDate);
+
         return "Booking/addBooking.html";
     }
     @RequestMapping("/BookingSuccess")
@@ -86,6 +86,7 @@ public class BookingAddViewController {
             model.addAttribute("end",endDateB);
             return "Booking/addBooking.html";
         }
+
         return "Booking/BookingSuccess.html";
     }
 }
