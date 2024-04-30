@@ -9,8 +9,6 @@ import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
-import jakarta.validation.ConstraintViolation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -116,7 +114,7 @@ class CustomerServicesImplTest {
     @Test
     void createMiniBookingDtoListFromBookingList() {
         Booking booking = new Booking(1L, LocalDate.now(), LocalDate.now(), 1, new Room(1L, 2), new Customer());
-        List<Booking> bookings = Arrays.asList(booking);
+        List<Booking> bookings = List.of(booking);
 
         List<MiniBookingDtoForCustomer> miniBookingDtoList = cs.createMiniBookingDtoListFromBookingList(bookings);
         assertEquals(1, miniBookingDtoList.size());
@@ -215,15 +213,14 @@ class CustomerServicesImplTest {
     //Funkar ej
     @Test
     void findCustomers() {
-        List<MiniCustomerDto> allCustomers = Arrays.asList(
-                new MiniCustomerDto(1L, "John", "Doe", "john@example.com", "123456789"),
-                new MiniCustomerDto(2L, "Jane", "Doe", "jane@example.com", "987654321"),
-                new MiniCustomerDto(3L, "Alice", "Smith", "alice@example.com", "111222333")
+        List<Customer> allCustomers = Arrays.asList(
+                new Customer(1L, "John", "Doe", "john@example.com", "123456789"),
+                new Customer(2L, "Jane", "Doe", "jane@example.com", "987654321"),
+                new Customer(3L, "Alice", "Smith", "alice@example.com", "111222333")
         );
         String searchWord = "doe";
 
-        //Här blir det fel.
-        when(cs.getAllMiniCustomers()).thenReturn(allCustomers);
+        when(mockCustomerRepo.findAll()).thenReturn(allCustomers);
         List<MiniCustomerDto> customerMatches = cs.findCustomers(searchWord);
 
         assertEquals(2, customerMatches.size());
@@ -251,33 +248,21 @@ class CustomerServicesImplTest {
 
     }
 
-    //ChatGPT
-    //Funkar ej
     @Test
     void addCustomer_Success() {
         Customer customer = new Customer(1L, "John", "Doe", "john@example.com", "123456789");
-        when(cs.validator.validate(customer)).thenReturn(new HashSet<>());
-
         String result = cs.addCustomer(customer);
         verify(mockCustomerRepo, times(1)).save(customer);
         assertEquals("Success!", result);
     }
 
-    //ChatGPT
-    //Funkar ej
     @Test
     void addCustomer_Failure() {
         Customer invalidCustomer = new Customer();
-
-        Set<ConstraintViolation<Customer>> violations = new HashSet<>();
-        violations.add(mock(ConstraintViolation.class));
-        when(cs.validator.validate(invalidCustomer)).thenReturn(violations);
-
         String result = cs.addCustomer(invalidCustomer);
         verify(mockCustomerRepo, never()).save(any());
-
         assertNotEquals("Success!", result);
-        assertTrue(result.contains("Error"));
+        assertTrue(result.contains("required"));
     }
 
     @Test
