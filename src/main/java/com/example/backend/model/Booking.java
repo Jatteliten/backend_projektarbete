@@ -42,6 +42,12 @@ public class Booking {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public Booking(LocalDate startDate, LocalDate endDate, int extraBeds) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.extraBeds = extraBeds;
+    }
+
     public Booking(LocalDate startDate, LocalDate endDate, int extraBeds, Room room, Customer customer){
         this.startDate = startDate;
         this.endDate = endDate;

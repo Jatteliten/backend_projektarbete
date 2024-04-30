@@ -124,12 +124,29 @@ public class BookingServicesImpl implements BookingServices {
         br.delete(booking);
     }
 
-    public void updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId) {
+    public String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds) {
         Booking booking = br.findById(bookingId).get();
-        booking.setStartDate(startDate);
-        booking.setEndDate(endDate);
+        Booking validateBooking = new Booking(startDate,endDate,extraBeds);
         Room room = rr.findById(roomId).get();
-        booking.setRoom(room);
+
+
+
+        Set<ConstraintViolation<Booking>> violations = validator.validate(validateBooking);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            for (ConstraintViolation<Booking> violation : violations) {
+                errorMessages.append(violation.getMessage()).append("<br>");
+            }
+            return String.valueOf(errorMessages);
+        }
+        else {
+            booking.setStartDate(startDate);
+            booking.setEndDate(endDate);
+            booking.setRoom(room);
+            booking.setExtraBeds(extraBeds);
+            br.save(booking);
+            return "Success!";
+        }
     }
 
     @Override

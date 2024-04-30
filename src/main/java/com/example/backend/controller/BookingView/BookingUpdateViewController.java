@@ -2,6 +2,7 @@ package com.example.backend.controller.BookingView;
 
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
+import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.impl.BookingServicesImpl;
 import com.example.backend.services.impl.CustomerServicesImpl;
@@ -61,7 +62,7 @@ public class BookingUpdateViewController {
                             @RequestParam(required = false) LocalDate endDate,
                             Model model) {
 
-        MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
+//        MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
         MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
         //model.addAttribute("startDate", miniBookingDto.getStartDate());
         //model.addAttribute("endDate", miniBookingDto.getEndDate());
@@ -72,9 +73,21 @@ public class BookingUpdateViewController {
         model.addAttribute("custLastName", customer.getLastName());
         model.addAttribute("custEmail", customer.getEmail());
         model.addAttribute("custPhoneNr", customer.getPhoneNumber());
+        model.addAttribute("extraBeds", extraBeds);
 
         List<Room> rooms = bookingServices.filterRooms(beds, extraBeds, startDate, endDate);
         String error = null;
+
+        if (startDate != null && startDate.isBefore(LocalDate.now())){
+            rooms = Collections.emptyList();
+            error = "Start date must be in the future";
+        }
+
+        if (endDate != null &&endDate.isBefore(startDate)){
+            rooms = Collections.emptyList();
+            error = "End date must be after start date";
+        }
+
         model.addAttribute("title", "Available rooms");
         model.addAttribute("listOfRooms", rooms);
         model.addAttribute("buttonText", "Update Room");
@@ -86,23 +99,39 @@ public class BookingUpdateViewController {
 
     @RequestMapping("/update/BookingSuccess")
     public String bookingSuccess(@RequestParam Long oldBookingId,
+                                 @RequestParam int extraBeds,
                                  @RequestParam String email,
                                  @RequestParam Long roomId,
                                  @RequestParam LocalDate startDateB,
                                  @RequestParam LocalDate endDateB, Model model) {
 
-        cancel(oldBookingId, model);
 
-        String error = bookingServices.bookRoom(email, roomId, startDateB, endDateB);
+//        cancel(oldBookingId, model);
+
+        String error = bookingServices.updateBooking(oldBookingId,startDateB,endDateB,roomId,extraBeds);
         if (!error.contains("Success!")){
-            Integer size = roomServices.findById(roomId).getSize();
-            List<Room> rooms = bookingServices.filterRooms(size, 0, startDateB, endDateB);
+            System.out.println("här");
+            Customer c = customerServices.findByEmail(email);
+//            MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
+//            MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
+//            //model.addAttribute("startDate", miniBookingDto.getStartDate());
+//            //model.addAttribute("endDate", miniBookingDto.getEndDate());
+            model.addAttribute("oldBookingId", oldBookingId);
+            model.addAttribute("custId", c.getId());
+
+            model.addAttribute("custFirstName", c.getFirstName());
+            model.addAttribute("custLastName", c.getLastName());
+            model.addAttribute("custEmail", c.getEmail());
+            model.addAttribute("custPhoneNr", c.getPhoneNumber());
+//            Integer size = roomServices.findById(roomId).getSize();
+            List<Room> rooms = Collections.emptyList();
+//            List<Room> rooms = bookingServices.filterRooms(size, 0, startDateB, endDateB);
             model.addAttribute("title", "Available rooms");
             model.addAttribute("listOfRooms", rooms);
             model.addAttribute("buttonText", "Update Room");
             model.addAttribute("error", error);
-            model.addAttribute("start", startDateB);
-            model.addAttribute("end", endDateB);
+//            model.addAttribute("start", startDateB);
+//            model.addAttribute("end", endDateB);
 
             return "Booking/updateBookingForm.html";
         }
