@@ -30,17 +30,19 @@ public class CustomerAddViewController {
         model.addAttribute("pNr", pNr);
         model.addAttribute("email", email);
 
+        /*
         String inputFeedback = validateInput(firstName, lastName, pNr, email);
         if (!inputFeedback.isEmpty()) {
             model.addAttribute("header", "Error:" + inputFeedback);
             return addCustomer();
         }
+        */
 
         Customer test = cs.findByEmail(email);
 
         if(test == null){
-            cs.addCustomer(new Customer(firstName, lastName, email, pNr));
-            model.addAttribute("header", "Customer added!");
+            //cs.addCustomer(new Customer(firstName, lastName, email, pNr));
+            model.addAttribute("header", cs.addCustomer(new Customer(firstName, lastName, email, pNr)));
             return addCustomer();
         }else{
             model.addAttribute("header", "Customer already exists.");
