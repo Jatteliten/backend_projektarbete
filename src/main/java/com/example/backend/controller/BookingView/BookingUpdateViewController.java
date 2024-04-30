@@ -95,13 +95,16 @@ public class BookingUpdateViewController {
 
         String error = bookingServices.bookRoom(email, roomId, startDateB, endDateB);
         if (!error.contains("Success!")){
-//            model.addAttribute("title","Available rooms");
-//            model.addAttribute("listOfRooms", Collections.emptyList());
-//            model.addAttribute("buttonText","Book Room");
-//            model.addAttribute("error",error);
-//            model.addAttribute("start",startDateB);
-//            model.addAttribute("end",endDateB);
-//            return "Booking/addBooking.html";
+            Integer size = roomServices.findById(roomId).getSize();
+            List<Room> rooms = bookingServices.filterRooms(size, 0, startDateB, endDateB);
+            model.addAttribute("title", "Available rooms");
+            model.addAttribute("listOfRooms", rooms);
+            model.addAttribute("buttonText", "Update Room");
+            model.addAttribute("error", error);
+            model.addAttribute("start", startDateB);
+            model.addAttribute("end", endDateB);
+
+            return "Booking/updateBookingForm.html";
         }
         System.out.println(roomId);
         model.addAttribute("error", error);
