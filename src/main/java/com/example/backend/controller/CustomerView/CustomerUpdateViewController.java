@@ -1,6 +1,7 @@
 package com.example.backend.controller.CustomerView;
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
+import com.example.backend.model.Customer;
 import com.example.backend.services.impl.CustomerServicesImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,23 +35,21 @@ public class CustomerUpdateViewController {
     @RequestMapping("/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         MiniCustomerDto miniCustomerDto = customerServices.getMiniCustomerById(id);
-        model.addAttribute("id", id);
-        model.addAttribute("fName", miniCustomerDto.getFirstName());
-        model.addAttribute("lName", miniCustomerDto.getLastName());
-        model.addAttribute("email", miniCustomerDto.getEmail());
-        model.addAttribute("phoneNumber", miniCustomerDto.getPhoneNumber());
+        model.addAttribute("customer", miniCustomerDto);
+
         return "Customer/updateCustomerForm.html";
     }
 
     //Ska kallas på när man fyllt i formulär
     @PostMapping("/update/final")
-    public String updateByAll(@RequestParam Long id,
-                              @RequestParam String fName,
-                              @RequestParam String lName,
-                              @RequestParam String email,
-                              @RequestParam String phoneNr,
-                              Model model) {
-        customerServices.updateCustomer(id, fName, lName, email, phoneNr);
+    public String updateByAll(MiniCustomerDto customer, Model model) {
+
+        customerServices.updateCustomer(customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhoneNumber());
+
         model.addAttribute("message", "Customer updated successfully!");
         return allWithUpdate(model);
     }

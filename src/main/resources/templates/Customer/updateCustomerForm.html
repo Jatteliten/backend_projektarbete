@@ -14,62 +14,24 @@
      på annat sätt en via alert rutor -->
 <h2 th:text="${validationMess}">Fill Out Form To Update</h2>
 
-<form action="/Customer/update/final" method="post" onsubmit="return validateForm()">
+<form action="/Customer/update/final" method="post" th:object="${customer}">
     <!-- För att man inte ska råka ändra Id är den hidden -->
-    <input type="hidden" id="id" name="id" th:value="${id}">
+    <input type="hidden" id="id" name="id" th:value="${customer.id}">
 
-    <label for="fName">First Name:</label><br>
-    <input type="text" id="fName" name="fName" th:value="${fName}"><br>
+    <label for="firstName">First Name:</label><br>
+    <input type="text" id="firstName" name="fName" th:field="${customer.firstName}"><br>
 
-    <label for="lName">Last Name:</label><br>
-    <input type="text" id="lName" name="lName" th:value="${lName}"><br>
+    <label for="lastName">Last Name:</label><br>
+    <input type="text" id="lastName" name="lName" th:field="${customer.lastName}"><br>
 
     <label for="email">Email:</label><br>
-    <input type="text" id="email" name="email" th:value="${email}"><br>
+    <input type="text" id="email" name="email" th:field="${customer.email}"><br>
 
-    <label for="phoneNr">Phone Number:</label><br>
-    <input type="text" id="phoneNr" name="phoneNr" th:value="${phoneNumber}"><br><br>
+    <label for="phoneNumber">Phone Number:</label><br>
+    <input type="text" id="phoneNumber" name="phoneNr" th:field="${customer.phoneNumber}"><br><br>
 
     <input type="submit" value="Update"><br>
 </form>
 
-<script>
-    function validateForm() {
-        const fName = document.getElementById("fName").value;
-        const lName = document.getElementById("lName").value;
-        const email = document.getElementById("email").value;
-        const phoneNr = document.getElementById("phoneNr").value;
-
-        const letterPattern = /^[A-Za-z]+$/;
-        if (!letterPattern.test(fName) || !letterPattern.test(lName)) {
-            alert("First Name and Last Name must contain only letters!");
-            return false;
-        }
-        if (fName.length < 2 || lName.length < 2 || fName.length > 30 || lName.length > 30) {
-            alert("First Name and Last Name must be at least two and max 30 characters long !");
-            return false;
-        }
-        const emailPattern1 = /@/;
-        if (!emailPattern1.test(email)) {
-            alert("Email must contain '@'!");
-            return false;
-        }
-        const emailPattern2 = /^[^\s@]+@[^.\s@]+\.[^\s@]+$/
-        if (!emailPattern2.test(email)) {
-            alert("Email must contain at least one character before '@' and at least two after.!");
-            return false;
-        }
-        const phonePattern = /^(07|\+46)\d+$/;
-        if (!phonePattern.test(phoneNr)) {
-            alert("Phone Number must start with '07' or '+46' and contain only numbers!");
-            return false;
-        }
-        if (fName === "" || lName === "" || email === "" || phoneNr === "") {
-            alert("All fields are required!");
-            return false;
-        }
-        return true;
-    }
-</script>
 </body>
 </html>
