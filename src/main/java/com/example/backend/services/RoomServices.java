@@ -14,4 +14,5 @@ public interface RoomServices {
     public List<MiniRoomDto> getAllMiniRooms();
     public DetailedRoomDto getDetailedRoomById(Long id);
     public boolean roomExists(Long id);
+    public Room findById(Long id);
 }
