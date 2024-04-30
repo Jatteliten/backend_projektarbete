@@ -5,9 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +33,9 @@ public class Customer {
     private String email;
 
     @NotEmpty(message = "Phone number is required")
+    @Pattern(regexp="^[0-9+()-]*$", message="Wrong phone number format")
+    @Max(value = 15, message ="Phone number is too long")
+    @Min(value = 7, message = "Phone number is too short")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

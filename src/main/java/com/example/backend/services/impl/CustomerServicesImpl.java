@@ -109,12 +109,6 @@ public class CustomerServicesImpl implements CustomerServices {
 
         cr.save(customer);
     }
-    /*
-    @Override
-    public void addCustomer(@Valid Customer c) {
-        cr.save(c);
-    }
-     */
 
     @Override
     public String addCustomer(Customer c) {
