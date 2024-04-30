@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -76,7 +77,7 @@ public class BookingUpdateViewController {
         String error = null;
         model.addAttribute("title", "Available rooms");
         model.addAttribute("listOfRooms", rooms);
-        model.addAttribute("buttonText", "Book Room");
+        model.addAttribute("buttonText", "Update Room");
         model.addAttribute("error", error);
         model.addAttribute("start", startDate);
         model.addAttribute("end", endDate);
@@ -92,12 +93,21 @@ public class BookingUpdateViewController {
 
         cancel(oldBookingId, model);
 
-        String error = null;
+        String error = bookingServices.bookRoom(email, roomId, startDateB, endDateB);
+        if (!error.contains("Success!")){
+//            model.addAttribute("title","Available rooms");
+//            model.addAttribute("listOfRooms", Collections.emptyList());
+//            model.addAttribute("buttonText","Book Room");
+//            model.addAttribute("error",error);
+//            model.addAttribute("start",startDateB);
+//            model.addAttribute("end",endDateB);
+//            return "Booking/addBooking.html";
+        }
         System.out.println(roomId);
         model.addAttribute("error", error);
         model.addAttribute("email", email);
         model.addAttribute("roomId", roomId);
-        bookingServices.bookRoom(email, roomId, startDateB, endDateB);
+
         return "Booking/BookingSuccess.html";
     }
 
