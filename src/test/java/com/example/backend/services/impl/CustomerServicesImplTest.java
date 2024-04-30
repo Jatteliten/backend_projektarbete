@@ -47,7 +47,6 @@ class CustomerServicesImplTest {
 
         dc = cs.customerToDetailedCustomerDto(c);
         mc = cs.customerToMiniCustomerDto(c);
-        System.out.println(dc.getMiniBookingDto().get(0).getId());
 
         when(mockCustomerRepo.findById(1L)).thenReturn(Optional.of(c));
         when(mockBookingRepo.findById(1L)).thenReturn(Optional.of(b.get(0)));
