@@ -11,6 +11,10 @@ import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +27,14 @@ public class BookingServicesImpl implements BookingServices {
     private final BookingRepo br;
     private final CustomerRepo cr;
     private final RoomRepo rr;
+    private Validator validator;
 
     public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr) {
         this.br = br;
         this.cr = cr;
         this.rr = rr;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
     }
 
     public DetailedBookingDto bookingToDetailedBookingDto(Booking b) {
@@ -117,12 +124,29 @@ public class BookingServicesImpl implements BookingServices {
         br.delete(booking);
     }
 
-    public void updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId) {
+    public String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds) {
         Booking booking = br.findById(bookingId).get();
-        booking.setStartDate(startDate);
-        booking.setEndDate(endDate);
+        Booking validateBooking = new Booking(startDate,endDate,extraBeds);
         Room room = rr.findById(roomId).get();
-        booking.setRoom(room);
+
+
+
+        Set<ConstraintViolation<Booking>> violations = validator.validate(validateBooking);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            for (ConstraintViolation<Booking> violation : violations) {
+                errorMessages.append(violation.getMessage()).append("<br>");
+            }
+            return String.valueOf(errorMessages);
+        }
+        else {
+            booking.setStartDate(startDate);
+            booking.setEndDate(endDate);
+            booking.setRoom(room);
+            booking.setExtraBeds(extraBeds);
+            br.save(booking);
+            return "Success!";
+        }
     }
 
     @Override
@@ -165,12 +189,28 @@ public class BookingServicesImpl implements BookingServices {
 
     @Modifying
     @Transactional
-    public void bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
+    public String bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
         Customer bookingCustomer = cr.findByEmail(email);
         Room room = rr.findById(roomId).get();
-        bookingCustomer.addBooking(new Booking(startDate, endDate, calculateExtraBeds(room), room, bookingCustomer));
-        cr.save(bookingCustomer);
+        Booking newBooking = new Booking(startDate, endDate, calculateExtraBeds(room), room, bookingCustomer);
+
+
+
+        Set<ConstraintViolation<Booking>> violations = validator.validate(newBooking);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            for (ConstraintViolation<Booking> violation : violations) {
+                errorMessages.append(violation.getMessage()).append("<br>");
+            }
+            return String.valueOf(errorMessages);
+        }
+        else {
+            bookingCustomer.addBooking(newBooking);
+            cr.save(bookingCustomer);
+            return "Success!";
+        }
     }
+
 
     private int calculateExtraBeds(Room room) {
         return switch (room.getSize()) {

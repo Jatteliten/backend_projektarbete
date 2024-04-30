@@ -78,6 +78,7 @@
         <form action="/Booking/update/BookingSuccess" method="post">
 
             <input type="hidden" name="oldBookingId" th:value="${oldBookingId}">
+            <input type="hidden" name="extraBeds" th:value="${extraBeds}">
 
             <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
             <input type="hidden" name="email" th:value="${custEmail}">
@@ -92,7 +93,7 @@
             </td>
             <td>
                 <input type="hidden" name="roomId" th:value="${room.id}">
-                <button type="submit">Book Room</button>
+                <button type="submit" th:value="${buttonText}">Update booking</button>
             </td>
         </form>
     </tr>
