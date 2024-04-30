@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CustomerServicesImpl implements CustomerServices {
     private final CustomerRepo cr;
     private final BookingRepo br;
-    private Validator validator;
+    public Validator validator;
 
     public CustomerServicesImpl(CustomerRepo cr, BookingRepo br) {
         this.cr = cr;
@@ -53,11 +53,11 @@ public class CustomerServicesImpl implements CustomerServices {
                 .bookings(createBookingListFromMiniBookingsDtoList(c.getMiniBookingDto())).build();
     }
 
-    private List<Booking> createBookingListFromMiniBookingsDtoList(List<MiniBookingDtoForCustomer> b) {
+    public List<Booking> createBookingListFromMiniBookingsDtoList(List<MiniBookingDtoForCustomer> b) {
         return b.stream().map(bb -> br.findById(bb.getId()).get()).toList();
     }
 
-    private List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b) {
+    public List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b) {
         return b.stream().map(bb -> new MiniBookingDtoForCustomer(bb.getId(), bb.getStartDate(), bb.getEndDate(),
                 new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize()))).collect(Collectors.toList());
     }
@@ -72,6 +72,12 @@ public class CustomerServicesImpl implements CustomerServices {
 
     public DetailedCustomerDto getDetailedCustomerById(Long id) {
         return customerToDetailedCustomerDto(cr.findById(id).get());
+    }
+
+    @Override
+    public MiniCustomerDto getMiniCustomerById(Long id) {
+        Customer customer = cr.findById(id).get();
+        return customerToMiniCustomerDto(customer);
     }
 
     @Override
@@ -94,12 +100,6 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     @Override
-    public MiniCustomerDto getMiniCustomerById(Long id) {
-        Customer customer = cr.findById(id).get();
-        return customerToMiniCustomerDto(customer);
-    }
-
-    @Override
     public void updateCustomer(Long id, String fName, String lName, String email, String phoneNr) {
         Customer customer = cr.findById(id).get();
         customer.setFirstName(fName.trim());
@@ -109,12 +109,6 @@ public class CustomerServicesImpl implements CustomerServices {
 
         cr.save(customer);
     }
-    /*
-    @Override
-    public void addCustomer(@Valid Customer c) {
-        cr.save(c);
-    }
-     */
 
     @Override
     public String addCustomer(Customer c) {
@@ -136,6 +130,7 @@ public class CustomerServicesImpl implements CustomerServices {
         cr.deleteById(id);
     }
 
+    //Radera?
     @Override
     public void deleteCustomer(Customer c) {
         if (c != null) {
