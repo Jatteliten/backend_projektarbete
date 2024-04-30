@@ -8,12 +8,12 @@
           crossorigin="anonymous">
     <title>Title</title>
 </head>
-<body>
+<body class="container">
 
     <h1>Booking confirmed</h1>
     <p th:text="'Customer ' + ${email} +' booked room with id: '+${roomId}+'.'"/>
     <a href="/">
-        <button>Homepage</button>
+        <button class="btn btn-outline-info">Homepage</button>
     </a>
 </body>
 </html>
