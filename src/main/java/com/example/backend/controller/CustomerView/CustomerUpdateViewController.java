@@ -26,8 +26,10 @@ public class CustomerUpdateViewController {
     public String allWithUpdate(Model model) {
         System.out.println("hej");
         List<MiniCustomerDto> customers = customerServices.getAllMiniCustomers();
+
         model.addAttribute("allCustomers", customers);
         model.addAttribute("header", "All Customers");
+
         return "Customer/updateCustomer.html";
     }
 
@@ -44,8 +46,7 @@ public class CustomerUpdateViewController {
     //Ska kallas på när man fyllt i formulär
     @PostMapping("/update/final")
     public String updateByAll(MiniCustomerDto customer, Model model) {
-
-        model.addAttribute("message", customerServices.updateCustomer(customer));
+        model.addAttribute("message", customerServices.addCustomer2(customer));
         return allWithUpdate(model);
     }
 

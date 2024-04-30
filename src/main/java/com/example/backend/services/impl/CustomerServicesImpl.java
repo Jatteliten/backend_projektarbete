@@ -127,10 +127,57 @@ public class CustomerServicesImpl implements CustomerServices {
         }
     }
 
+    public String addCustomer2(MiniCustomerDto c) {
+        Customer customer = cr.findById(c.getId()).orElse(null);
+
+        if (customer != null) {
+            String originalFirstName = customer.getFirstName();
+            String originalLastName = customer.getLastName();
+            String originalEmail = customer.getEmail();
+            String originalPhoneNumber = customer.getPhoneNumber();
+
+            try {
+                customer.setFirstName(c.getFirstName().trim());
+                customer.setLastName(c.getLastName().trim());
+                customer.setEmail(c.getEmail().trim());
+                customer.setPhoneNumber(c.getPhoneNumber().trim());
+
+                Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
+
+                if (violations.isEmpty()) {
+                    cr.save(customer);
+                    return "Success!";
+                } else {
+                    customer.setFirstName(originalFirstName);
+                    customer.setLastName(originalLastName);
+                    customer.setEmail(originalEmail);
+                    customer.setPhoneNumber(originalPhoneNumber);
+                    StringBuilder errorMessages = new StringBuilder();
+                    for (ConstraintViolation<Customer> violation : violations) {
+                        errorMessages.append(" - ").append(violation.getMessage());
+                    }
+                    return String.valueOf(errorMessages);
+                }
+            } catch (Exception e) {
+                customer.setFirstName(originalFirstName);
+                customer.setLastName(originalLastName);
+                customer.setEmail(originalEmail);
+                customer.setPhoneNumber(originalPhoneNumber);
+
+                e.printStackTrace();
+                return "An error occurred while updating the customer.";
+            }
+        } else {
+            return "Customer not found.";
+        }
+    }
+
+
     @Override
     public void deleteCustomerById(Long id) {
         cr.deleteById(id);
     }
+
 
     //Radera?
     @Override
@@ -141,6 +188,8 @@ public class CustomerServicesImpl implements CustomerServices {
             //lägg till ev felmeddelande
         }
     }
+
+
     public Customer findByEmail(String email){
         return cr.findByEmail(email);
     }
