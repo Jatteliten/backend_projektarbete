@@ -168,9 +168,6 @@ public class BookingServicesImpl implements BookingServices {
 
         return availableRooms.stream().filter(room -> room.getSize() >= beds + extraBeds).toList();
     }
-    public Integer getRoomSize(Long roomId){
-        return rr.findById(roomId).get().getSize();
-    }
 
     private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate) {
 
