@@ -24,7 +24,7 @@ public class BookingRemoveViewController {
         return "Booking/removeBooking.html";
     }
 
-    @PostMapping("/ removeBookingSuccess")
+    @PostMapping("/removeBookingSuccess")
     public String removeBookingSuccess(@RequestParam String id, Model model){
         try {
             Long idLong = Long.parseLong(id);
