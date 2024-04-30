@@ -24,6 +24,7 @@ public class CustomerUpdateViewController {
 
     @RequestMapping("/allWithUpdate")
     public String allWithUpdate(Model model) {
+        System.out.println("hej");
         List<MiniCustomerDto> customers = customerServices.getAllMiniCustomers();
         model.addAttribute("allCustomers", customers);
         model.addAttribute("header", "All Customers");

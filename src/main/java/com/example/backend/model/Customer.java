@@ -34,8 +34,7 @@ public class Customer {
 
     @NotEmpty(message = "Phone number is required")
     @Pattern(regexp="^[0-9+()-]*$", message="Wrong phone number format")
-    @Max(value = 15, message ="Phone number is too long")
-    @Min(value = 7, message = "Phone number is too short")
+    @Size(min = 7, max = 15, message="Phone number must be between 7-15 characters long")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
