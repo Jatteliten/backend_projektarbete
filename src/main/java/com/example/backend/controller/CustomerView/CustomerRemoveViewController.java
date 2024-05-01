@@ -2,7 +2,6 @@ package com.example.backend.controller.CustomerView;
 
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
-import com.example.backend.model.Customer;
 import com.example.backend.services.impl.CustomerServicesImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
