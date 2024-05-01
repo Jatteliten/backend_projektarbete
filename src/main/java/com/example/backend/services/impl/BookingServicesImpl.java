@@ -27,7 +27,7 @@ public class BookingServicesImpl implements BookingServices {
     private final BookingRepo br;
     private final CustomerRepo cr;
     private final RoomRepo rr;
-    private Validator validator;
+    private final Validator validator;
 
     public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr) {
         this.br = br;

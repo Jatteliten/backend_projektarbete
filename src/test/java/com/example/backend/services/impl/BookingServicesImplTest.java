@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,8 +60,8 @@ class BookingServicesImplTest {
                 LocalDate.of(2022, 10, 12), 1, r1, c1);
         b2 = new Booking(2L, LocalDate.of(2023, 12, 12),
                 LocalDate.of(2023, 12, 20), 2, r2, c2);
-        b1List = Arrays.asList(b1);
-        b2List = Arrays.asList(b2);
+        b1List = Collections.singletonList(b1);
+        b2List = List.of(b2);
 
         c1.setBookings(b1List);
         c2.setBookings(b2List);
