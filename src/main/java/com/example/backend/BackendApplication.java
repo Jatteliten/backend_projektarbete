@@ -21,7 +21,6 @@ public class BackendApplication {
     }
 
     /*
-
     @Bean
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
@@ -48,20 +47,30 @@ public class BackendApplication {
             roomRepo.save(r9);
             roomRepo.save(r10);
 
-            Customer c1 = new Customer("Daniel", "Isaksson", "Daniel@hej.se", "0725523222");
-            Customer c2 = new Customer("Lise", "Martinsen", "Lise@hej.se", "0732511663");
+            Customer c1 = new Customer("Daniel", "Isaksson",
+                    "Daniel@hej.se", "0725523222");
+            Customer c2 = new Customer("Lise", "Martinsen",
+                    "Lise@hej.se", "0732511663");
+            Customer c3 = new Customer("Martin", "Harrysson",
+                    "Martin@hej.se", "0725523223");
+            Customer c4 = new Customer("Astrid", "Rosen",
+                    "Astrid@hej.se", "0732511655");
 
             cr.save(c1);
             cr.save(c2);
+            cr.save(c3);
+            cr.save(c4);
 
-            Booking b1 = new Booking(LocalDate.of(2024, 10, 10),
-                    LocalDate.of(2024, 10, 12), 1, r1, c1);
+            LocalDate currentDay = LocalDate.now();
 
-            Booking b2 = new Booking(LocalDate.of(2024, 11, 11),
-                    LocalDate.of(2024, 11, 16), 1, r1, c1);
+            Booking b1 = new Booking(currentDay.plusDays(3),
+                    currentDay.plusDays(6), 1, r1, c1);
 
-            Booking b3 = new Booking(LocalDate.of(2024, 11, 11),
-                    LocalDate.of(2024, 11, 14), 1, r4, c2);
+            Booking b2 = new Booking(currentDay.plusMonths(1).plusDays(3),
+                    currentDay.plusMonths(1).plusDays(5), 1, r1, c1);
+
+            Booking b3 = new Booking(currentDay.plusDays(1),
+                    currentDay.plusDays(6), 1, r4, c2);
 
             br.save(b1);
             br.save(b2);
@@ -71,6 +80,4 @@ public class BackendApplication {
     }
 
      */
-
-
 }
