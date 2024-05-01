@@ -10,38 +10,36 @@
 </head>
 <body class="container">
 
-<h1>Booking</h1>
-<div>
-    <table class="table">
-        <tr>
-            <td>Customer</td>
-            <td>Booking</td>
-        </tr>
-        <tr>
-            <td><a href="/Customer/addCustomer">
-                <button class="btn btn-outline-secondary">Register Customer</button>
-            </a></td>
-            <td><a href="/Booking/availableRooms">
-                <button class="btn btn-outline-secondary">Place Booking</button>
-            </a></td>
-        </tr>
-        <tr>
-            <td><a href="/Customer/allWithUpdate">
-                <button class="btn btn-outline-secondary">Update Customer</button>
-            </a></td>
-            <td><a href="/Booking/allWithUpdate">
-                <button class="btn btn-outline-secondary">Update Booking</button>
-            </a></td>
-        </tr>
-        <tr>
-            <td><a href="/Customer/allWithDelete">
-                <button class="btn btn-outline-secondary">Delete Customer</button>
-            </a></td>
-            <td><a href="/Booking/removeBooking">
-                <button class="btn btn-outline-secondary">Delete Booking</button>
-            </a></td>
-        </tr>
-    </table>
+<a href="/" class="link-dark" style="text-decoration: none; color: #333333">
+    <h1>Booking</h1>
+</a>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col"><p style="font-size:20px">Customer</p></div>
+        <div class="col"><p style="font-size:20px">Booking</p></div>
+        <div class="w-100"><br></div>
+        <div class="col"><a href="/Customer/addCustomer">
+            <button class="btn btn-outline-secondary">Register Customer</button>
+        </a></div>
+        <div class="col"><a href="/Booking/availableRooms">
+            <button class="btn btn-outline-secondary">Book room</button>
+        </a></div>
+        <div class="w-100"><br></div>
+        <div class="col"><a href="/Customer/allWithUpdate">
+            <button class="btn btn-outline-secondary">Update Customer</button>
+        </a></div>
+        <div class="col"><a href="/Booking/allWithUpdate">
+            <button class="btn btn-outline-secondary">Update Booking</button>
+        </a></div>
+        <div class="w-100"><br></div>
+        <div class="col"><a href="/Customer/allWithDelete">
+            <button class="btn btn-outline-secondary">Delete Customer</button>
+        </a></div>
+        <div class="col"><a href="/Booking/removeBooking">
+            <button class="btn btn-outline-secondary">Delete Booking</button>
+        </a></div>
+    </div>
 </div>
 
 </body>
