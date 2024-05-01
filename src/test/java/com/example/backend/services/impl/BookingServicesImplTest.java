@@ -15,11 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class BookingServicesImplTest {
@@ -164,6 +167,25 @@ class BookingServicesImplTest {
         Assertions.assertEquals(1L, db.getId());
         Assertions.assertEquals(1L, db.getMiniCustomerDto().getId());
         Assertions.assertEquals(1L, db.getMiniRoomDto().getId());
+    }
+
+    @Test
+    void checkNotAvailableTest() {
+        // check if date is already booked
+        Booking b1 = new Booking(LocalDate.now().plusDays(1),LocalDate.now().plusDays(3),0);
+        Boolean actualValue = bs.checkNotAvailable(b1,LocalDate.now().plusDays(1),LocalDate.now().plusDays(3));
+        assertTrue(actualValue);
+        // check if date is available
+        actualValue = bs.checkNotAvailable(b1,LocalDate.now().plusDays(4),LocalDate.now().plusDays(6));
+        assertFalse(actualValue);
+    }
+
+    @Test
+    void calculateExtraBedsTest() {
+        Room room = new Room(3);
+        int expectedValue = 1;
+        assertEquals(expectedValue,bs.calculateExtraBeds(room));
+
     }
 
 }

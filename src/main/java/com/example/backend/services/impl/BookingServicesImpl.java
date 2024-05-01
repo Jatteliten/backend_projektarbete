@@ -153,7 +153,7 @@ public class BookingServicesImpl implements BookingServices {
         return availableRooms.stream().filter(room -> room.getSize() >= beds + extraBeds).toList();
     }
 
-    private boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate) {
+    public boolean checkNotAvailable(Booking booking, LocalDate startDate, LocalDate endDate) {
 
         LocalDate bookedStartDate = booking.getStartDate();
         LocalDate bookedEndDate = booking.getEndDate();
@@ -192,7 +192,7 @@ public class BookingServicesImpl implements BookingServices {
         }
     }
 
-    private int calculateExtraBeds(Room room) {
+    public int calculateExtraBeds(Room room) {
         return switch (room.getSize()) {
             case 1 -> 0;
             case 2 -> 0;
