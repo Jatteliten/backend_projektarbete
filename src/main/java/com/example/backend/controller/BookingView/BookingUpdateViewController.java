@@ -6,7 +6,6 @@ import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.impl.BookingServicesImpl;
 import com.example.backend.services.impl.CustomerServicesImpl;
-import com.example.backend.services.impl.RoomServicesImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +22,11 @@ import java.util.List;
 public class BookingUpdateViewController {
 
     private final BookingServicesImpl bookingServices;
-    private final RoomServicesImpl roomServices;
+
     private final CustomerServicesImpl customerServices;
 
-    public BookingUpdateViewController(BookingServicesImpl bookingServices, RoomServicesImpl roomServices, CustomerServicesImpl customerServices) {
+    public BookingUpdateViewController(BookingServicesImpl bookingServices, CustomerServicesImpl customerServices) {
         this.bookingServices = bookingServices;
-        this.roomServices = roomServices;
         this.customerServices = customerServices;
     }
 
@@ -62,10 +60,8 @@ public class BookingUpdateViewController {
                             @RequestParam(required = false) LocalDate endDate,
                             Model model) {
 
-//        MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
         MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
-        //model.addAttribute("startDate", miniBookingDto.getStartDate());
-        //model.addAttribute("endDate", miniBookingDto.getEndDate());
+
         model.addAttribute("oldBookingId", id);
         model.addAttribute("custId", custId);
 
@@ -106,16 +102,12 @@ public class BookingUpdateViewController {
                                  @RequestParam LocalDate endDateB, Model model) {
 
 
-//        cancel(oldBookingId, model);
+
 
         String error = bookingServices.updateBooking(oldBookingId,startDateB,endDateB,roomId,extraBeds);
         if (!error.contains("Success!")){
             System.out.println("här");
             Customer c = customerServices.findByEmail(email);
-//            MiniBookingDto miniBookingDto = bookingServices.getMiniBookingById(id);
-//            MiniCustomerDto customer = customerServices.getMiniCustomerById(custId);
-//            //model.addAttribute("startDate", miniBookingDto.getStartDate());
-//            //model.addAttribute("endDate", miniBookingDto.getEndDate());
             model.addAttribute("oldBookingId", oldBookingId);
             model.addAttribute("custId", c.getId());
 
@@ -123,15 +115,14 @@ public class BookingUpdateViewController {
             model.addAttribute("custLastName", c.getLastName());
             model.addAttribute("custEmail", c.getEmail());
             model.addAttribute("custPhoneNr", c.getPhoneNumber());
-//            Integer size = roomServices.findById(roomId).getSize();
+
             List<Room> rooms = Collections.emptyList();
-//            List<Room> rooms = bookingServices.filterRooms(size, 0, startDateB, endDateB);
+
             model.addAttribute("title", "Available rooms");
             model.addAttribute("listOfRooms", rooms);
             model.addAttribute("buttonText", "Update Room");
             model.addAttribute("error", error);
-//            model.addAttribute("start", startDateB);
-//            model.addAttribute("end", endDateB);
+
 
             return "Booking/updateBookingForm.html";
         }
