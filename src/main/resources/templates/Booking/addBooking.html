@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
 </head>
+
 <body class="container">
 <a href="/" style="text-decoration: none; color: #333333">
     <h1>Booking</h1>
@@ -49,7 +49,7 @@
 
         <tr th:each="room : ${listOfRooms}">
             <form action="/Booking/BookingSuccess" method="post">
-            <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
+                <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
                 <td><input type="email" name="email" placeholder="Enter Customer email" required><br></td>
 
                 <td>
@@ -62,7 +62,7 @@
                 </td>
                 <td>
                     <input type="hidden" name="roomId" th:value="${room.id}">
-                    <button type="submit" class="btn btn-outline-secondary" >Book Room</button>
+                    <button type="submit" class="btn btn-outline-secondary">Book Room</button>
                 </td>
             </form>
         </tr>
@@ -71,14 +71,15 @@
     </table>
 </div>
 
-    <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            var startDateB = document.getElementById('startDateB').value;
-            var endDateB = document.getElementById('endDateB').value;
-            document.getElementById('startDateBHidden').value = startDateB;
-            document.getElementById('endDateBHidden').value = endDateB;
-        });
-    </script>
+<script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+        var startDateB = document.getElementById('startDateB').value;
+        var endDateB = document.getElementById('endDateB').value;
+        document.getElementById('startDateBHidden').value = startDateB;
+        document.getElementById('endDateBHidden').value = endDateB;
+    });
+</script>
 
 </body>
+
 </html>

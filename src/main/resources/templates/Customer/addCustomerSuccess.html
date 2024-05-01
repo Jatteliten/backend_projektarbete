@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
 </head>
+
 <body class="container">
 <a href="/" class="link-dark" style="text-decoration: none; color: #333333">
     <h1>Booking</h1>
 </a>
 <div class="container">
-    <h1><p th:text="'Added customer ' + ${firstName} + ' ' + ${lastName}"/><br>
-        <p th:text="'Phone number: ' + ${pNr}"/><br>
-        <p th:text="'e-mail: ' + ${email}"/>
+    <h1>
+        <p th:text="'Added customer ' + ${firstName} + ' ' + ${lastName}" /><br>
+        <p th:text="'Phone number: ' + ${pNr}" /><br>
+        <p th:text="'e-mail: ' + ${email}" />
     </h1>
 </div>
 </body>
+
 </html>
