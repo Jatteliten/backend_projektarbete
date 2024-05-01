@@ -17,7 +17,6 @@ public interface CustomerServices {
     public DetailedCustomerDto getDetailedCustomerById(Long id);
 
     public String addCustomer(Customer c);
-    public void deleteCustomer(Customer c);
     public void deleteCustomerById(Long id);
     public String updateCustomer(MiniCustomerDto c);
     public List<MiniCustomerDto> findCustomers(String searchWord);

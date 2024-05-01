@@ -80,11 +80,7 @@ public class BookingServicesImpl implements BookingServices {
 
     @Override
     public void deleteBooking(Booking b) {
-        if (b != null) {
-            br.delete(b);
-        } else {
-            //lägg till ev felmeddelande
-        }
+        br.delete(b);
     }
 
     @Override
@@ -95,13 +91,9 @@ public class BookingServicesImpl implements BookingServices {
         for (MiniBookingDto b : allBookings) {
             if (
                     b.getId().toString().contains(searchWord) ||
-                            //går det att göra såhär med ett datum-objekt?
                             b.getStartDate().toString().contains(searchWord) ||
                             b.getEndDate().toString().contains(searchWord) ||
-
                             b.getMiniRoomDto().getId().toString().contains(searchWord) ||
-                            //b.getMiniRoomDto().getSize() == Integer.parseInt(searchWord)||
-
                             b.getMiniCustomerDto().getId().toString().contains(searchWord) ||
                             b.getMiniCustomerDto().getEmail().toLowerCase().contains(searchWord) ||
                             b.getMiniCustomerDto() .getFirstName().toLowerCase().contains(searchWord) ||
@@ -129,13 +121,11 @@ public class BookingServicesImpl implements BookingServices {
         Booking validateBooking = new Booking(startDate,endDate,extraBeds);
         Room room = rr.findById(roomId).get();
 
-
-
         Set<ConstraintViolation<Booking>> violations = validator.validate(validateBooking);
         if (!violations.isEmpty()) {
             StringBuilder errorMessages = new StringBuilder();
             for (ConstraintViolation<Booking> violation : violations) {
-                errorMessages.append(violation.getMessage()).append("<br>");
+                errorMessages.append(" - ").append(violation.getMessage());
             }
             return String.valueOf(errorMessages);
         }
@@ -147,12 +137,6 @@ public class BookingServicesImpl implements BookingServices {
             br.save(booking);
             return "Success!";
         }
-    }
-
-    @Override
-    public boolean isAvailable(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId) {
-        //Kolla om det redan finns funktioner för detta.
-        return false;
     }
 
     public List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate) {
@@ -197,7 +181,7 @@ public class BookingServicesImpl implements BookingServices {
         if (!violations.isEmpty()) {
             StringBuilder errorMessages = new StringBuilder();
             for (ConstraintViolation<Booking> violation : violations) {
-                errorMessages.append(violation.getMessage()).append("<br>");
+                errorMessages.append(" - ").append(violation.getMessage());
             }
             return String.valueOf(errorMessages);
         }
@@ -207,7 +191,6 @@ public class BookingServicesImpl implements BookingServices {
             return "Success!";
         }
     }
-
 
     private int calculateExtraBeds(Room room) {
         return switch (room.getSize()) {

@@ -126,7 +126,7 @@ public class CustomerServicesImpl implements CustomerServices {
         }
     }
 
-    public String addCustomer2(MiniCustomerDto c) {
+    public String addCustomerWithFindById(MiniCustomerDto c) {
         Customer customer = cr.findById(c.getId()).orElse(null);
 
         if (customer != null) {
@@ -162,8 +162,6 @@ public class CustomerServicesImpl implements CustomerServices {
                 customer.setLastName(originalLastName);
                 customer.setEmail(originalEmail);
                 customer.setPhoneNumber(originalPhoneNumber);
-
-                e.printStackTrace();
                 return "An error occurred while updating the customer.";
             }
         } else {
@@ -176,18 +174,6 @@ public class CustomerServicesImpl implements CustomerServices {
     public void deleteCustomerById(Long id) {
         cr.deleteById(id);
     }
-
-
-    //Radera?
-    @Override
-    public void deleteCustomer(Customer c) {
-        if (c != null) {
-            cr.delete(c);
-        } else {
-            //lägg till ev felmeddelande
-        }
-    }
-
 
     public Customer findByEmail(String email){
         return cr.findByEmail(email);

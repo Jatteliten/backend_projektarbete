@@ -1,7 +1,6 @@
 package com.example.backend.controller.CustomerView;
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
-import com.example.backend.model.Customer;
 import com.example.backend.services.impl.CustomerServicesImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +44,7 @@ public class CustomerUpdateViewController {
     //Ska kallas på när man fyllt i formulär
     @PostMapping("/update/final")
     public String updateByAll(MiniCustomerDto customer, Model model) {
-        model.addAttribute("message", customerServices.addCustomer2(customer));
+        model.addAttribute("message", customerServices.addCustomerWithFindById(customer));
         return allWithUpdate(model);
     }
 

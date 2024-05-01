@@ -21,5 +21,4 @@ public interface BookingServices {
     public MiniBookingDto getMiniBookingById(Long id);
     public void deleteBookingById(Long id);
     public String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds);
-    public boolean isAvailable(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId);
 }
