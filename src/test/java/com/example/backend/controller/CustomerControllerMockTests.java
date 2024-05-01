@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,6 +16,9 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -27,7 +31,7 @@ public class CustomerControllerMockTests {
     private CustomerController cc;
 
     @BeforeEach
-    private void init(){
+    public void init(){
         Customer c1 = new Customer(1L, "Daniel", "Isaksson",
                 "hej@Daniel.com", "0722223344");
         Customer c2 = new Customer(2L, "Gustaf", "Forsberg",
@@ -40,6 +44,7 @@ public class CustomerControllerMockTests {
         when(mockRepo.findById(3L)).thenReturn(Optional.of(c3));
         when(mockRepo.findAll()).thenReturn(Arrays.asList(c1, c2, c3));
     }
+
 
     @Test
     public void contextLoads() {assertThat(cc).isNotNull();}

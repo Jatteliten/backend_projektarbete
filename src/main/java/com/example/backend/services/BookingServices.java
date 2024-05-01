@@ -8,17 +8,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingServices {
-    public DetailedBookingDto bookingToDetailedBookingDto(Booking b);
-    public MiniBookingDto bookingToMiniBookingDto(Booking b);
-    public Booking detailedBookingDtoToBooking(DetailedBookingDto b);
-    public List<DetailedBookingDto> getAllDetailedBookings();
-    public List<MiniBookingDto> getAllMiniBookings();
-    public DetailedBookingDto getDetailedBookingById(Long id);
-    public void addBooking(Booking b);
-    public void deleteBooking(Booking b);
-
-    public List<MiniBookingDto> findBookings(String searchWord);
-    public MiniBookingDto getMiniBookingById(Long id);
-    public void deleteBookingById(Long id);
-    public String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds);
+    DetailedBookingDto bookingToDetailedBookingDto(Booking b);
+    MiniBookingDto bookingToMiniBookingDto(Booking b);
+    Booking detailedBookingDtoToBooking(DetailedBookingDto b);
+    List<DetailedBookingDto> getAllDetailedBookings();
+    List<MiniBookingDto> getAllMiniBookings();
+    DetailedBookingDto getDetailedBookingById(Long id);
+    void addBooking(Booking b);
+    void deleteBooking(Booking b);
+    List<MiniBookingDto> findBookings(String searchWord);
+    MiniBookingDto getMiniBookingById(Long id);
+    void deleteBookingById(Long id);
+    String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds);
 }
