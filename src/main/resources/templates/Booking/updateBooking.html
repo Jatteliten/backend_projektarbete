@@ -8,12 +8,6 @@
           crossorigin="anonymous">
     <title>Title</title>
     <style>
-        h3 {
-            margin-bottom: 5px;
-        }
-        .spacer {
-            height: 10px;
-        }
 
         .miniHeader {
             font-weight: bold;
@@ -25,10 +19,10 @@
     </style>
 </head>
 <body class="container">
-<a href="/" class="link-dark" style="text-decoration: none; color: #333333">
+<a href="/" style="text-decoration: none; color: #333333">
     <h1>Booking</h1>
 </a>
-
+<div class="container">
 <h4 th:text="${message}"></h4>
 
 <h3>Search for Booking</h3>
@@ -97,5 +91,6 @@
 <a href="/Booking/allWithUpdate">
     <button class="btn btn-outline-secondary">All Bookings</button>
 </a>
+</div>
 </body>
 </html>

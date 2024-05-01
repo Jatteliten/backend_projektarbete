@@ -20,18 +20,8 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
-        return (args -> {
-            Customer c1 = new Customer("Daniel", "Isaksson", "Daniel@hej.se", "0725523222");
-            Customer c2 = new Customer("Lise", "Martinsen", "Lise@hej.se", "0732511663");
-
-            cr.save(c1);
-            cr.save(c2);
-        });
-    }
-
     /*
+
     @Bean
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
@@ -64,14 +54,14 @@ public class BackendApplication {
             cr.save(c1);
             cr.save(c2);
 
-            Booking b1 = new Booking(LocalDate.of(2022, 10, 10),
-                    LocalDate.of(2022, 10, 12), 1, r1, c1);
+            Booking b1 = new Booking(LocalDate.of(2024, 10, 10),
+                    LocalDate.of(2024, 10, 12), 1, r1, c1);
 
-            Booking b2 = new Booking(LocalDate.of(2022, 11, 11),
-                    LocalDate.of(2022, 11, 16), 1, r1, c1);
+            Booking b2 = new Booking(LocalDate.of(2024, 11, 11),
+                    LocalDate.of(2024, 11, 16), 1, r1, c1);
 
-            Booking b3 = new Booking(LocalDate.of(2022, 11, 11),
-                    LocalDate.of(2022, 11, 14), 1, r4, c2);
+            Booking b3 = new Booking(LocalDate.of(2024, 11, 11),
+                    LocalDate.of(2024, 11, 14), 1, r4, c2);
 
             br.save(b1);
             br.save(b2);
@@ -81,4 +71,6 @@ public class BackendApplication {
     }
 
      */
+
+
 }
