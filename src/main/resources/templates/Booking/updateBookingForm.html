@@ -14,12 +14,9 @@
 </a>
 <div class="container">
 
-    <!-- validationMess är bara en förberedelse för ifall man vill att felmeddelandena ska dyka upp
- på annat sätt en via alert rutor -->
     <h2 th:text="${validationMess}">Fill Out Form To Update</h2>
 
     <div>
-        <!-- Visa info om Customer här-->
         <table>
             <tbody>
             <tr>
@@ -110,16 +107,6 @@
     <br>
 </div>
 
-<!-- Available rooms -->
-
-<script>
-    //Kolla att startdatum är innan slutdatum och tvärtom
-    //Kolla att datum inte är bakåt i tiden.
-    function validateForm() {
-
-        return true;
-    }
-</script>
 </body>
 
 </html>
