@@ -4,8 +4,8 @@ import com.example.backend.Dto.BookingViews.MiniBookingDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
-import com.example.backend.services.impl.BookingServicesImpl;
-import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.BookingServices;
+import com.example.backend.services.CustomerServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequestMapping("/Booking")
 public class BookingUpdateViewController {
 
-    private final BookingServicesImpl bookingServices;
+    private final BookingServices bookingServices;
 
-    private final CustomerServicesImpl customerServices;
+    private final CustomerServices customerServices;
 
-    public BookingUpdateViewController(BookingServicesImpl bookingServices, CustomerServicesImpl customerServices) {
+    public BookingUpdateViewController(BookingServices bookingServices, CustomerServices customerServices) {
         this.bookingServices = bookingServices;
         this.customerServices = customerServices;
     }

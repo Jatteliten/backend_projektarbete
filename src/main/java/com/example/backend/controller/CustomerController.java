@@ -2,7 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.Dto.CustomerViews.DetailedCustomerDto;
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
-import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.CustomerServices;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final CustomerServicesImpl cs;
+    private final CustomerServices cs;
 
-    public CustomerController(CustomerServicesImpl cs){
+    public CustomerController(CustomerServices cs){
         this.cs = cs;
     }
 

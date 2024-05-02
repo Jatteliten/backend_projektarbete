@@ -14,10 +14,12 @@ public interface CustomerServices {
     List<DetailedCustomerDto> getAllDetailedCustomers();
     List<MiniCustomerDto> getAllMiniCustomers();
     DetailedCustomerDto getDetailedCustomerById(Long id);
-
     String addCustomer(Customer c);
     void deleteCustomerById(Long id);
     String updateCustomer(MiniCustomerDto c);
     List<MiniCustomerDto> findCustomers(String searchWord);
     MiniCustomerDto getMiniCustomerById(Long id);
+    Customer findByEmail(String email);
+    String addCustomerWithFindById(MiniCustomerDto c);
+
 }

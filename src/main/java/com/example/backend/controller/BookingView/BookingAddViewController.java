@@ -2,10 +2,9 @@ package com.example.backend.controller.BookingView;
 
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
-import com.example.backend.services.impl.BookingServicesImpl;
-import com.example.backend.services.impl.CustomerServicesImpl;
-import com.example.backend.services.impl.RoomServicesImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.services.BookingServices;
+import com.example.backend.services.CustomerServices;
+import com.example.backend.services.RoomServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +17,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/Booking")
 public class BookingAddViewController {
-    @Autowired
-    BookingServicesImpl bookingServices;
-    @Autowired
-    CustomerServicesImpl customerServices;
-    @Autowired
-    RoomServicesImpl roomServices;
+    BookingServices bookingServices;
+    CustomerServices customerServices;
+    RoomServices roomServices;
+
+    public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
+                                    RoomServices roomServices){
+        this.bookingServices = bookingServices;
+        this.customerServices = customerServices;
+        this.roomServices = roomServices;
+    }
 
     @RequestMapping("/availableRooms")
     public String findRooms(@RequestParam(required = false) Integer beds,
