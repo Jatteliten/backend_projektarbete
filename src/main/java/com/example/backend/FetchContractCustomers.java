@@ -1,7 +1,7 @@
 package com.example.backend;
 
 import com.example.backend.model.ContractCustomer;
-import com.example.backend.model.modeluitl.ContractCustomers;
+import com.example.backend.model.modelUti.ContractCustomers;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.boot.CommandLineRunner;

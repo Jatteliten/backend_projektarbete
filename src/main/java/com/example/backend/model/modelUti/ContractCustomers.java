@@ -1,4 +1,4 @@
-package com.example.backend.model.modeluitl;
+package com.example.backend.model.modelUti;
 
 import com.example.backend.model.ContractCustomer;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
