@@ -2,7 +2,6 @@ package com.example.backend;
 
 import com.example.backend.model.Shipper;
 import com.example.backend.model.modelUti.ShipperDto;
-import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.repos.ShipperRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
