@@ -35,6 +35,7 @@ dependencies {
     implementation ("jakarta.validation:jakarta.validation-api:3.0.0")
     implementation ("org.hibernate.validator:hibernate-validator:7.0.1.Final")
     implementation ("org.glassfish:jakarta.el:3.0.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
 }
 tasks.withType<Test> {
     useJUnitPlatform()
