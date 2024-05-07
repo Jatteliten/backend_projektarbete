@@ -1,7 +1,7 @@
 package com.example.backend.controller.BookingView;
 
 import com.example.backend.model.Booking;
-import com.example.backend.services.impl.BookingServicesImpl;
+import com.example.backend.services.BookingServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +13,9 @@ import java.util.NoSuchElementException;
 @Controller
 @RequestMapping("/Booking")
 public class BookingRemoveViewController {
-    private final BookingServicesImpl bs;
+    private final BookingServices bs;
 
-    public BookingRemoveViewController(BookingServicesImpl bs){
+    public BookingRemoveViewController(BookingServices bs){
         this.bs = bs;
     }
 

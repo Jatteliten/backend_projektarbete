@@ -1,7 +1,7 @@
 package com.example.backend.controller.CustomerView;
 
 import com.example.backend.model.Customer;
-import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.CustomerServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 @Controller
 @RequestMapping("/Customer")
 public class CustomerAddViewController {
-    private final CustomerServicesImpl cs;
+    private final CustomerServices cs;
 
-    public CustomerAddViewController(CustomerServicesImpl cs){
+    public CustomerAddViewController(CustomerServices cs){
         this.cs = cs;
     }
 

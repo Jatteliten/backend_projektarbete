@@ -20,7 +20,7 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
     }
 
-    /*
+
     @Bean
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
@@ -79,5 +79,5 @@ public class BackendApplication {
         });
     }
 
-     */
+
 }

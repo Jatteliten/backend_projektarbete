@@ -1,7 +1,7 @@
 package com.example.backend.controller.CustomerView;
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
-import com.example.backend.services.impl.CustomerServicesImpl;
+import com.example.backend.services.CustomerServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/Customer")
 public class CustomerUpdateViewController {
 
-    private final CustomerServicesImpl customerServices;
+    private final CustomerServices customerServices;
 
-    public CustomerUpdateViewController(CustomerServicesImpl customerServices) {
+    public CustomerUpdateViewController(CustomerServices customerServices) {
         this.customerServices = customerServices;
     }
 
