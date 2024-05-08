@@ -8,7 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.net.URL;
+import java.net.URI;
 
 @ComponentScan
 public class FetchShippers implements CommandLineRunner {
@@ -23,7 +23,9 @@ public class FetchShippers implements CommandLineRunner {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        ShipperDto[] shippers = objectMapper.readValue(new URL("https://javaintegration.systementor.se/shippers"), ShipperDto[].class);
+        ShipperDto[] shippers = objectMapper.readValue(
+                new URI("https://javaintegration.systementor.se/shippers").toURL(),
+                ShipperDto[].class);
 
         for(ShipperDto s : shippers){
             Shipper shipper = sr.findByExternalId(s.id);
