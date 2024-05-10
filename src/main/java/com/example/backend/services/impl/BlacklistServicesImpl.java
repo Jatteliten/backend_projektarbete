@@ -37,7 +37,6 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
                 .GET()
                 .build();
-
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
@@ -130,31 +129,4 @@ public class BlacklistServicesImpl implements BlacklistServices {
         }
     }
 
-    /*
-
-    @Override
-    public void removeEmailFromBlacklist(String email) {
-        //FEL -- Statuskod 405 -> Metoden Delete är ej tillåten ---
-        HttpClient httpClient = HttpClient.newHttpClient();
-        String jsonBody = "{\"email\":\"" + email + "\"}";
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BLACKLIST_API_URL))
-                .header("Content-Type", "application/json")
-                .method("DELETE", HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
-                .build();
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                System.out.println("Mail has been removed from blacklist");
-            } else {
-                System.out.println("Error when removing email from blacklist: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            System.err.println("Error when removing email from blacklist: " + e.getMessage());
-        }
-    }
-
-     */
 }
