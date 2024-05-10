@@ -17,6 +17,19 @@
     <h2 th:text="${header}">Contract Customers</h2>
     <div id="tableOfContractCustomers" th:unless="${#lists.isEmpty(allContractCustomers)}">
         <table class="table">
+            <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Contact Name</th>
+                <th>Country</th>
+                <th>Contact Title</th>
+                <th>City</th>
+                <th>Fax</th>
+                <th>Phone</th>
+                <th>Postal Code</th>
+                <th>Street Address</th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="conCust : ${allContractCustomers}">
                 <td th:text="${conCust.companyName}"></td>
