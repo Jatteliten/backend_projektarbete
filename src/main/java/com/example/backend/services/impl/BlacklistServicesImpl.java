@@ -3,6 +3,7 @@ package com.example.backend.services.impl;
 import com.example.backend.services.BlacklistServices;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class BlacklistServicesImpl implements BlacklistServices {
 
     public static void main(String[] args) {
@@ -19,13 +21,13 @@ public class BlacklistServicesImpl implements BlacklistServices {
         //blacklistServices.addEmailToBlacklist("stefanH@gmail.com", "Stefan Holmberg");
         //blacklistServices.removeEmailFromBlacklist("lise@gmail.com");
 
-        //boolean isBlacklisted = blacklistServices.isBlacklisted("martin@gmail.com");
+        //boolean isBlacklisted = blacklistServices.isBlacklisted("lise@gmail.com");
         //System.out.println("isBlacklisted = " + isBlacklisted);
 
         //List<String> blacklist = blacklistServices.fetchBlacklist();
         //System.out.println(blacklist);
 
-        blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
+        //blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
     }
 
     private final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
