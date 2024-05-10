@@ -1,5 +1,6 @@
 package com.example.backend.services.impl;
 
+import com.example.backend.Dto.ContractCustomerViews.DetailedContractCustomer;
 import com.example.backend.Dto.ContractCustomerViews.MiniContractCustomerDto;
 import com.example.backend.model.ContractCustomer;
 import com.example.backend.repos.ContractCustomerRepo;
@@ -25,6 +26,27 @@ public class ContractCustomerServicesImpl implements ContractCustomerServices {
     @Override
     public List<MiniContractCustomerDto> getAllMiniContractCustomerDto() {
         return ccr.findAll().stream().map(c -> contractCustomerToMiniContractCustomerDto(c)).toList();
+    }
+
+    @Override
+    public ContractCustomer getSpecifikContractCustomer(String externalId) {
+        return ccr.findByExternalSystemId(externalId);
+    }
+
+    @Override
+    public DetailedContractCustomer contractCustomerToDetailedContractCustomerDto(ContractCustomer contractCustomer) {
+        return DetailedContractCustomer.builder()
+                .externalSystemId(contractCustomer.getExternalSystemId())
+                .companyName(contractCustomer.getCompanyName())
+                .contactName(contractCustomer.getContactName())
+                .contactTitle(contractCustomer.getContactTitle())
+                .streetAddress(contractCustomer.getStreetAddress())
+                .city(contractCustomer.getCity())
+                .postalCode(contractCustomer.getPostalCode())
+                .country(contractCustomer.getCountry())
+                .phone(contractCustomer.getPhone())
+                .fax(contractCustomer.getFax())
+                .build();
     }
 
 }

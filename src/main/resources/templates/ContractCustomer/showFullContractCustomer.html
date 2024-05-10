@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+
+<body class="container">
+<a href="/" class="link-dark" style="text-decoration: none; color: #333333">
+    <h1>Booking</h1>
+</a>
+<div class="container">
+    <h2 th:text="${header}">Contract Customers</h2>
+    <div id="tableOfContractCustomers" th:unless="${#lists.isEmpty(allContractCustomers)}">
+        <table class="table">
+            <tbody>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <td th:text="${conCust.companyName}"></td>
+                <td th:text="${conCust.contactName}"></td>
+                <td th:text="${conCust.country}"></td>
+                <td th:text="${conCust.contactTitle}"></td>
+                <td th:text="${conCust.city}"></td>
+                <td th:text="${conCust.fax}"></td>
+                <td th:text="${conCust.phone}"></td>
+                <td th:text="${conCust.postalCode}"></td>
+                <td th:text="${conCust.streetAddress}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+</body>
+
+</html>
