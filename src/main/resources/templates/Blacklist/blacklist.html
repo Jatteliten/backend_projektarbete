@@ -15,13 +15,13 @@
 
 <body class="container">
 <a href="/" class="link-dark" style="text-decoration: none; color: #333333">
-    <h1></h1>
+    <h1>Blacklist</h1>
 </a>
 <div class="container">
     <h4 th:text="${message}" style="color: darkred"></h4>
 
-    <h3>Search for customer</h3>
-    <form action="/Customer/filter/update" method="post">
+    <h3>Search Blacklist</h3>
+    <form action="/blacklist/filter" method="post">
         <div class="form-group">
             <label for="input"></label><br>
             <input type="text" id="input" name="input" value=""><br><br>
@@ -32,23 +32,22 @@
     <br>
 
     <h2 th:text="${header}"></h2>
-    <div class="allCustomers" th:unless="${#lists.isEmpty(allCustomers)}">
+    <div class="blacklist" th:unless="${#lists.isEmpty(allOnBlacklist)}">
         <table class="table">
             <tbody>
-            <tr th:each="cust : ${allCustomers}">
-                <td th:text="${cust.id}"></td>
-                <td th:text="${cust.firstName}"></td>
-                <td th:text="${cust.lastName}"></td>
-                <td th:text="${cust.email}"></td>
-                <td th:text="${cust.phoneNumber}"></td>
-                <td><a th:href="@{'/Customer/update/' + ${cust.id}}">Update</a></td>
+            <tr th:each="b : ${allOnBlacklist}">
+                <td th:text="${b.id}"></td>
+                <td th:text="${b.email}"></td>
+                <td th:text="${b.name}"></td>
+                <td th:text="${b.isOk}"></td>
+                <td><a th:href="@{'/blacklist/update/' + ${b.id}}">Update</a></td>
             </tr>
             </tbody>
         </table>
     </div>
     <br>
-    <a href="/Customer/allWithUpdate">
-        <button class="btn btn-outline-secondary">All Customers</button>
+    <a href="/blacklist/all">
+        <button class="btn btn-outline-secondary">Full Blacklist</button>
     </a>
 </div>
 </body>
