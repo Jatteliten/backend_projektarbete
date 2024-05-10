@@ -16,26 +16,19 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
     public static void main(String[] args) {
         BlacklistServicesImpl blacklistServices = new BlacklistServicesImpl();
-        //blacklistServices.addEmailToBlacklist("@gmail.com");
+        //blacklistServices.addEmailToBlacklist("stefanH@gmail.com", "Stefan Holmberg");
         //blacklistServices.removeEmailFromBlacklist("lise@gmail.com");
 
-        //boolean isBlacklisted = blacklistServices.isBlacklisted("hej@gmail.com");
+        //boolean isBlacklisted = blacklistServices.isBlacklisted("martin@gmail.com");
         //System.out.println("isBlacklisted = " + isBlacklisted);
 
         //List<String> blacklist = blacklistServices.fetchBlacklist();
         //System.out.println(blacklist);
 
-        //blacklistServices.updateEmailInBlacklist("lise@gmail.com", "lise.martinsen@gmail.com");
+        blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
     }
-    private final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
 
-    /*
-    FRÅGOR TILL STEFAN:
-    - Är delete inte tillåtet? Statuskod 405
-    - Kan man inte hämta enstaka värden? Måste man alltid få tillbaka ALLA svartlistade?
-    - Är det tänkt att man alltid ska hämta ALL info från API:et för att sen i sitt service-lager
-      själv sålla ut den informationen man letar efter? Känns som onödigt jobb.
-     */
+    private final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
 
     public List<String> fetchBlacklist() {
         List<String> blacklist = new ArrayList<>();
@@ -64,81 +57,80 @@ public class BlacklistServicesImpl implements BlacklistServices {
         return blacklist;
     }
 
-
-    /*
-    Från början försökte jag hämta bara den specifika email-adressen
-    för att slippa hämta allting. Verkar dock som att Stefan inte har
-    skapat funktionalitet för att köra GET på enstaka värden.
-    Fick tillbaka ALLA svartlistade när jag försökte hämta endast en person.
-     */
     @Override
     public boolean isBlacklisted(String email) {
-        List<String> blacklist = fetchBlacklist();
-        for (String blacklistedEmail : blacklist) {
-            if (blacklistedEmail.equalsIgnoreCase(email)) {
-                return true;
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BLACKLIST_API_URL + "check/" + email))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                String jsonResponse = response.body();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+                boolean isBlacklisted = jsonNode.get("ok").asBoolean();
+                return !isBlacklisted;
+            } else {
+                System.out.println("Request failed, status code: " + response.statusCode());
             }
+        } catch (Exception e) {
+            System.err.println("Request failed: " + e.getMessage());
         }
         return false;
     }
 
     @Override
-    public void addEmailToBlacklist(String email) {
+    public void addPersonToBlacklist(String email, String name) {
         HttpClient httpClient = HttpClient.newHttpClient();
-        String jsonBody = "{\"email\":\"" + email + "\"}";
+        String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BLACKLIST_API_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                 .build();
         try {
-           HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-           if (response.statusCode() == 200) {
-               System.out.println("Mail added to blacklist");
-           } else {
-               System.out.println("Error when adding email to blacklist: " + response.statusCode());
-           }
+            if (response.statusCode() == 200) {
+                System.out.println("Mail added to blacklist");
+            } else {
+                System.out.println("Error when adding email to blacklist: " + response.statusCode());
+            }
         } catch (Exception e) {
             System.err.println("Error when adding email to blacklist: " + e.getMessage());
         }
     }
 
     @Override
-    public void updateEmailInBlacklist(String oldEmail, String newEmail) {
-        String id = getBlacklistIdByEmail(oldEmail);
+    public void updateBlacklistedPerson(String email, String newName, boolean newOkStatus) {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        String jsonBody = "{"
+                + "\"name\":\"" + newName + "\", "
+                + "\"ok\":" + newOkStatus
+                + "}";
 
-        //Funkar för tillfället inte eftersom det inte går att hämta enstaka värden
-        if (id != null) {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            String jsonBody = "{\"email\":\"" + newEmail + "\"}";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BLACKLIST_API_URL + "/" + email))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BLACKLIST_API_URL + "/" + id))
-                    .header("Content-Type", "application/json")
-                    .method("PUT", HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
-                    .build();
-            try {
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-                    System.out.println("Email updated in blacklist");
-                } else {
-                    System.out.println("Error when updating email in blacklist: " + response.statusCode());
-                }
-            } catch (Exception e) {
-                System.err.println("Error when updating email in blacklist: " + e.getMessage());
+            if (response.statusCode() == 204) {
+                System.out.println("Blacklisted person updated successfully.");
+            } else {
+                System.out.println("Error while updating blacklisted person. Status code:" + response.statusCode());
             }
-        } else {
-            System.out.println("No entry found in blacklist for email: " + oldEmail);
+        } catch (Exception e) {
+            System.err.println("Error while updating blacklisted person: " + e.getMessage());
         }
     }
 
-    @Override
-    public String getBlacklistIdByEmail(String email) {
-        //Vänta med tills fått reda på om man kan hämta enstaka värden eller inte från http.
-        return null;
-    }
+    /*
 
     @Override
     public void removeEmailFromBlacklist(String email) {
@@ -163,4 +155,6 @@ public class BlacklistServicesImpl implements BlacklistServices {
             System.err.println("Error when removing email from blacklist: " + e.getMessage());
         }
     }
+
+     */
 }
