@@ -32,7 +32,7 @@ public class BackendApplication {
         }
     }
 
-/*
+
     @Bean
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
@@ -90,7 +90,7 @@ public class BackendApplication {
 
         });
     }
- */
+
 
 
 }
