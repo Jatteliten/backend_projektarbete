@@ -39,6 +39,7 @@ public class ContractCustomerViewController {
         model.addAttribute("allContractCustomers", detailedContractCustomer);
         // test
         String externalId2 = "2";
+        String link = "/ContractCustomer/"+externalId2;
         model.addAttribute("CustomerId",externalId2);
         return "ContractCustomer/showFullContractCustomer.html";
     }
