@@ -37,6 +37,9 @@ public class ContractCustomerViewController {
                 contractCustomerServices.getSpecifikContractCustomer(externalId))
         );
         model.addAttribute("allContractCustomers", detailedContractCustomer);
+        // test
+        String externalId2 = "2";
+        model.addAttribute("CustomerId",externalId2);
         return "ContractCustomer/showFullContractCustomer.html";
     }
 
