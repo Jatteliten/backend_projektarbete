@@ -1,5 +1,7 @@
 package com.example.backend;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ComponentScan;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,8 +10,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import events.RoomEvent;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -37,9 +37,8 @@ public class FetchEventQueue implements CommandLineRunner {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
-            RoomEvent roomEvent = new ObjectMapper()
-                    .readerFor(RoomEvent.class)
-                    .readValue(message);
+            RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
+            System.out.println(roomEvent);
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }

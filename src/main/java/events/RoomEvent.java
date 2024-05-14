@@ -15,6 +15,6 @@ import java.time.LocalDateTime;
         @JsonSubTypes.Type(value = RoomOpened.class, name = "RoomOpened")
 })
 public class RoomEvent {
-    private String type;
-    private LocalDateTime timeStamp;
+    public String type;
+    public LocalDateTime TimeStamp;
 }
