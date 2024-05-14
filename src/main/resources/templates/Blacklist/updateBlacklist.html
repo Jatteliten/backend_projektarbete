@@ -10,7 +10,7 @@
 
 <body class="container">
 <a href="/" class="link-dark" style="text-decoration: none; color: #333333">
-    <h1></h1>
+    <h1>Booking</h1>
 </a>
 <div class="container">
 
@@ -20,21 +20,14 @@
 
     <form action="/blacklist/update/final" method="post" th:object="${blacklistObj}">
         <div class="form-group">
-
             <label for="name">Name:</label><br>
             <input type="text" id="name" name="name" th:field="${blacklistObj.name}"><br>
 
             <label for="email">Email:</label><br>
             <input type="text" id="email" name="email" th:field="${blacklistObj.email}"><br>
 
-            <label for="isOk">Allow person to place booking:</label><br>
-
-            <!-- Här blir det fel -->
-           <select id="isOk" name="isOk" th:field="${blacklistObj.isOk}">
-               <option th:value="true" th:selected="${blacklistObj.isOk} == true">Yes</option>
-               <option th:value="false" th:selected="${blacklistObj.isOk} == false">No</option>
-           </select><br>
-           <br>
+            <label for="isOk">Allow customer in system:</label>
+            <input type="checkbox" id="isOk" name="isOk" th:checked="${blacklistObj.isOk}"><br>
 
            <input type="submit" class="btn btn-outline-secondary" value="Update"><br>
        </div>
