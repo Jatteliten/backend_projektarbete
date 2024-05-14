@@ -38,17 +38,21 @@ public class BlacklistViewController {
     }
 
     @RequestMapping("/update/final")
-    public String updateFinalBlacklist(@RequestBody Blacklist blacklist, Model model) {
-        model.addAttribute("message", blacklistServices.updateBlacklistedPerson(
-                blacklist.getEmail(), blacklist.getName(), blacklist.isOk()
-        ));
+    public String updateFinalBlacklist(@RequestParam("name") String name,
+                                       @RequestParam("email") String email,
+                                       @RequestParam(value = "isOk", defaultValue = "false") boolean isOk,
+                                       Model model) {
+        System.out.println(name);
+        System.out.println(email);
+        System.out.println(isOk);
+
+        model.addAttribute("message", blacklistServices.updateBlacklistedPerson(email, name, isOk));
         return getBlacklist(model);
     }
 
-    @GetMapping("/filter")
-    public String filterBlacklist(@RequestParam String searchWord, Model model) {
+    @PostMapping("/filter")
+    public String filterBlacklist(@RequestParam("input") String searchWord, Model model) {
         List<Blacklist> filteredBlacklist = blacklistServices.filterBlacklist(searchWord);
-
         if (!filteredBlacklist.isEmpty()) {
             model.addAttribute("allOnBlacklist", filteredBlacklist);
             model.addAttribute("header", "Matches Found");
