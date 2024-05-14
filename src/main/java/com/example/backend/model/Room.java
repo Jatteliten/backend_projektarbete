@@ -21,7 +21,14 @@ public class Room {
 
     private int size;
 
-    public Room(int size){
+    private double pricePerNight;
+
+//    public Room(int size){
+//        this.size = size;
+//    }
+
+    public Room(int size, double pricePerNight) {
         this.size = size;
+        this.pricePerNight = pricePerNight;
     }
 }

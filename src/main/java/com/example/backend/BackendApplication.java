@@ -37,16 +37,16 @@ public class BackendApplication {
     public CommandLineRunner commandLineRunner(RoomRepo roomRepo, BookingRepo br, CustomerRepo cr) {
         return (args -> {
 
-            Room r1 = new Room(1);
-            Room r2 = new Room(1);
-            Room r3 = new Room(1);
-            Room r4 = new Room(1);
-            Room r5 = new Room(2);
-            Room r6 = new Room(2);
-            Room r7 = new Room(3);
-            Room r8 = new Room(3);
-            Room r9 = new Room(4);
-            Room r10 = new Room(4);
+            Room r1 = new Room(1,100.00);
+            Room r2 = new Room(1,100.00);
+            Room r3 = new Room(1,100.00);
+            Room r4 = new Room(1,100.00);
+            Room r5 = new Room(2,200.00);
+            Room r6 = new Room(2,200.00);
+            Room r7 = new Room(3,300.00);
+            Room r8 = new Room(3,300.00);
+            Room r9 = new Room(4,400.00);
+            Room r10 = new Room(4,400.00);
 
             roomRepo.save(r1);
             roomRepo.save(r2);
