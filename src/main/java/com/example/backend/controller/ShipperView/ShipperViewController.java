@@ -1,6 +1,5 @@
 package com.example.backend.controller.ShipperView;
 
-import com.example.backend.services.DiscountServices;
 import com.example.backend.services.ShipperServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/Shipper")
 public class ShipperViewController {
     private final ShipperServices shipperServices;
-    private final DiscountServices discountServices;
 
-    public ShipperViewController(ShipperServices shipperServices, DiscountServices discountServices){
+    public ShipperViewController(ShipperServices shipperServices){
         this.shipperServices = shipperServices;
-        this.discountServices = discountServices;
     }
 
     @RequestMapping("/viewAll")

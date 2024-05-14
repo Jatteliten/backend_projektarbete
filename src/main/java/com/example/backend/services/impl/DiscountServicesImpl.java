@@ -48,13 +48,11 @@ public class DiscountServicesImpl implements DiscountServices {
     public double calculateSundayToMondayDiscount(Booking booking,double fullPrice) {
         //returns the initial price to pay after standars sunday to monday discount
         LocalDate startDate = booking.getStartDate();
-        int amountOfNightsSundayToMonday = 0;
         double discount = 0;
 
         while (startDate.isBefore(booking.getEndDate())){
             if (startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) &&
                     startDate.plusDays(1).getDayOfWeek().equals(DayOfWeek.SUNDAY)){
-                amountOfNightsSundayToMonday ++;
                 discount += booking.getRoom().getPricePerNight()*sundayToMondayDiscount;
             }
             startDate = startDate.plusDays(1);
