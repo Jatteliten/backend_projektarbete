@@ -33,7 +33,7 @@ class RoomServicesImplTest {
     void roomToDetailedRoomDtoTest() {
         DetailedRoomDto dr = roomServices.roomToDetailedRoomDto(r1);
 
-        assertEquals(1l, dr.getId());
+        assertEquals(1L, dr.getId());
         assertEquals(4, dr.getSize());
 
     }
@@ -42,7 +42,7 @@ class RoomServicesImplTest {
     void roomToMiniRoomDtoTest() {
         MiniRoomDto mr = roomServices.roomToMiniRoomDto(r1);
 
-        assertEquals(1l, mr.getId());
+        assertEquals(1L, mr.getId());
         assertEquals(4, mr.getSize());
     }
 
@@ -50,7 +50,7 @@ class RoomServicesImplTest {
     void detailedRoomDtoToRoomTest() {
         Room r = roomServices.detailedRoomDtoToRoom(d1);
 
-        assertEquals(1l, r.getId());
+        assertEquals(1L, r.getId());
         assertEquals(4, r.getSize());
     }
 
