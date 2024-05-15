@@ -38,7 +38,7 @@ class DiscountServicesImplTest {
         c1 = new Customer(1,"Martin",
                 "Harrysson","Martin@hej.se","0704455667",null);
 
-        r1 = new Room(1l,1,100);
+        r1 = Room.builder().id(1L).size(1).pricePerNight(100).build();
 
         twoNightsBooking = new Booking(1l, LocalDate.of(2024,05,01),
                 LocalDate.of(2024,05,03),0,r1,c1);
