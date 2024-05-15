@@ -38,21 +38,18 @@ public class BookingControllerMockTests {
     private void init(){
         Booking b1 = new Booking(1L, LocalDate.of(2020,12,12),
                 LocalDate.of(2020,12,15),1,
-                new Room(1L, 2),
-                new Customer(1L, "Daniel", "Isaksson",
-                "hej@Daniel.com", "0722223344"));
+                Room.builder().id(1L).size(2).build(), Customer.builder().id(1L).firstName("Daniel").lastName("Isaksson")
+                .email("hej@Daniel.com").phoneNumber("0722223344").build());
 
         Booking b2 = new Booking(2L, LocalDate.of(2021,2,5),
                 LocalDate.of(2021,2,7),0,
-                new Room(2L, 2),
-                new Customer(2L, "Gustaf", "Forsberg",
-                        "hej@Gustaf.com", "0723346344"));
+                Room.builder().id(2L).size(2).build(), Customer.builder().id(2L).firstName("Gustaf").lastName("Forsberg")
+                .email("hej@Gustaf.com").phoneNumber("0723346344").build());
 
         Booking b3 = new Booking(3L, LocalDate.of(2022,1,1),
                 LocalDate.of(2022,1,5),2,
-                new Room(3L, 4),
-                new Customer(3L, "Petter", "Tornberg",
-                        "hej@Petter.com", "0722445344"));
+                Room.builder().id(3L).size(4).build(), Customer.builder().id(3L).firstName("Petter").lastName("Tornberg")
+                .email("hej@Petter.com").phoneNumber("0722445344").build());
 
         when(mockRepo.findById(1L)).thenReturn(Optional.of(b1));
         when(mockRepo.findById(2L)).thenReturn(Optional.of(b2));

@@ -1,8 +1,10 @@
 package com.example.backend.services.impl;
 
+import com.example.backend.model.Blacklist;
 import com.example.backend.services.BlacklistServices;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,8 +12,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@Service
 public class BlacklistServicesImpl implements BlacklistServices {
 
     public static void main(String[] args) {
@@ -19,22 +23,22 @@ public class BlacklistServicesImpl implements BlacklistServices {
         //blacklistServices.addEmailToBlacklist("stefanH@gmail.com", "Stefan Holmberg");
         //blacklistServices.removeEmailFromBlacklist("lise@gmail.com");
 
-        //boolean isBlacklisted = blacklistServices.isBlacklisted("martin@gmail.com");
+        //boolean isBlacklisted = blacklistServices.isBlacklisted("lise@gmail.com");
         //System.out.println("isBlacklisted = " + isBlacklisted);
 
         //List<String> blacklist = blacklistServices.fetchBlacklist();
         //System.out.println(blacklist);
 
-        blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
+        //blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
     }
 
     private final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
 
-    public List<String> fetchBlacklist() {
-        List<String> blacklist = new ArrayList<>();
+    public List<Blacklist> fetchBlacklist() {
+        List<Blacklist> blacklist = new ArrayList<>();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
+                .uri(URI.create(BLACKLIST_API_URL))
                 .GET()
                 .build();
         try {
@@ -42,11 +46,8 @@ public class BlacklistServicesImpl implements BlacklistServices {
             if (response.statusCode() == 200) {
                 String jsonResponse = response.body();
                 ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-                for (JsonNode node : jsonNode) {
-                    String email = node.get("email").asText();
-                    blacklist.add(email);
-                }
+                Blacklist[] blacklistArray = objectMapper.readValue(jsonResponse, Blacklist[].class);
+                Collections.addAll(blacklist, blacklistArray);
             } else {
                 System.out.println("Request failed, status code: " + response.statusCode());
             }
@@ -104,7 +105,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     }
 
     @Override
-    public void updateBlacklistedPerson(String email, String newName, boolean newOkStatus) {
+    public String updateBlacklistedPerson(String email, String newName, boolean newOkStatus) {
         HttpClient httpClient = HttpClient.newHttpClient();
         String jsonBody = "{"
                 + "\"name\":\"" + newName + "\", "
@@ -120,13 +121,43 @@ public class BlacklistServicesImpl implements BlacklistServices {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 204) {
-                System.out.println("Blacklisted person updated successfully.");
+                return "Blacklisted person updated successfully.";
             } else {
                 System.out.println("Error while updating blacklisted person. Status code:" + response.statusCode());
+
             }
         } catch (Exception e) {
             System.err.println("Error while updating blacklisted person: " + e.getMessage());
         }
+        return "Error while updating blacklisted person.";
+    }
+
+    @Override
+    public List<Blacklist> filterBlacklist(String searchWord) {
+        List<Blacklist> matches = new ArrayList<>();
+        List<Blacklist> allOnBlackList = fetchBlacklist();
+        searchWord = searchWord.toLowerCase();
+
+        for (Blacklist b : allOnBlackList) {
+            if (
+                    b.getId().toString().contains(searchWord) ||
+                            b.getName().toLowerCase().contains(searchWord) ||
+                            b.getEmail().toLowerCase().contains(searchWord)
+            ) {
+                matches.add(b);
+            }
+        }
+        return matches;
+    }
+
+    @Override
+    public Blacklist findBlacklistObjById(Long id) {
+        for (Blacklist b : fetchBlacklist()) {
+            if (b.getId().equals(id)) {
+                return b;
+            }
+        }
+        return null;
     }
 
 }

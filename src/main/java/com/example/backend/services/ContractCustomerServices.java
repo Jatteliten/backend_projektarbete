@@ -11,8 +11,6 @@ import java.util.List;
 public interface ContractCustomerServices {
     MiniContractCustomerDto contractCustomerToMiniContractCustomerDto(ContractCustomer c);
 
-    List<MiniContractCustomerDto> getAllMiniContractCustomerDto();
-
     ContractCustomer getSpecifikContractCustomer(String externalId);
 
     DetailedContractCustomer contractCustomerToDetailedContractCustomerDto(ContractCustomer contractCustomer);

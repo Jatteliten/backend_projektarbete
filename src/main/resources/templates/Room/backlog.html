@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Title</title>
+    <style>
+        h2 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body class="container">
+<a href="/" class="link-dark" style="text-decoration: none; color: #333333">
+    <h1>Booking</h1>
+</a>
+<div class="container">
+    <h4 th:text="${message}" style="color: darkred"></h4>
+    <br>
+
+    <h2 th:text="${header}"></h2>
+
+    <table>
+        <tbody>
+        <tr th:each="event : ${allEvents}">
+            <td th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'CleaningEvent')}">
+                <span th:text="'Room ' + ${event.type} + ' cleaned by ' + ${event.cleaningByUser} + ' at ' + ${#temporals.format(event.timeStamp, 'dd-MM-yyyy HH:mm')}"></span>
+            </td>
+            <td th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'DoorEvent')}">
+                <span th:text="'Door ' + ${event.type} + ' at ' + ${#temporals.format(event.timeStamp, 'dd-MM-yyyy HH:mm')}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <!--
+    <a href="#">
+        <button class="btn btn-outline-secondary">All Rooms</button>
+    </a> -->
+</div>
+</body>
+
+</html>

@@ -19,4 +19,5 @@ public class ShipperViewController {
         model.addAttribute("allShippers", shipperServices.getAllMiniShippersDto());
         return "Shipper/showShippers.html";
     }
+
 }

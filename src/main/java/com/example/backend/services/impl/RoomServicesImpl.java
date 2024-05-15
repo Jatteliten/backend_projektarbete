@@ -18,15 +18,15 @@ public class RoomServicesImpl implements RoomServices {
     }
 
     public DetailedRoomDto roomToDetailedRoomDto(Room r){
-        return DetailedRoomDto.builder().id(r.getId()).size(r.getSize()).build();
+        return DetailedRoomDto.builder().id(r.getId()).size(r.getSize()).pricePerNight(r.getPricePerNight()).build();
     }
 
     public MiniRoomDto roomToMiniRoomDto(Room r){
-        return MiniRoomDto.builder().id(r.getId()).size(r.getSize()).build();
+        return MiniRoomDto.builder().id(r.getId()).size(r.getSize()).pricePerNight(r.getPricePerNight()).build();
     }
 
     public Room detailedRoomDtoToRoom(DetailedRoomDto r){
-        return Room.builder().id(r.getId()).size(r.getSize()).build();
+        return Room.builder().id(r.getId()).size(r.getSize()).pricePerNight(r.getPricePerNight()).build();
     }
 
     public List<DetailedRoomDto> getAllDetailedRooms(){

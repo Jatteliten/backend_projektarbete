@@ -52,13 +52,13 @@ class BookingServicesImplTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
-        c1 = new Customer(1L, "Daniel", "Isaksson",
-                "Daniel@hej.com", "0722055577");
-        c2 = new Customer(2L, "Sarah", "Wrengler",
-                "Sarah@hej.com", "0733023322");
-        r1 = new Room(1L, 3);
-        r2 = new Room(2L, 4);
+        MockitoAnnotations.openMocks(this);
+        c1 = Customer.builder().id(1L).firstName("Daniel").lastName("Isaksson").email("Daniel@hej.com")
+                .phoneNumber("0722055577").build();
+        c2 = Customer.builder().id(2L).firstName("Sarah").lastName("Wrengler").email("Sarah@hej.com")
+                .phoneNumber("0733023322").build();
+        r1 = Room.builder().id(1L).size(3).build();
+        r2 = Room.builder().id(2L).size(4).build();
         b1 = new Booking(1L, LocalDate.of(2022, 10, 10),
                 LocalDate.of(2022, 10, 12), 1, r1, c1);
         b2 = new Booking(2L, LocalDate.of(2023, 12, 12),
@@ -173,7 +173,11 @@ class BookingServicesImplTest {
     @Test
     void checkNotAvailableTest() {
         // check if date is already booked
-        Booking b1 = new Booking(LocalDate.now().plusDays(1),LocalDate.now().plusDays(3),0);
+        Booking b1 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(1))
+                .endDate(LocalDate.now().plusDays(3))
+                .extraBeds(0)
+                .build();
         Boolean actualValue = bs.checkNotAvailable(b1,LocalDate.now().plusDays(1),LocalDate.now().plusDays(3));
         assertTrue(actualValue);
         // check if date is available
@@ -183,7 +187,7 @@ class BookingServicesImplTest {
 
     @Test
     void calculateExtraBedsTest() {
-        Room room = new Room(3);
+        Room room = Room.builder().size(3).build();
         int expectedValue = 1;
         assertEquals(expectedValue,bs.calculateExtraBeds(room));
 

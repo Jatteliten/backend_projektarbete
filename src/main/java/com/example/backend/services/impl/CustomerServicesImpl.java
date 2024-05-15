@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class CustomerServicesImpl implements CustomerServices {
     private final CustomerRepo cr;
     private final BookingRepo br;
-    public Validator validator;
+    public final Validator validator;
 
     public CustomerServicesImpl(CustomerRepo cr, BookingRepo br) {
         this.cr = cr;
@@ -58,7 +58,7 @@ public class CustomerServicesImpl implements CustomerServices {
 
     public List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b) {
         return b.stream().map(bb -> new MiniBookingDtoForCustomer(bb.getId(), bb.getStartDate(), bb.getEndDate(),
-                new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize()))).collect(Collectors.toList());
+                new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize(), bb.getRoom().getPricePerNight()))).collect(Collectors.toList());
     }
 
     public List<DetailedCustomerDto> getAllDetailedCustomers() {

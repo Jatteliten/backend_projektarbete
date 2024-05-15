@@ -15,59 +15,35 @@
 </a>
 <br>
 <div class="container">
-    <div class="row">
-        <div class="col">
+    <div class="row g-0">
+        <div class="col-sm-6 col-md-4 mb-4">
             <p style="font-size:20px">Customer</p>
+            <a href="/Customer/addCustomer" class="btn btn-outline-secondary btn-block">Register Customer</a>
+            <a href="/Customer/allWithUpdate" class="btn btn-outline-secondary btn-block">Update Customer</a>
+            <a href="/Customer/allWithDelete" class="btn btn-outline-secondary btn-block">Delete Customer</a>
         </div>
-        <div class="col">
+        <div class="col-sm-6 col-md-4 mb-4">
             <p style="font-size:20px">Booking</p>
+            <a href="/Booking/availableRooms" class="btn btn-outline-secondary btn-block">Book room</a>
+            <a href="/Booking/allWithUpdate" class="btn btn-outline-secondary btn-block">Update Booking</a>
+            <a href="/Booking/removeBooking" class="btn btn-outline-secondary btn-block">Delete Booking</a>
         </div>
-        <div class="col">
+        <div class="col-sm-6 col-md-4 mb-4">
+            <p style="font-size:20px">Rooms</p>
+            <a href="Room/all" class="btn btn-outline-secondary btn-block">Manage Rooms</a>
+        </div>
+        <div class="col-sm-6 col-md-4 mb-4">
             <p style="font-size:20px">Contract Customer</p>
+            <a href="ContractCustomer/viewCustomer" class="btn btn-outline-secondary btn-block">Show Contract Customers</a>
         </div>
-        <div class="col">
+        <div class="col-sm-6 col-md-4 mb-4">
             <p style="font-size:20px">Shippers</p>
+            <a href="Shipper/viewAll" class="btn btn-outline-secondary btn-block">Show Shippers</a>
         </div>
-        <div class="w-100"></div>
-        <div class="col"><a href="/Customer/addCustomer">
-            <button class="btn btn-outline-secondary">Register Customer</button>
-        </a></div>
-        <div class="col"><a href="/Booking/availableRooms">
-            <button class="btn btn-outline-secondary">Book room</button>
-        </a></div>
-        <div class="col"><a href="ContractCustomer/viewCustomer">
-            <button class="btn btn-outline-secondary">Show Contract Customers</button>
-        </a></div>
-        <div class="col"><a href="Shipper/viewAll">
-            <button class="btn btn-outline-secondary">Show Shippers</button>
-        </a></div>
-        <div class="w-100"><br></div>
-        <div class="col"><a href="/Customer/allWithUpdate">
-            <button class="btn btn-outline-secondary">Update Customer</button>
-        </a></div>
-        <div class="col"><a href="/Booking/allWithUpdate">
-            <button class="btn btn-outline-secondary">Update Booking</button>
-        </a></div>
-        <div class="col"><a href="#">
-            <button class="btn btn-outline-secondary" disabled>Update Contract Customer</button>
-        </a></div>
-        <div class="col"><a href="#">
-            <button class="btn btn-outline-secondary" disabled>Update Shipper</button>
-        </a></div>
-        <div class="w-100"><br></div>
-        <div class="col"><a href="/Customer/allWithDelete">
-            <button class="btn btn-outline-secondary">Delete Customer</button>
-        </a></div>
-        <div class="col"><a href="/Booking/removeBooking">
-            <button class="btn btn-outline-secondary">Delete Booking</button>
-        </a></div>
-        <div class="col"><a href="#">
-            <button class="btn btn-outline-secondary" disabled>Delete Contract Customer</button>
-        </a></div>
-        <div class="col"><a href="#">
-            <button class="btn btn-outline-secondary" disabled>Delete Shipper</button>
-        </a></div>
-
+        <div class="col-sm-6 col-md-4 mb-4">
+            <p style="font-size:20px">Blacklist</p>
+            <a href="blacklist/all" class="btn btn-outline-secondary btn-block">Manage Blacklist</a>
+        </div>
     </div>
 </div>
 
