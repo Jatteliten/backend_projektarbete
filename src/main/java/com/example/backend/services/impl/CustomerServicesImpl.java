@@ -58,7 +58,7 @@ public class CustomerServicesImpl implements CustomerServices {
 
     public List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b) {
         return b.stream().map(bb -> new MiniBookingDtoForCustomer(bb.getId(), bb.getStartDate(), bb.getEndDate(),
-                new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize()))).collect(Collectors.toList());
+                new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize(), bb.getRoom().getPricePerNight()))).collect(Collectors.toList());
     }
 
     public List<DetailedCustomerDto> getAllDetailedCustomers() {

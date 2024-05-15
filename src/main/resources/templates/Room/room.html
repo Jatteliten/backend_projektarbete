@@ -34,12 +34,20 @@
     <h2 th:text="${header}"></h2>
     <div class="allCustomers" th:unless="${#lists.isEmpty(rooms)}">
         <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Size</th>
+                <th>Price / Night</th>
+                <th>Backlog</th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="room : ${rooms}">
                 <td th:text="${room.id}"></td>
                 <td th:text="${room.size}"></td>
-                <td th:text="${room.price}"></td>
-                <td><a th:href="@{'/Room/backlog/' + ${room.id}}">Backlog</a></td>
+                <td th:text="${room.pricePerNight}"></td>
+                <td><a th:href="@{'/Room/backlog/' + ${room.id}}">View</a></td>
             </tr>
             </tbody>
         </table>
