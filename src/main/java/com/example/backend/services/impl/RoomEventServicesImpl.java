@@ -24,12 +24,10 @@ public class RoomEventServicesImpl implements RoomEventServices {
         this.cleaningEventRepo = cleaningEventRepo;
     }
 
-
     public List<Object> getEventsByRoomId(Long id) {
         List<CleaningEvent> cleaningEvents = getCleaningEventsByRoomId(id);
         List<DoorEvent> doorEvents = getDoorEventsByRoomId(id);
 
-        // Sortera händelserna baserat på tid
         return Stream.concat(cleaningEvents.stream(), doorEvents.stream()).sorted(Comparator.comparing(event -> {
             if (event instanceof CleaningEvent) {
                 return ((CleaningEvent) event).getTimeStamp();
@@ -41,11 +39,9 @@ public class RoomEventServicesImpl implements RoomEventServices {
     }
 
     public List<CleaningEvent> getCleaningEventsByRoomId(Long id) {
-        //System.out.println(cleaningEventRepo.findByRoomId(id));
         return cleaningEventRepo.findByRoomId(id);
     }
     public List<DoorEvent> getDoorEventsByRoomId(Long id) {
-        //System.out.println(doorEventRepo.findByRoomId(id));
         return doorEventRepo.findByRoomId(id);
     }
 

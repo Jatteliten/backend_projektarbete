@@ -34,10 +34,7 @@ public class RoomViewController {
 
     @RequestMapping("/backlog/{id}")
     public String getBacklog(Model model, @PathVariable Long id) {
-        model.addAttribute("RoomdId", id);
-        System.out.println("---------------");
-       // System.out.println(roomEventServices.getEventsByRoomId(id));
-        System.out.println("---------------");
+        model.addAttribute("header", "Room " + id);
         model.addAttribute("allEvents", roomEventServices.getEventsByRoomId(id));
 
         List<CleaningEvent> cleaningEvents = roomEventServices.getCleaningEventsByRoomId(id);
