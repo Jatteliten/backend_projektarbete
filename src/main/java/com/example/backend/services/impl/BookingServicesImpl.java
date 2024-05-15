@@ -40,14 +40,14 @@ public class BookingServicesImpl implements BookingServices {
     public DetailedBookingDto bookingToDetailedBookingDto(Booking b) {
         return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
                 .startDate(b.getStartDate()).endDate(b.getEndDate())
-                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
+                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize(), b.getRoom().getPricePerNight()))
                 .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 
     public MiniBookingDto bookingToMiniBookingDto(Booking b) {
         return MiniBookingDto.builder().id(b.getId()).startDate(b.getStartDate())
                 .endDate(b.getEndDate())
-                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize()))
+                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize(), b.getRoom().getPricePerNight()))
                 .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
     }
 

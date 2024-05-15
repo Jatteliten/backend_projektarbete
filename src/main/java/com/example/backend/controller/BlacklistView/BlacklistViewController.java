@@ -20,7 +20,6 @@ public class BlacklistViewController {
     @GetMapping("/all")
     public String getBlacklist(Model model) {
         model.addAttribute("allOnBlacklist", blacklistServices.fetchBlacklist());
-        System.out.println(blacklistServices.fetchBlacklist());
         return "Blacklist/blacklist.html";
     }
 

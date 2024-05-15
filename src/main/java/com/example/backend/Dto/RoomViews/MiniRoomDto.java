@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class MiniRoomDto {
     private Long id;
     private int size;
+    private double pricePerNight;
 }
