@@ -27,14 +27,13 @@ public class Room {
 
     private double pricePerNight;
 
-    public Room(int size, double pricePerNight) {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CleaningEvent> cleaningEventlist;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DoorEvent> doorEventList;
 
-    public Room(int size){
+    public Room(int size, double pricePerNight){
         this.size = size;
         this.pricePerNight = pricePerNight;
     }
