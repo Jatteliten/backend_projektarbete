@@ -1,5 +1,6 @@
-package com.example.backend.model;
+package com.example.backend.model.modelUti;
 
+import com.example.backend.model.Room;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CleaningEvent {
+public class DoorEvent {
     @Id
     @GeneratedValue
     private Long id;
@@ -28,6 +29,5 @@ public class CleaningEvent {
 
     private String type;
     private LocalDateTime timeStamp;
-    private String cleaningByUser;
 
 }

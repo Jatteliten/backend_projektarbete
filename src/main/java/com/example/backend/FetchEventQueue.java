@@ -1,7 +1,7 @@
 package com.example.backend;
 
-import com.example.backend.model.CleaningEvent;
-import com.example.backend.model.DoorEvent;
+import com.example.backend.model.modelUti.CleaningEvent;
+import com.example.backend.model.modelUti.DoorEvent;
 import com.example.backend.model.Room;
 import com.example.backend.repos.CleaningEventRepo;
 import com.example.backend.repos.DoorEventRepo;
