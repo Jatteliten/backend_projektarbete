@@ -31,21 +31,26 @@ public class FetchContractCustomers implements CommandLineRunner {
         for (ContractCustomer c : customers.getContractCustomers()) {
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
             if (tempCustomer.isPresent()) {
-                ContractCustomer existingCustomer = tempCustomer.get();
-                existingCustomer.setCompanyName(c.getCompanyName());
-                existingCustomer.setContactName(c.getContactName());
-                existingCustomer.setContactTitle(c.getContactTitle());
-                existingCustomer.setStreetAddress(c.getStreetAddress());
-                existingCustomer.setCity(c.getCity());
-                existingCustomer.setPostalCode(c.getPostalCode());
-                existingCustomer.setCountry(c.getCountry());
-                existingCustomer.setPhone(c.getPhone());
-                existingCustomer.setFax(c.getFax());
+                ContractCustomer existingCustomer = findAndApplyChangesToContractCustomer(c, tempCustomer);
                 ccr.save(existingCustomer);
             } else {
                 ccr.save(c);
             }
         }
+    }
+
+    private static ContractCustomer findAndApplyChangesToContractCustomer(ContractCustomer c, Optional<ContractCustomer> tempCustomer) {
+        ContractCustomer existingCustomer = tempCustomer.get();
+        existingCustomer.setCompanyName(c.getCompanyName());
+        existingCustomer.setContactName(c.getContactName());
+        existingCustomer.setContactTitle(c.getContactTitle());
+        existingCustomer.setStreetAddress(c.getStreetAddress());
+        existingCustomer.setCity(c.getCity());
+        existingCustomer.setPostalCode(c.getPostalCode());
+        existingCustomer.setCountry(c.getCountry());
+        existingCustomer.setPhone(c.getPhone());
+        existingCustomer.setFax(c.getFax());
+        return existingCustomer;
     }
 
 }
