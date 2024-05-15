@@ -1,6 +1,8 @@
 package com.example.backend.model;
 
 
+import com.example.backend.model.modelUti.CleaningEvent;
+import com.example.backend.model.modelUti.DoorEvent;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
