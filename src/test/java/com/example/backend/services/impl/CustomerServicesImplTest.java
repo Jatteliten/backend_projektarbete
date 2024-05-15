@@ -44,7 +44,7 @@ class CustomerServicesImplTest {
         c = new Customer(1L, "Daniel", "Isaksson",
                 "Daniel@hej.com", "0722055577");
         b = List.of(new Booking(1L, LocalDate.of(2022, 10, 10),
-                LocalDate.of(2022, 10, 12), 1, new Room(1L, 3), c));
+                LocalDate.of(2022, 10, 12), 1, Room.builder().id(1L).size(3).build(), c));
         c.setBookings(b);
 
         dc = cs.customerToDetailedCustomerDto(c);
@@ -112,7 +112,8 @@ class CustomerServicesImplTest {
 
     @Test
     void createMiniBookingDtoListFromBookingList() {
-        Booking booking = new Booking(1L, LocalDate.now(), LocalDate.now(), 1, new Room(1L, 2), new Customer());
+        Booking booking = new Booking(1L, LocalDate.now(), LocalDate.now(), 1,
+                Room.builder().id(1L).size(2).build(), new Customer());
         List<Booking> bookings = List.of(booking);
 
         List<MiniBookingDtoForCustomer> miniBookingDtoList = cs.createMiniBookingDtoListFromBookingList(bookings);
@@ -121,8 +122,10 @@ class CustomerServicesImplTest {
 
     @Test
     void getAllDetailedCustomers() {
-        Booking booking1 = new Booking(1L, LocalDate.now(), LocalDate.now(), 1, new Room(1L, 2), null);
-        Booking booking2 = new Booking(2L, LocalDate.now(), LocalDate.now(), 1, new Room(2L, 2), null);
+        Booking booking1 = new Booking(1L, LocalDate.now(), LocalDate.now(), 1,
+                Room.builder().id(1L).size(2).build(), null);
+        Booking booking2 = new Booking(2L, LocalDate.now(), LocalDate.now(), 1,
+                Room.builder().id(2L).size(2).build(), null);
         List<Booking> bookings1= List.of(booking1);
         List<Booking> bookings2 = List.of(booking1);
 
@@ -173,7 +176,8 @@ class CustomerServicesImplTest {
 
     @Test
     void getDetailedCustomerById() {
-        Booking booking1 = new Booking(1L, LocalDate.now(), LocalDate.now(), 1, new Room(1L, 2), null);
+        Booking booking1 = new Booking(1L, LocalDate.now(), LocalDate.now(), 1,
+                Room.builder().id(1L).size(2).build(), null);
         List<Booking> bookings1= List.of(booking1);
 
         Long customerId = 1L;

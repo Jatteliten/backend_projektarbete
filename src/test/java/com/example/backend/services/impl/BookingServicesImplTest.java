@@ -57,8 +57,8 @@ class BookingServicesImplTest {
                 "Daniel@hej.com", "0722055577");
         c2 = new Customer(2L, "Sarah", "Wrengler",
                 "Sarah@hej.com", "0733023322");
-        r1 = new Room(1L, 3);
-        r2 = new Room(2L, 4);
+        r1 = Room.builder().id(1L).size(3).build();
+        r2 = Room.builder().id(2L).size(4).build();
         b1 = new Booking(1L, LocalDate.of(2022, 10, 10),
                 LocalDate.of(2022, 10, 12), 1, r1, c1);
         b2 = new Booking(2L, LocalDate.of(2023, 12, 12),
@@ -183,7 +183,7 @@ class BookingServicesImplTest {
 
     @Test
     void calculateExtraBedsTest() {
-        Room room = new Room(3);
+        Room room = Room.builder().size(3).build();
         int expectedValue = 1;
         assertEquals(expectedValue,bs.calculateExtraBeds(room));
 

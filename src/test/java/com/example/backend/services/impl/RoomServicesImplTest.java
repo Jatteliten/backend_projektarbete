@@ -24,7 +24,7 @@ class RoomServicesImplTest {
     @Mock
     private RoomRepo roomRepo;
 
-    Room r1 = new Room(1L,4);
+    Room r1 = Room.builder().id(1L).size(4).build();
     DetailedRoomDto d1 = new DetailedRoomDto(1L,4);
 
 
