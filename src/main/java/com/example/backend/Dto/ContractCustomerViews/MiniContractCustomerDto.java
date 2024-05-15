@@ -17,4 +17,6 @@ public class MiniContractCustomerDto {
     private String contactName;
 
     private String country;
+
+    private String externalSystemId;
 }

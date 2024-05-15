@@ -34,8 +34,8 @@
 
 
             <tr th:each="conCust : ${allContractCustomers}" >
-                <td th:text="${conCust.companyName}"></td>
                 <td th:text="${conCust.contactName}"></td>
+                <td th:text="${conCust.companyName}"></td>
                 <td th:text="${conCust.country}"></td>
                 <td th:text="${conCust.contactTitle}"></td>
                 <td th:text="${conCust.city}"></td>
@@ -48,9 +48,6 @@
         </table>
     </div>
 </div>
-<!--test-->
-<!--<a th:href="@{'/ContractCustomer/' + ${CustomerId}}" class="btn btn-primary">Go to Customer Test</a>-->
-<a th:href="@{${CustomerId}}" class="btn btn-primary">Go to Customer Test</a>
 
 </body>
 

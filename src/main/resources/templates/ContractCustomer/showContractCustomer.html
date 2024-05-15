@@ -62,7 +62,11 @@
             <tbody>
             <tr th:each="conCust : ${allContractCustomers}">
                 <td th:text="${conCust.companyName}"></td>
-                <td th:text="${conCust.contactName}"></td>
+                <td>
+                    <a th:href="@{'/ContractCustomer/' + ${conCust.externalSystemId}}">
+                        <span th:text="${conCust.contactName}"></span>
+                    </a>
+                </td>
                 <td th:text="${conCust.country}"></td>
             </tr>
             </tbody>

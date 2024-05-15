@@ -19,7 +19,7 @@ public class ContractCustomerServicesImpl implements ContractCustomerServices {
     @Override
     public MiniContractCustomerDto contractCustomerToMiniContractCustomerDto(ContractCustomer c) {
         return MiniContractCustomerDto.builder().id(c.getCustomerId()).companyName(c.getCompanyName())
-                .contactName(c.getContactName()).country(c.getCountry()).build();
+                .contactName(c.getContactName()).country(c.getCountry()).externalSystemId(c.getExternalSystemId()).build();
 
     }
 
