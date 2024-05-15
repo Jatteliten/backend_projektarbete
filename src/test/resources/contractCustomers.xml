@@ -1,0 +1,38 @@
+<allcustomers>
+    <customers>
+        <id>1</id>
+        <companyName>Persson Kommanditbolag</companyName>
+        <contactName>Maria Åslund</contactName>
+        <contactTitle>gardener</contactTitle>
+        <streetAddress>Anderssons Gata 259</streetAddress>
+        <city>Kramland</city>
+        <postalCode>60843</postalCode>
+        <country>Sverige</country>
+        <phone>076-340-7143</phone>
+        <fax>1500-16026</fax>
+    </customers>
+    <customers>
+        <id>2</id>
+        <companyName>Karlsson-Eriksson</companyName>
+        <contactName>Jörgen Gustafsson</contactName>
+        <contactTitle>philosopher</contactTitle>
+        <streetAddress>Undre Villagatan 451</streetAddress>
+        <city>Alingtorp</city>
+        <postalCode>28838</postalCode>
+        <country>Sverige</country>
+        <phone>070-369-5518</phone>
+        <fax>7805-209976</fax>
+    </customers>
+    <customers>
+        <id>3</id>
+        <companyName>Eriksson Group</companyName>
+        <contactName>Anna Karlsson</contactName>
+        <contactTitle>journalist</contactTitle>
+        <streetAddress>Johanssons Väg 036</streetAddress>
+        <city>Arlöv</city>
+        <postalCode>77616</postalCode>
+        <country>Sverige</country>
+        <phone>076-904-2433</phone>
+        <fax>8653-585976</fax>
+    </customers>
+</allcustomers>

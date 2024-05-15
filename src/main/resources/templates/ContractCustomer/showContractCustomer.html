@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
+
 </head>
 
 <body class="container">
@@ -29,15 +30,33 @@
 <div class="container">
     <h2 th:text="${header}">Contract Customers</h2>
     <div class="mb-3">
-        <input type="text" class="form-control" id="searchBox" placeholder="Search for contract customer...">
+        <form method="get">
+        <input type="text" name="q" class="form-control" id="searchBox" placeholder="Search for contract customer..." th:value="${q}">
+        </form>
     </div>
-    <div id="tableOfContractCustomers" th:unless="${#lists.isEmpty(allContractCustomers)}">
+    <div id="tableOfContractCustomers"> <!--th:unless="${#lists.isEmpty(allContractCustomers)}"-->
         <table class="table">
             <thead>
             <tr>
-                <th>Company Name<button class="sortingButton"><svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></button><button><svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></button></th>
-                <th>Contact Name<button class="sortingButton"><svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></button><button><svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></button></th>
-                <th>Country<button class="sortingButton"><svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></button><button><svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></button></th>
+                <th>Company Name
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=companyName&sortOrder=asc&q=' + q}}" class="sortingButton">
+                        <svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></a>
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=companyName&sortOrder=desc&q=' + q}}" class="sortingButton">
+                        <svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></a>
+                </th>
+                <th>Contact Name
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=contactName&sortOrder=asc&q=' + q}}" class="sortingButton">
+                        <svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></a>
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=contactName&sortOrder=desc&q=' + q}}" class="sortingButton">
+                        <svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></a>
+                </th>
+                <th>Country
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=country&sortOrder=asc&q=' + q}}" class="sortingButton">
+                        <svg class="sortingIcon" width="20" height="20"><use xlink:href="#sort-alpha-up-icon"></use></svg></a>
+                    <a th:href="@{${'/ContractCustomer/viewCustomer' + '?sortCol=country&sortOrder=desc&q=' + q}}" class="sortingButton">
+                            <svg class="sortingIcon" width="20" height="20"><use href="#sort-alpha-down-alt-icon"></use></svg></a>
+                </th>
+
             </tr>
             </thead>
             <tbody>

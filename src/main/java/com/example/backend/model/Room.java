@@ -1,13 +1,19 @@
 package com.example.backend.model;
 
 
+import com.example.backend.model.modelUti.CleaningEvent;
+import com.example.backend.model.modelUti.DoorEvent;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -23,8 +29,10 @@ public class Room {
 
     private double pricePerNight;
 
-    public Room(int size, double pricePerNight) {
-        this.size = size;
-        this.pricePerNight = pricePerNight;
-    }
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CleaningEvent> cleaningEventlist;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DoorEvent> doorEventList;
+
 }

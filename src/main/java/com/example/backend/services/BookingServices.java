@@ -23,5 +23,5 @@ public interface BookingServices {
     String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds);
     List<Room> filterRooms(Integer beds, Integer extraBeds, LocalDate startDate, LocalDate endDate);
     String bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate);
-    public Booking findById(Long id);
+    Booking findById(Long id);
 }

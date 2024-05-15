@@ -11,7 +11,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/blacklist")
 public class BlacklistViewController {
-    BlacklistServices blacklistServices;
+    private final BlacklistServices blacklistServices;
 
     public BlacklistViewController(BlacklistServices blacklistServices) {
         this.blacklistServices = blacklistServices;
@@ -20,7 +20,6 @@ public class BlacklistViewController {
     @GetMapping("/all")
     public String getBlacklist(Model model) {
         model.addAttribute("allOnBlacklist", blacklistServices.fetchBlacklist());
-        System.out.println(blacklistServices.fetchBlacklist());
         return "Blacklist/blacklist.html";
     }
 
