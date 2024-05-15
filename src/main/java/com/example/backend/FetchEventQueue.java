@@ -67,6 +67,7 @@ public class FetchEventQueue implements CommandLineRunner {
             }else if(roomEvent instanceof RoomOpened){
                 saveRoomOpened(roomEvent);
             }
+            System.out.println(" [x] Received '" + message + "'");
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }
