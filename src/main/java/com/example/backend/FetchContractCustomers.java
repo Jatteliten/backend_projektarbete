@@ -39,7 +39,7 @@ public class FetchContractCustomers implements CommandLineRunner {
         }
     }
 
-    private static ContractCustomer findAndApplyChangesToContractCustomer(ContractCustomer c, Optional<ContractCustomer> tempCustomer) {
+    public ContractCustomer findAndApplyChangesToContractCustomer(ContractCustomer c, Optional<ContractCustomer> tempCustomer) {
         ContractCustomer existingCustomer = tempCustomer.get();
         existingCustomer.setCompanyName(c.getCompanyName());
         existingCustomer.setContactName(c.getContactName());
