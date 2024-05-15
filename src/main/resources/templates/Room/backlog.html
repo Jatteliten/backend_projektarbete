@@ -23,14 +23,19 @@
 
     <h2 th:text="${header}"></h2>
 
-    <div th:each="event : ${allEvents}">
-    <span th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'CleaningEvent')}">
-        <span th:text="'Room ' + ${event.type} + ' being cleaned by ' + ${event.cleaningByUser} + ' at ' + ${event.timeStamp}"></span>
-    </span>
-        <span th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'DoorEvent')}">
-        <span th:text="'Door ' + ${event.type} + ' at ' + ${event.timeStamp}"></span>
-    </span>
-    </div>
+    <table>
+        <tbody>
+        <tr th:each="event : ${allEvents}">
+            <td th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'CleaningEvent')}">
+                <span th:text="'Room ' + ${event.type} + ' cleaned by ' + ${event.cleaningByUser} + ' at ' + ${#temporals.format(event.timeStamp, 'dd-MM-yyyy HH:mm')}"></span>
+            </td>
+            <td th:if="${#strings.startsWith(event.getClass().getSimpleName(), 'DoorEvent')}">
+                <span th:text="'Door ' + ${event.type} + ' at ' + ${#temporals.format(event.timeStamp, 'dd-MM-yyyy HH:mm')}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 
     <br>
     <a href="#">
