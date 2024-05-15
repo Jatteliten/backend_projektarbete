@@ -25,7 +25,7 @@ class RoomServicesImplTest {
     private RoomRepo roomRepo;
 
     private final Room r1 = Room.builder().id(1L).size(4).build();
-    private final DetailedRoomDto d1 = new DetailedRoomDto(1L,4);
+    private final DetailedRoomDto d1 = DetailedRoomDto.builder().id(1L).size(4).build();
 
     @Test
     void roomToDetailedRoomDtoTest() {

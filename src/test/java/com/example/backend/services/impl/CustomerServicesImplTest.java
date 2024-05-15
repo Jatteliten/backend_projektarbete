@@ -102,7 +102,7 @@ class CustomerServicesImplTest {
     @Test
     void createBookingListFromMiniBookingsDtoList() {
         MiniBookingDtoForCustomer miniBookingDto = new MiniBookingDtoForCustomer
-                (1L, LocalDate.now(), LocalDate.now(), new MiniRoomDto(1L, 2));
+                (1L, LocalDate.now(), LocalDate.now(), MiniRoomDto.builder().id(1L).size(2).build());
         List<MiniBookingDtoForCustomer> miniBookingDtoList = List.of(miniBookingDto);
 
         when(mockBookingRepo.findById(1L)).thenReturn(Optional.of(new Booking()));
