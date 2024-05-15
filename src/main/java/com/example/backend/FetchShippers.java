@@ -53,18 +53,18 @@ public class FetchShippers implements CommandLineRunner {
     }
 
     private Shipper createNewShipper(ShipperDto s){
-        return new Shipper(
-                s.id,
-                s.email,
-                s.companyName,
-                s.contactName,
-                s.contactTitle,
-                s.streetAddress,
-                s.city,
-                s.postalCode,
-                s.country,
-                s.phone,
-                s.fax);
+        return Shipper.builder()
+                .externalId(s.id)
+                .email(s.email)
+                .companyName(s.companyName)
+                .contactName(s.contactName)
+                .contactTitle(s.contactTitle)
+                .streetAddress(s.streetAddress)
+                .city(s.city)
+                .postalCode(s.postalCode)
+                .country(s.country)
+                .phone(s.phone)
+                .fax(s.fax).build();
     }
 
 
