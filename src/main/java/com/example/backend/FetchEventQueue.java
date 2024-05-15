@@ -39,40 +39,36 @@ public class FetchEventQueue implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
-        ConnectionFactory factory = new ConnectionFactory();        factory.setHost("128.140.81.47");
+    public void run(String... args) throws IOException, TimeoutException {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("128.140.81.47");
         factory.setUsername("djk47589hjkew789489hjf894");
         factory.setPassword("sfdjkl54278frhj7");
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
 
-        try (Connection connection = factory.newConnection();
-             Channel channel = connection.createChannel()) {
 
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-            System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
-                if (roomEvent instanceof RoomCleaningFinished) {
-                    saveRoomCleaningFinished(roomEvent);
-                } else if (roomEvent instanceof RoomCleaningStarted) {
-                    saveRoomCleaningStarted(roomEvent);
-                } else if (roomEvent instanceof RoomClosed) {
-                    saveRoomClosed(roomEvent);
-                } else if (roomEvent instanceof RoomOpened) {
-                    saveRoomOpened(roomEvent);
-                }
-                System.out.println(" [x] Received '" + message + "'");
-            };
-
-            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
-
-        } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
-        }
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
+            if(roomEvent instanceof RoomCleaningFinished){
+                saveRoomCleaningFinished(roomEvent);
+            }else if(roomEvent instanceof RoomCleaningStarted){
+                saveRoomCleaningStarted(roomEvent);
+            }else if(roomEvent instanceof RoomClosed){
+                saveRoomClosed(roomEvent);
+            }else if(roomEvent instanceof RoomOpened){
+                saveRoomOpened(roomEvent);
+            }
+            System.out.println(" [x] Received '" + message + "'");
+        };
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }
 
     private void saveRoomOpened(RoomEvent roomEvent) {
