@@ -24,11 +24,6 @@ public class ContractCustomerServicesImpl implements ContractCustomerServices {
     }
 
     @Override
-    public List<MiniContractCustomerDto> getAllMiniContractCustomerDto() {
-        return ccr.findAll().stream().map(c -> contractCustomerToMiniContractCustomerDto(c)).toList();
-    }
-
-    @Override
     public ContractCustomer getSpecifikContractCustomer(String externalId) {
         return ccr.findByExternalSystemId(externalId);
     }
