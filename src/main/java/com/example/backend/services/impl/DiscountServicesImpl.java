@@ -88,7 +88,7 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public boolean checkMoreThanTwoNightsDiscount(Booking booking) {
-        return ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate()) < AMOUNT_OF_DAYS_TO_GET_DISCOUNT;
+        return ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate()) >= AMOUNT_OF_DAYS_TO_GET_DISCOUNT;
 
     }
     @Override

@@ -38,19 +38,19 @@ public class BookingControllerMockTests {
     private void init(){
         Booking b1 = new Booking(1L, LocalDate.of(2020,12,12),
                 LocalDate.of(2020,12,15),1,
-                new Room(1L, 2),
+                new Room(1L, 2,200),
                 new Customer(1L, "Daniel", "Isaksson",
                 "hej@Daniel.com", "0722223344"));
 
         Booking b2 = new Booking(2L, LocalDate.of(2021,2,5),
                 LocalDate.of(2021,2,7),0,
-                new Room(2L, 2),
+                new Room(2L,2, 200),
                 new Customer(2L, "Gustaf", "Forsberg",
                         "hej@Gustaf.com", "0723346344"));
 
         Booking b3 = new Booking(3L, LocalDate.of(2022,1,1),
                 LocalDate.of(2022,1,5),2,
-                new Room(3L, 4),
+                new Room(3L,4, 4),
                 new Customer(3L, "Petter", "Tornberg",
                         "hej@Petter.com", "0722445344"));
 
