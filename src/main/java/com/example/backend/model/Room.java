@@ -33,8 +33,4 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DoorEvent> doorEventList;
 
-    public Room(int size, double pricePerNight){
-        this.size = size;
-        this.pricePerNight = pricePerNight;
-    }
 }
