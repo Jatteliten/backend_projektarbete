@@ -24,10 +24,8 @@ class RoomServicesImplTest {
     @Mock
     private RoomRepo roomRepo;
 
-    Room r1 = Room.builder().id(1L).size(4).build();
-    DetailedRoomDto d1 = new DetailedRoomDto(1L,4);
-
-
+    private final Room r1 = Room.builder().id(1L).size(4).build();
+    private final DetailedRoomDto d1 = new DetailedRoomDto(1L,4);
 
     @Test
     void roomToDetailedRoomDtoTest() {
@@ -78,7 +76,7 @@ class RoomServicesImplTest {
         RoomServicesImpl services = new RoomServicesImpl(roomRepo);
         DetailedRoomDto foundDR = services.getDetailedRoomById(1L);
 
-        assertEquals(1l, foundDR.getId());
+        assertEquals(1L, foundDR.getId());
         assertEquals(4,foundDR.getSize());
     }
 

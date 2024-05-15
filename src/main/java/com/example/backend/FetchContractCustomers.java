@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
-    ContractCustomerRepo ccr;
+    private final ContractCustomerRepo ccr;
 
     public FetchContractCustomers(ContractCustomerRepo ccr){
         this.ccr = ccr;

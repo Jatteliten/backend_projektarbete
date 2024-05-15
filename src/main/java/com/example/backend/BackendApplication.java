@@ -63,14 +63,30 @@ public class BackendApplication {
             roomRepo.save(r9);
             roomRepo.save(r10);
 
-            Customer c1 = new Customer("Daniel", "Isaksson",
-                    "Daniel@hej.se", "0725523222");
-            Customer c2 = new Customer("Lise", "Martinsen",
-                    "Lise@hej.se", "0732511663");
-            Customer c3 = new Customer("Martin", "Harrysson",
-                    "Martin@hej.se", "0725523223");
-            Customer c4 = new Customer("Astrid", "Rosen",
-                    "Astrid@hej.se", "0732511655");
+            Customer c1 = Customer.builder()
+                    .firstName("Daniel")
+                    .lastName("Isaksson")
+                    .email("Daniel@hej.se")
+                    .phoneNumber("0755232222")
+                    .build();
+            Customer c2 = Customer.builder()
+                    .firstName("Lise")
+                    .lastName("Martinsen")
+                    .email("Lise@hej.se")
+                    .phoneNumber("0732511663")
+                    .build();
+            Customer c3 = Customer.builder()
+                    .firstName("Martin")
+                    .lastName("Harrysson")
+                    .email("Martin@hej.se")
+                    .phoneNumber("0725523223")
+                    .build();
+            Customer c4 = Customer.builder()
+                    .firstName("Astrid")
+                    .lastName("Rosen")
+                    .email("Astrid@hej.se")
+                    .phoneNumber("0732511655")
+                    .build();
 
             cr.save(c1);
             cr.save(c2);
