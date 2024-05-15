@@ -5,10 +5,10 @@ import com.example.backend.model.Blacklist;
 import java.util.List;
 
 public interface BlacklistServices {
-    public List<Blacklist> fetchBlacklist();
-    public boolean isBlacklisted(String email);
-    public void addPersonToBlacklist(String email, String name);
-    public String updateBlacklistedPerson(String email, String newName, boolean newOkStatus);
-    public List<Blacklist> filterBlacklist(String searchWord);
-    public Blacklist findBlacklistObjById(Long id);
+    List<Blacklist> fetchBlacklist();
+    boolean isBlacklisted(String email);
+    void addPersonToBlacklist(String email, String name);
+    String updateBlacklistedPerson(String email, String newName, boolean newOkStatus);
+    List<Blacklist> filterBlacklist(String searchWord);
+    Blacklist findBlacklistObjById(Long id);
 }
