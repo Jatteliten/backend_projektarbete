@@ -43,11 +43,10 @@ public class CustomerRemoveViewController {
         if (!customers.isEmpty()) {
             model.addAttribute("allCustomers", customers);
             model.addAttribute("header", "Matches Found");
-            return "Customer/removeCustomer.html";
         } else {
             model.addAttribute("header", "No Matches Found");
-            return "Customer/removeCustomer.html";
         }
+        return "Customer/removeCustomer.html";
     }
 
 }

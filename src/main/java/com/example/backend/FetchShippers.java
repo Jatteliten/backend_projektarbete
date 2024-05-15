@@ -12,7 +12,7 @@ import java.net.URI;
 
 @ComponentScan
 public class FetchShippers implements CommandLineRunner {
-    ShipperRepo sr;
+    private final ShipperRepo sr;
 
     public FetchShippers(ShipperRepo sr){
         this.sr = sr;
