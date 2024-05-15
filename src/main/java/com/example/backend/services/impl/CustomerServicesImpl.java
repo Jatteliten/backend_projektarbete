@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class CustomerServicesImpl implements CustomerServices {
     private final CustomerRepo cr;
     private final BookingRepo br;
-    public Validator validator;
+    public final Validator validator;
 
     public CustomerServicesImpl(CustomerRepo cr, BookingRepo br) {
         this.cr = cr;

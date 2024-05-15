@@ -12,7 +12,7 @@ class BookingControllerIsCreatedTest {
     private BookingController bookingController;
 
     @Test
-    public void contextLoads() throws Exception{
+    public void contextLoads() {
         assertThat(bookingController).isNotNull();
     }
 }

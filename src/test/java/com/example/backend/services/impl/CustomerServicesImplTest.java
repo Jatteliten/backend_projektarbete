@@ -40,9 +40,9 @@ class CustomerServicesImplTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
-        c = new Customer(1L, "Daniel", "Isaksson",
-                "Daniel@hej.com", "0722055577");
+        MockitoAnnotations.openMocks(this);
+        c = Customer.builder().id(1L).firstName("Daniel").lastName("Isaksson").email("Daniel@hej.com")
+                .phoneNumber("0722055577").build();
         b = List.of(new Booking(1L, LocalDate.of(2022, 10, 10),
                 LocalDate.of(2022, 10, 12), 1, Room.builder().id(1L).size(3).build(), c));
         c.setBookings(b);
@@ -153,8 +153,10 @@ class CustomerServicesImplTest {
 
     @Test
     void getAllMiniCustomers() {
-        Customer customer1 = new Customer(1L, "John", "Doe", "john@example.com", "123456789");
-        Customer customer2 = new Customer(2L, "Jane", "Doe", "jane@example.com", "987654321");
+        Customer customer1 = Customer.builder().id(1L).firstName("John").lastName("Doe")
+                .email("john@example.com").phoneNumber("123456789").build();
+        Customer customer2 = Customer.builder().id(2L).firstName("Jane").lastName("Doe")
+                .email("jane@example.com").phoneNumber("987654321").build();
         List<Customer> customers = Arrays.asList(customer1, customer2);
 
         when(mockCustomerRepo.findAll()).thenReturn(customers);
@@ -192,15 +194,13 @@ class CustomerServicesImplTest {
         assertEquals(customer.getLastName(), detailedCustomerDto.getLastName());
         assertEquals(customer.getEmail(), detailedCustomerDto.getEmail());
         assertEquals(customer.getPhoneNumber(), detailedCustomerDto.getPhoneNumber());
-        //Hur kan jag testa bokningen?
-        //assertEquals(customer.getBookings().size(), detailedCustomerDto.getMiniBookingDto().);
-        //Ska jag ge kunden en MiniBookingDtoForCustomer och testa det med?
     }
 
     @Test
     void getMiniCustomerById() {
         Long customerId = 1L;
-        Customer customer = new Customer(customerId, "John", "Doe", "john@example.com", "123456789");
+        Customer customer = Customer.builder().id(customerId).firstName("John").lastName("Doe")
+                .email("john@example.com").phoneNumber("123456789").build();
         when(mockCustomerRepo.findById(customerId)).thenReturn(Optional.of(customer));
 
         MiniCustomerDto miniCustomerDto = cs.getMiniCustomerById(customerId);
@@ -216,10 +216,12 @@ class CustomerServicesImplTest {
     //Funkar ej
     @Test
     void findCustomers() {
-        List<Customer> allCustomers = Arrays.asList(
-                new Customer(1L, "John", "Doe", "john@example.com", "123456789"),
-                new Customer(2L, "Jane", "Doe", "jane@example.com", "987654321"),
-                new Customer(3L, "Alice", "Smith", "alice@example.com", "111222333")
+        List<Customer> allCustomers = Arrays.asList(Customer.builder().id(1L).firstName("John").lastName("Doe")
+                .email("john@example.com").phoneNumber("123456789").build(),
+                Customer.builder().id(2L).firstName("Jane").lastName("Doe")
+                        .email("jane@example.com").phoneNumber("987654321").build(),
+                Customer.builder().id(3L).firstName("Alice").lastName("Smith")
+                        .email("alice@example.com").phoneNumber("111222333").build()
         );
         String searchWord = "doe";
 
@@ -234,32 +236,11 @@ class CustomerServicesImplTest {
                         c.getPhoneNumber().toLowerCase().contains(searchWord)
         ));
     }
-/*
-    @Test
-    void updateCustomer() {
-        Long customerId = 1L;
-        Customer customer = new Customer(customerId, "John", "Doe", "john@example.com", "123456789");
-
-        when(mockCustomerRepo.findById(customerId)).thenReturn(Optional.of(customer));
-        when(mockCustomerRepo.save(customer)).thenReturn(customer);
-
-        MiniCustomerDto miniCustomer = cs.getMiniCustomerById(customerId);
-        cs.updateCustomer(miniCustomer);
-
-        verify(mockCustomerRepo, times(1)).save(customer);
-
-        assertEquals("Jane", customer.getFirstName());
-        assertEquals("Smith", customer.getLastName());
-        assertEquals("jane@example.com", customer.getEmail());
-        assertEquals("987654321", customer.getPhoneNumber());
-
-    }
-
- */
 
     @Test
     void addCustomer_Success() {
-        Customer customer = new Customer(1L, "John", "Doe", "john@example.com", "123456789");
+        Customer customer = Customer.builder().id(1L).firstName("John").lastName("Doe")
+                .email("john@example.com").phoneNumber("123456789").build();
         String result = cs.addCustomer(customer);
         verify(mockCustomerRepo, times(1)).save(customer);
         assertEquals("Success!", result);
@@ -277,7 +258,8 @@ class CustomerServicesImplTest {
     @Test
     void deleteCustomerById() {
         Long customerId = 1L;
-        Customer testCustomer = new Customer(customerId, "John", "Doe", "john@example.com", "123456789");
+        Customer testCustomer = Customer.builder().id(customerId).firstName("John").lastName("Doe")
+                .email("john@example.com").phoneNumber("123456789").build();
 
         when(mockCustomerRepo.findById(customerId)).thenReturn(Optional.of(testCustomer));
         cs.deleteCustomerById(customerId);
@@ -287,7 +269,8 @@ class CustomerServicesImplTest {
     @Test
     void findByEmail() {
         String email = "john@example.com";
-        Customer customer = new Customer(1L, "John", "Doe", email, "123456789");
+        Customer customer = Customer.builder().id(1L).firstName("John").lastName("Doe")
+                .email(email).phoneNumber("123456789").build();
 
         when(mockCustomerRepo.findByEmail(email)).thenReturn(customer);
         Customer foundCustomer = cs.findByEmail(email);

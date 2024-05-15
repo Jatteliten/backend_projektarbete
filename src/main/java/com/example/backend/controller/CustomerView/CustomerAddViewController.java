@@ -33,12 +33,13 @@ public class CustomerAddViewController {
         Customer test = cs.findByEmail(email);
 
         if(test == null){
-            model.addAttribute("header", cs.addCustomer(new Customer(firstName, lastName, email, pNr)));
-            return addCustomer();
+            model.addAttribute("header", cs.addCustomer(
+                    Customer.builder()
+                            .firstName(firstName).lastName(lastName).email(email).phoneNumber(pNr).build()));
         }else{
             model.addAttribute("header", "Customer already exists.");
-            return addCustomer();
         }
+        return addCustomer();
     }
 
 }

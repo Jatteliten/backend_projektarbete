@@ -18,10 +18,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/Booking")
 public class BookingAddViewController {
-    BookingServices bookingServices;
-    CustomerServices customerServices;
-    RoomServices roomServices;
-    BlacklistServices blacklistServices;
+    private final BookingServices bookingServices;
+    private final CustomerServices customerServices;
+    private final RoomServices roomServices;
+    private final BlacklistServices blacklistServices;
 
     public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
                                     RoomServices roomServices, BlacklistServices blacklistServices) {

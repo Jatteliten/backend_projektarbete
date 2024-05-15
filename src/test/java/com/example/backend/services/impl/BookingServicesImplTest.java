@@ -52,11 +52,11 @@ class BookingServicesImplTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
-        c1 = new Customer(1L, "Daniel", "Isaksson",
-                "Daniel@hej.com", "0722055577");
-        c2 = new Customer(2L, "Sarah", "Wrengler",
-                "Sarah@hej.com", "0733023322");
+        MockitoAnnotations.openMocks(this);
+        c1 = Customer.builder().id(1L).firstName("Daniel").lastName("Isaksson").email("Daniel@hej.com")
+                .phoneNumber("0722055577").build();
+        c2 = Customer.builder().id(2L).firstName("Sarah").lastName("Wrengler").email("Sarah@hej.com")
+                .phoneNumber("0733023322").build();
         r1 = Room.builder().id(1L).size(3).build();
         r2 = Room.builder().id(2L).size(4).build();
         b1 = new Booking(1L, LocalDate.of(2022, 10, 10),
