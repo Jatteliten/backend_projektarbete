@@ -12,9 +12,15 @@ import java.util.List;
 
 @Service
 public class DiscountServicesImpl implements DiscountServices {
-    private static final double moreThanTwoDaysDiscount = 0.005;
-    private static final double sundayToMondayDiscount = 0.02;
-    private static final double moreThan10DaysBookedDiscount = 0.02;
+
+    private static final int AMOUNT_OF_DAYS_TO_GET_DISCOUNT = 2;
+    private static final double MORE_THAN_TWO_DAYS_DISCOUNT = 0.005;
+    private static final double SUNDAY_TO_MONDAY_DISCOUNT = 0.02;
+
+    private static final double MORE_THAN_TEN_DAYS_BOOKED_DISCOUNT = 0.02;
+    private static final int AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT = 1;
+    private static final int AMOUNT_OF_NIGHTS_WITHIN_YEAR_TO_GET_DISCOUNT = 10;
+
 
 
     private final BookingRepo bookingRepo;
@@ -26,16 +32,22 @@ public class DiscountServicesImpl implements DiscountServices {
     @Override
     public double calculateTotalPriceWithAllDiscounts(Booking booking) {
 
-        final double fullPrice = calculateFullPrice(booking);
+        double totalPriceToPay  = calculateFullPrice(booking);
+        double totalDiscount = 0;
 
-        //initial price with standard sunday to monday discount
-        final double priceWithSundayToMondayDiscount = calculateSundayToMondayDiscount(booking,fullPrice);
+        if (checkSundayToMondayDiscount(booking)){
+            totalPriceToPay = applySundayToMondayDiscount(booking,totalPriceToPay);
+        }
 
-        double totalDiscount =
-                calculateIfCustomerBookedMoreThan10NightsLastYearDiscount(booking,priceWithSundayToMondayDiscount)+
-                calculateMoreThanTwoNightsDiscount(booking,priceWithSundayToMondayDiscount);
+        if (checkMoreThanTwoNightsDiscount(booking)){
+            totalDiscount += calculateMoreThanTwoNightsDiscount(totalPriceToPay);
+        }
 
-        return priceWithSundayToMondayDiscount-totalDiscount;
+        if (checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(booking)){
+            totalDiscount += calculateMoreThanTenNightsDiscount(totalPriceToPay);
+        }
+
+        return totalPriceToPay - totalDiscount;
     }
 
     @Override
@@ -45,15 +57,28 @@ public class DiscountServicesImpl implements DiscountServices {
     }
 
     @Override
-    public double calculateSundayToMondayDiscount(Booking booking,double fullPrice) {
+    public boolean checkSundayToMondayDiscount(Booking booking){
+        LocalDate startDate = booking.getStartDate();
+        while (startDate.isBefore(booking.getEndDate())){
+            if (startDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) &&
+                    startDate.plusDays(1).getDayOfWeek().equals(DayOfWeek.MONDAY)){
+                return true;
+            }
+            startDate = startDate.plusDays(1);
+        }
+        return false;
+    }
+
+    @Override
+    public double applySundayToMondayDiscount(Booking booking,double fullPrice) {
         //returns the initial price to pay after standars sunday to monday discount
         LocalDate startDate = booking.getStartDate();
         double discount = 0;
 
         while (startDate.isBefore(booking.getEndDate())){
-            if (startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) &&
-                    startDate.plusDays(1).getDayOfWeek().equals(DayOfWeek.SUNDAY)){
-                discount += booking.getRoom().getPricePerNight()*sundayToMondayDiscount;
+            if (startDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) &&
+                    startDate.plusDays(1).getDayOfWeek().equals(DayOfWeek.MONDAY)){
+                discount += booking.getRoom().getPricePerNight()* SUNDAY_TO_MONDAY_DISCOUNT;
             }
             startDate = startDate.plusDays(1);
         }
@@ -62,36 +87,41 @@ public class DiscountServicesImpl implements DiscountServices {
     }
 
     @Override
-    public double calculateMoreThanTwoNightsDiscount(Booking booking, double initialPriceToPay) {
-        if (ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate()) < 2){
-            return 0;
-        } else
-            return initialPriceToPay*moreThanTwoDaysDiscount;
+    public boolean checkMoreThanTwoNightsDiscount(Booking booking) {
+        return ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate()) < AMOUNT_OF_DAYS_TO_GET_DISCOUNT;
+
+    }
+    @Override
+    public double calculateMoreThanTwoNightsDiscount(double initialPriceToPay) {
+            return initialPriceToPay* MORE_THAN_TWO_DAYS_DISCOUNT;
     }
 
     @Override
-    public double calculateIfCustomerBookedMoreThan10NightsLastYearDiscount(Booking booking, double initialPriceToPay) {
-
+    public long calculateAmountsOfNightsCustomerBookedWithinOneYear(Booking booking){
         List<Booking> allCustomersBookings = bookingRepo.findByCustomer_Id(booking.getCustomer().getId());
 
         List<Booking> bookingsWithinOneYear = allCustomersBookings.stream().filter(b ->
-                b.getStartDate().isAfter(LocalDate.now().minusYears(1)))
+                        b.getStartDate().isAfter(LocalDate.now()
+                                .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT)))
                 .toList();
 
-        Long totalAmountOfNightsBookedWithinOneYear = bookingsWithinOneYear
+        return bookingsWithinOneYear
                 .stream().mapToLong(this::calculateAmountOfNightsBooked).sum();
+    }
 
-        if (totalAmountOfNightsBookedWithinOneYear >= 10){
-            return initialPriceToPay*moreThan10DaysBookedDiscount;
-        } else
-            return 0.0;
+    @Override
+    public boolean checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(Booking booking){
+        return calculateAmountOfNightsBooked(booking) >= AMOUNT_OF_NIGHTS_WITHIN_YEAR_TO_GET_DISCOUNT;
+    }
 
+    @Override
+    public double calculateMoreThanTenNightsDiscount(double initialPriceToPay) {
+        return initialPriceToPay* MORE_THAN_TEN_DAYS_BOOKED_DISCOUNT;
     }
 
     @Override
     public Long calculateAmountOfNightsBooked(Booking booking) {
         return ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
     }
-
 
 }
