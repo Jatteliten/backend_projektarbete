@@ -80,14 +80,29 @@ public class BeanInitialisation implements CommandLineRunner {
 
         LocalDate currentDay = LocalDate.now();
 
-        Booking b1 = new Booking(currentDay.plusDays(3),
-                currentDay.plusDays(6), 1, r1, c1);
+        Booking b1 = Booking.builder()
+                .startDate(currentDay.plusDays(3))
+                .endDate(currentDay.plusDays(6))
+                .extraBeds(1)
+                .room(r1)
+                .customer(c1)
+                .build();
 
-        Booking b2 = new Booking(currentDay.plusMonths(1).plusDays(3),
-                currentDay.plusMonths(1).plusDays(5), 1, r1, c1);
+        Booking b2 = Booking.builder()
+                .startDate(currentDay.plusMonths(1).plusDays(3))
+                .endDate(currentDay.plusMonths(1).plusDays(5))
+                .extraBeds(1)
+                .room(r1)
+                .customer(c1)
+                .build();
 
-        Booking b3 = new Booking(currentDay.plusDays(1),
-                currentDay.plusDays(6), 1, r4, c2);
+        Booking b3 = Booking.builder()
+                .startDate(currentDay.plusDays(1))
+                .endDate(currentDay.plusDays(6))
+                .extraBeds(1)
+                .room(r4)
+                .customer(c2)
+                .build();
 
         br.save(b1);
         br.save(b2);

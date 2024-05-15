@@ -11,6 +11,7 @@ import com.example.backend.repos.BookingRepo;
 import com.example.backend.repos.CustomerRepo;
 import com.example.backend.repos.RoomRepo;
 import com.example.backend.services.BookingServices;
+import com.example.backend.services.CustomerServices;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -26,40 +27,59 @@ import java.util.*;
 public class BookingServicesImpl implements BookingServices {
     private final BookingRepo br;
     private final CustomerRepo cr;
+    private final CustomerServices cs;
     private final RoomRepo rr;
     private final Validator validator;
 
-    public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr) {
+    public BookingServicesImpl(BookingRepo br, CustomerRepo cr, RoomRepo rr, CustomerServices cs) {
         this.br = br;
         this.cr = cr;
         this.rr = rr;
+        this.cs = new CustomerServicesImpl(cr, br);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
 
     public DetailedBookingDto bookingToDetailedBookingDto(Booking b) {
-        return DetailedBookingDto.builder().id(b.getId()).extraBeds(b.getExtraBeds())
-                .startDate(b.getStartDate()).endDate(b.getEndDate())
-                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize(), b.getRoom().getPricePerNight()))
-                .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
+        return DetailedBookingDto.builder()
+                .id(b.getId())
+                .extraBeds(b.getExtraBeds())
+                .startDate(b.getStartDate())
+                .endDate(b.getEndDate())
+                .miniRoomDto(MiniRoomDto.builder()
+                        .id(b.getRoom().getId())
+                        .size(b.getRoom().getSize())
+                        .pricePerNight(b.getRoom().getPricePerNight())
+                        .build())
+                .miniCustomerDto(cs.customerToMiniCustomerDto(b.getCustomer()))
+                .build();
     }
 
     public MiniBookingDto bookingToMiniBookingDto(Booking b) {
-        return MiniBookingDto.builder().id(b.getId()).startDate(b.getStartDate())
+        return MiniBookingDto.builder()
+                .id(b.getId())
+                .startDate(b.getStartDate())
                 .endDate(b.getEndDate())
-                .miniRoomDto(new MiniRoomDto(b.getRoom().getId(), b.getRoom().getSize(), b.getRoom().getPricePerNight()))
-                .miniCustomerDto(createMiniCustomerDtoFromCustomer(b.getCustomer())).build();
+                .miniRoomDto(MiniRoomDto.builder()
+                        .id(b.getRoom().getId())
+                        .size(b.getRoom().getSize())
+                        .pricePerNight(b.getRoom().getPricePerNight())
+                        .build())
+                .miniCustomerDto(cs.customerToMiniCustomerDto(b.getCustomer()))
+                .build();
     }
 
     public Booking detailedBookingDtoToBooking(DetailedBookingDto b) {
-        return Booking.builder().id(b.getId()).startDate(b.getStartDate()).endDate(b.getEndDate())
-                .extraBeds(b.getExtraBeds()).room(rr.findById(b.getMiniRoomDto().getId()).get())
-                .customer(cr.findById(b.getMiniCustomerDto().getId()).get()).build();
+        return Booking.builder()
+                .id(b.getId())
+                .startDate(b.getStartDate())
+                .endDate(b.getEndDate())
+                .extraBeds(b.getExtraBeds())
+                .room(rr.findById(b.getMiniRoomDto().getId()).get())
+                .customer(cr.findById(b.getMiniCustomerDto().getId()).get())
+                .build();
     }
 
-    private MiniCustomerDto createMiniCustomerDtoFromCustomer(Customer c) {
-        return new MiniCustomerDto(c.getId(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPhoneNumber());
-    }
 
     public List<DetailedBookingDto> getAllDetailedBookings() {
         return br.findAll().stream().map(b -> bookingToDetailedBookingDto(b)).toList();
@@ -118,7 +138,11 @@ public class BookingServicesImpl implements BookingServices {
 
     public String updateBooking(Long bookingId, LocalDate startDate, LocalDate endDate, Long roomId,int extraBeds) {
         Booking booking = br.findById(bookingId).get();
-        Booking validateBooking = new Booking(startDate,endDate,extraBeds);
+        Booking validateBooking = Booking.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .extraBeds(extraBeds)
+                .build();
         Room room = rr.findById(roomId).get();
 
         Set<ConstraintViolation<Booking>> violations = validator.validate(validateBooking);
@@ -173,9 +197,13 @@ public class BookingServicesImpl implements BookingServices {
     public String bookRoom(String email, Long roomId, LocalDate startDate, LocalDate endDate) {
         Customer bookingCustomer = cr.findByEmail(email);
         Room room = rr.findById(roomId).get();
-        Booking newBooking = new Booking(startDate, endDate, calculateExtraBeds(room), room, bookingCustomer);
-
-
+        Booking newBooking = Booking.builder().
+                startDate(startDate).
+                endDate(endDate).
+                extraBeds(calculateExtraBeds(room)).
+                room(room).
+                customer(bookingCustomer).
+                build();
 
         Set<ConstraintViolation<Booking>> violations = validator.validate(newBooking);
         if (!violations.isEmpty()) {

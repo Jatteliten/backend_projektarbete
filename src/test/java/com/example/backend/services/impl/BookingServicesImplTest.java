@@ -173,7 +173,11 @@ class BookingServicesImplTest {
     @Test
     void checkNotAvailableTest() {
         // check if date is already booked
-        Booking b1 = new Booking(LocalDate.now().plusDays(1),LocalDate.now().plusDays(3),0);
+        Booking b1 = Booking.builder()
+                .startDate(LocalDate.now().plusDays(1))
+                .endDate(LocalDate.now().plusDays(3))
+                .extraBeds(0)
+                .build();
         Boolean actualValue = bs.checkNotAvailable(b1,LocalDate.now().plusDays(1),LocalDate.now().plusDays(3));
         assertTrue(actualValue);
         // check if date is available
