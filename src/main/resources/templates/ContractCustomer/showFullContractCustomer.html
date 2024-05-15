@@ -17,33 +17,44 @@
     <h2 th:text="${header}">Contract Customers</h2>
     <div id="tableOfContractCustomers" th:unless="${#lists.isEmpty(allContractCustomers)}">
         <table class="table">
-            <thead>
-            <tr>
-                <th>Company Name</th>
-                <th>Contact Name</th>
-                <th>Country</th>
-                <th>Contact Title</th>
-                <th>City</th>
-                <th>Fax</th>
-                <th>Phone</th>
-                <th>Postal Code</th>
-                <th>Street Address</th>
-            </tr>
-            </thead>
             <tbody>
-
-
-            <tr th:each="conCust : ${allContractCustomers}" >
-                <td th:text="${conCust.contactName}"></td>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Company name</th>
                 <td th:text="${conCust.companyName}"></td>
-                <td th:text="${conCust.country}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Contact Title</th>
                 <td th:text="${conCust.contactTitle}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Contact Name</th>
+                <td th:text="${conCust.contactName}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Country</th>
+                <td th:text="${conCust.country}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>City</th>
                 <td th:text="${conCust.city}"></td>
-                <td th:text="${conCust.fax}"></td>
-                <td th:text="${conCust.phone}"></td>
-                <td th:text="${conCust.postalCode}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Street Address</th>
                 <td th:text="${conCust.streetAddress}"></td>
             </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Postal Code</th>
+                <td th:text="${conCust.postalCode}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Phone</th>
+                <td th:text="${conCust.phone}"></td>
+            </tr>
+            <tr th:each="conCust : ${allContractCustomers}">
+                <th>Fax</th>
+                <td th:text="${conCust.fax}"></td>
+            </tr>
+
             </tbody>
         </table>
     </div>
