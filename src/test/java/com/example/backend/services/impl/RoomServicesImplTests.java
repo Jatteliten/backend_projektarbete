@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class RoomServicesImplTest {
+class RoomServicesImplTests {
     @Autowired
     RoomServicesImpl roomServices;
 

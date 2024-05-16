@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 
-class CustomerServicesImplTest {
+class CustomerServicesImplTests {
 
     Customer c;
     List<Booking> b;

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-class BookingServicesImplTest {
+class BookingServicesImplTests {
 
     Customer c1;
     Customer c2;

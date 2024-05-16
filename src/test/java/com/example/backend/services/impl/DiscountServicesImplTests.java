@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class DiscountServicesImplTest {
+class DiscountServicesImplTests {
 
 
     private BookingRepo bookingRepo = mock(BookingRepo.class);
