@@ -1,11 +1,9 @@
 package com.example.backend.controller.BookingView;
 
+import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
-import com.example.backend.services.BlacklistServices;
-import com.example.backend.services.BookingServices;
-import com.example.backend.services.CustomerServices;
-import com.example.backend.services.RoomServices;
+import com.example.backend.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +20,16 @@ public class BookingAddViewController {
     private final CustomerServices customerServices;
     private final RoomServices roomServices;
     private final BlacklistServices blacklistServices;
+    private final DiscountServices discountServices;
 
     public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
-                                    RoomServices roomServices, BlacklistServices blacklistServices) {
+                                    RoomServices roomServices, BlacklistServices blacklistServices,
+                                    DiscountServices discountServices) {
         this.bookingServices = bookingServices;
         this.customerServices = customerServices;
         this.roomServices = roomServices;
         this.blacklistServices = blacklistServices;
+        this.discountServices = discountServices;
     }
 
     @RequestMapping("/availableRooms")
@@ -100,5 +101,39 @@ public class BookingAddViewController {
         }
 
         return "Booking/BookingSuccess.html";
+    }
+    @RequestMapping("/confirmBooking")
+    public String confirmBooking(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
+                                 @RequestParam LocalDate endDateB, Model model) {
+        String error = null;
+        Customer c = customerServices.findByEmail(email);
+        if (c == null) {
+            error = "No customer with email: " + email + " found.";
+        } else if (blacklistServices.isBlacklisted(email)) {
+            error = "Customer with email " + email + " is blacklisted.";
+        }
+        if (error != null) {
+            List<Room> rooms = List.of(roomServices.findById(roomId));
+            model.addAttribute("title", "Available rooms");
+            model.addAttribute("listOfRooms", rooms);
+            model.addAttribute("buttonText", "Book Room");
+            model.addAttribute("error", error);
+            model.addAttribute("start", startDateB);
+            model.addAttribute("end", endDateB);
+            return "Booking/addBooking.html";
+        }
+
+        Room r = roomServices.findById(roomId);
+        Booking b = new Booking(1L,startDateB,endDateB,0,r,c);
+        double fullPrice = discountServices.calculateFullPrice(b);
+        double priceWithDiscount = discountServices.calculateTotalPriceWithDiscounts(b);
+        model.addAttribute("fullPrice", fullPrice);
+        model.addAttribute("discountedPrice", priceWithDiscount);
+        model.addAttribute("email", email);
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("start", startDateB);
+        model.addAttribute("end", endDateB);
+
+        return "Booking/confirmBooking.html";
     }
 }
