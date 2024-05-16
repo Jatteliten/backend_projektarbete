@@ -42,3 +42,16 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+val integrationTestTask = tasks.register<Test>("integrationTest"){
+    group = "verification"
+    filter{
+        includeTestsMatching("*IntegrationTests")
+    }
+}
+
+tasks.test{
+    filter{
+        includeTestsMatching("*Tests")
+    }
+}
