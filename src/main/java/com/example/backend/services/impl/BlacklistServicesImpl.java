@@ -4,6 +4,8 @@ import com.example.backend.model.Blacklist;
 import com.example.backend.services.BlacklistServices;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -18,25 +20,16 @@ import java.util.List;
 @Service
 public class BlacklistServicesImpl implements BlacklistServices {
 
-    public static void main(String[] args) {
-        BlacklistServicesImpl blacklistServices = new BlacklistServicesImpl();
-        //blacklistServices.addEmailToBlacklist("stefanH@gmail.com", "Stefan Holmberg");
-        //blacklistServices.removeEmailFromBlacklist("lise@gmail.com");
-
-        //boolean isBlacklisted = blacklistServices.isBlacklisted("lise@gmail.com");
-        //System.out.println("isBlacklisted = " + isBlacklisted);
-
-        //List<String> blacklist = blacklistServices.fetchBlacklist();
-        //System.out.println(blacklist);
-
-        //blacklistServices.updateBlacklistedPerson("lise@gmail.com", "Lise Martinsen", true);
-    }
-
     private final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
+    private final HttpClient httpClient;
+
+    @Autowired
+    public BlacklistServicesImpl(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
     public List<Blacklist> fetchBlacklist() {
         List<Blacklist> blacklist = new ArrayList<>();
-        HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BLACKLIST_API_URL))
                 .GET()
@@ -48,6 +41,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Blacklist[] blacklistArray = objectMapper.readValue(jsonResponse, Blacklist[].class);
                 Collections.addAll(blacklist, blacklistArray);
+
             } else {
                 System.out.println("Request failed, status code: " + response.statusCode());
             }
@@ -59,7 +53,6 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
     @Override
     public boolean isBlacklisted(String email) {
-        HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BLACKLIST_API_URL + "check/" + email))
                 .GET()
@@ -84,7 +77,6 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
     @Override
     public void addPersonToBlacklist(String email, String name) {
-        HttpClient httpClient = HttpClient.newHttpClient();
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BLACKLIST_API_URL))
@@ -106,7 +98,6 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
     @Override
     public String updateBlacklistedPerson(String email, String newName, boolean newOkStatus) {
-        HttpClient httpClient = HttpClient.newHttpClient();
         String jsonBody = "{"
                 + "\"name\":\"" + newName + "\", "
                 + "\"ok\":" + newOkStatus
