@@ -30,7 +30,7 @@ public class DiscountServicesImpl implements DiscountServices {
     }
 
     @Override
-    public double calculateTotalPriceWithAllDiscounts(Booking booking) {
+    public double calculateTotalPriceWithDiscounts(Booking booking) {
 
         double totalPriceToPay  = calculateFullPrice(booking);
         double totalDiscount = 0;
@@ -52,7 +52,7 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public double calculateFullPrice(Booking booking) {
-        Long amountOfNightsBooked = ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate());
+        long amountOfNightsBooked = ChronoUnit.DAYS.between(booking.getStartDate(),booking.getEndDate());
         return amountOfNightsBooked * booking.getRoom().getPricePerNight();
     }
 
@@ -71,7 +71,6 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public double applySundayToMondayDiscount(Booking booking,double fullPrice) {
-        //returns the initial price to pay after standars sunday to monday discount
         LocalDate startDate = booking.getStartDate();
         double discount = 0;
 
@@ -98,18 +97,9 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public long calculateAmountsOfNightsCustomerBookedWithinOneYear(Booking booking){
-        // ändra använd inte stream
         List<Booking> allCustomersBookingWithinOneYear = bookingRepo
-                .findByCustomerIdAndStartDateWithinOneYear(booking.getCustomer().getId(),LocalDate.now()
+                .findByCustomerIdAndStartDateAfter(booking.getCustomer().getId(),LocalDate.now()
                 .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT));
-
-
-//        List<Booking> allCustomersBookings = bookingRepo.findByCustomer_Id(booking.getCustomer().getId());
-//
-//        List<Booking> bookingsWithinOneYear = allCustomersBookings.stream().filter(b ->
-//                        b.getStartDate().isAfter(LocalDate.now()
-//                                .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT)))
-//                .toList();
 
         return allCustomersBookingWithinOneYear
                 .stream().mapToLong(this::calculateAmountOfNightsBooked).sum();
@@ -117,7 +107,7 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public boolean checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(Booking booking){
-        return calculateAmountOfNightsBooked(booking) >= AMOUNT_OF_NIGHTS_WITHIN_YEAR_TO_GET_DISCOUNT;
+        return calculateAmountsOfNightsCustomerBookedWithinOneYear(booking) >= AMOUNT_OF_NIGHTS_WITHIN_YEAR_TO_GET_DISCOUNT;
     }
 
     @Override
