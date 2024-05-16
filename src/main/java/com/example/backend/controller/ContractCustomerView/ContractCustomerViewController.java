@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -67,7 +66,7 @@ public class ContractCustomerViewController {
     public String detailedContractCustomer(@PathVariable String externalId, Model model){
         List<DetailedContractCustomer> detailedContractCustomer = List.of(
                 contractCustomerServices.contractCustomerToDetailedContractCustomerDto(
-                contractCustomerServices.getSpecifikContractCustomer(externalId))
+                contractCustomerServices.getSpecificContractCustomer(externalId))
         );
         model.addAttribute("allContractCustomers", detailedContractCustomer);
         return "ContractCustomer/showFullContractCustomer.html";

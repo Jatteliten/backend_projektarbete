@@ -24,7 +24,7 @@ public class ContractCustomerServicesImpl implements ContractCustomerServices {
     }
 
     @Override
-    public ContractCustomer getSpecifikContractCustomer(String externalId) {
+    public ContractCustomer getSpecificContractCustomer(String externalId) {
         return ccr.findByExternalSystemId(externalId);
     }
 
