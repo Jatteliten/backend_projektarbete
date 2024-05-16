@@ -116,6 +116,30 @@ public class BlacklistServicesImplTests {
 
     @Test
     void updateBlacklistedPersonSuccess() throws IOException, InterruptedException {
+        String email = "test@example.com";
+        String newName = "New Name";
+        boolean newOkStatus = true;
+
+        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+        when(mockResponse.statusCode()).thenReturn(204);
+        when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        String resultMessage = blacklistServices.updateBlacklistedPerson(email, newName, newOkStatus);
+
+        verify(mockHttpClient).send(argThat(req -> {
+            try {
+                return req.uri().equals(new URI("https://javabl.systementor.se/api/asmadali/blacklist/" + email))
+                        && req.method().equals("PUT")
+                        && req.headers().firstValue("Content-Type").get().equals("application/json")
+                        && req.bodyPublisher().isPresent()
+                        && req.bodyPublisher().get().contentLength() > 0;
+            } catch (Exception e) {
+                return false;
+            }
+        }), any(HttpResponse.BodyHandler.class));
+
+        assertEquals("Blacklisted person updated successfully.", resultMessage);
 
     }
 
