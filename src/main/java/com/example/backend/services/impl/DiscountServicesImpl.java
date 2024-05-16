@@ -98,14 +98,20 @@ public class DiscountServicesImpl implements DiscountServices {
 
     @Override
     public long calculateAmountsOfNightsCustomerBookedWithinOneYear(Booking booking){
-        List<Booking> allCustomersBookings = bookingRepo.findByCustomer_Id(booking.getCustomer().getId());
+        // ändra använd inte stream
+        List<Booking> allCustomersBookingWithinOneYear = bookingRepo
+                .findByCustomerIdAndStartDateWithinOneYear(booking.getCustomer().getId(),LocalDate.now()
+                .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT));
 
-        List<Booking> bookingsWithinOneYear = allCustomersBookings.stream().filter(b ->
-                        b.getStartDate().isAfter(LocalDate.now()
-                                .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT)))
-                .toList();
 
-        return bookingsWithinOneYear
+//        List<Booking> allCustomersBookings = bookingRepo.findByCustomer_Id(booking.getCustomer().getId());
+//
+//        List<Booking> bookingsWithinOneYear = allCustomersBookings.stream().filter(b ->
+//                        b.getStartDate().isAfter(LocalDate.now()
+//                                .minusYears(AMOUNT_OF_YEARS_TO_CHECK_WITHIN_FOR_DISCOUNT)))
+//                .toList();
+
+        return allCustomersBookingWithinOneYear
                 .stream().mapToLong(this::calculateAmountOfNightsBooked).sum();
     }
 

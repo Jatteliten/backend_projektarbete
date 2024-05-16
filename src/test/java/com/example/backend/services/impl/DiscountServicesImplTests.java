@@ -7,11 +7,16 @@ import com.example.backend.repos.BookingRepo;
 import com.example.backend.services.DiscountServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DiscountServicesImplTests {
 
@@ -49,6 +54,8 @@ class DiscountServicesImplTests {
                 LocalDate.of(2024,05,04),0,r1,c1);
     }
 
+
+
     @Test
     void calculateTotalPriceWithAllDiscountsTest() {
     }
@@ -85,8 +92,20 @@ class DiscountServicesImplTests {
     }
 
     @Test
-    void calculateAmountsOfNightsCustomerBookedWithinOneYearTest() {
-        //vg bookingRepoMock
+    void calculateAmountsOfNightsCustomerBookedWithinOneYearShouldReturn3() {
+        //assemble
+        when(bookingRepo.findByCustomerIdAndStartDateWithinOneYear(eq(1L),any())).thenReturn(List.of(oneNightBooking,twoNightsBooking));
+
+        //apply
+        long actualValue = sut.calculateAmountsOfNightsCustomerBookedWithinOneYear(twoNightsBooking);
+
+        //assert
+        assertEquals(3,actualValue);
+    }
+
+    @Test
+    void testFakeRepo(){
+
     }
 
     @Test
