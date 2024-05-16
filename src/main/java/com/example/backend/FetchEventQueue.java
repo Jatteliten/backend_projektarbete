@@ -47,11 +47,9 @@ public class FetchEventQueue implements CommandLineRunner {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {

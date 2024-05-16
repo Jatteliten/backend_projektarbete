@@ -3,20 +3,23 @@ package com.example.backend;
 import com.example.backend.model.ContractCustomer;
 import com.example.backend.model.modelUti.ContractCustomers;
 import com.example.backend.repos.ContractCustomerRepo;
+import com.example.backend.services.XmlStreamProvider;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.net.URI;
+import java.io.InputStream;
 import java.util.Optional;
 
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
     private final ContractCustomerRepo ccr;
+    XmlStreamProvider xmlStreamProvider;
 
-    public FetchContractCustomers(ContractCustomerRepo ccr){
+    public FetchContractCustomers(ContractCustomerRepo ccr, XmlStreamProvider xmlStreamProvider){
         this.ccr = ccr;
+        this.xmlStreamProvider = xmlStreamProvider;
     }
 
     @Override
@@ -24,9 +27,8 @@ public class FetchContractCustomers implements CommandLineRunner {
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(module);
-        ContractCustomers customers = xmlMapper.readValue(
-                new URI("https://javaintegration.systementor.se/customers").toURL(),
-                ContractCustomers.class);
+        InputStream stream = xmlStreamProvider.getContractCustomersStream();
+        ContractCustomers customers = xmlMapper.readValue(stream, ContractCustomers.class);
 
         for (ContractCustomer c : customers.getContractCustomers()) {
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));

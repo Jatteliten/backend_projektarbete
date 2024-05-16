@@ -3,29 +3,32 @@ package com.example.backend;
 import com.example.backend.model.Shipper;
 import com.example.backend.model.modelUti.ShipperDto;
 import com.example.backend.repos.ShipperRepo;
+import com.example.backend.services.XmlStreamProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.InputStream;
 import java.net.URI;
 
 @ComponentScan
 public class FetchShippers implements CommandLineRunner {
     private final ShipperRepo sr;
+    XmlStreamProvider xmlStreamProvider;
 
-    public FetchShippers(ShipperRepo sr){
+    public FetchShippers(ShipperRepo sr, XmlStreamProvider xmlStreamProvider){
         this.sr = sr;
+        this.xmlStreamProvider = xmlStreamProvider;
     }
     @Override
     public void run(String... args) throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+        InputStream stream = xmlStreamProvider.getShippersStream();
 
-        ShipperDto[] shippers = objectMapper.readValue(
-                new URI("https://javaintegration.systementor.se/shippers").toURL(),
-                ShipperDto[].class);
+        ShipperDto[] shippers = objectMapper.readValue(stream, ShipperDto[].class);
 
         for(ShipperDto s : shippers){
             Shipper shipper = sr.findByExternalId(s.id);
