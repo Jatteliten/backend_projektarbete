@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class FetchContractCustomersIntegrationTests {
+class FetchContractCustomersIntegrationTest {
     @Autowired
     ContractCustomerRepo contractCustomerRepo;
     @Autowired
@@ -29,7 +29,6 @@ class FetchContractCustomersIntegrationTests {
                 .getResourceAsStream("contractCustomers.xml"));
 
         sut = new FetchContractCustomers(contractCustomerRepo, xmlStreamProvider);
-        contractCustomerRepo.deleteAll();
         sut.run();
 
         assertEquals(3, contractCustomerRepo.count());
@@ -42,7 +41,6 @@ class FetchContractCustomersIntegrationTests {
                 .getResourceAsStream("contractCustomers.xml"));
 
         sut = new FetchContractCustomers(contractCustomerRepo, xmlStreamProvider);
-        contractCustomerRepo.deleteAll();
         sut.run();
 
         assertEquals("1", contractCustomerRepo.findById(1L).get().getExternalSystemId());

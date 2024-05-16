@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-public class FetchContractCustomersTest {
+public class FetchContractCustomersTests {
 
     @Mock
     private ContractCustomerRepo contractCustomerRepo;
