@@ -29,6 +29,7 @@ class FetchContractCustomersIntegrationTest {
                 .getResourceAsStream("contractCustomers.xml"));
 
         sut = new FetchContractCustomers(contractCustomerRepo, xmlStreamProvider);
+        contractCustomerRepo.deleteAll();
         sut.run();
 
         assertEquals(3, contractCustomerRepo.count());
@@ -41,20 +42,21 @@ class FetchContractCustomersIntegrationTest {
                 .getResourceAsStream("contractCustomers.xml"));
 
         sut = new FetchContractCustomers(contractCustomerRepo, xmlStreamProvider);
+        contractCustomerRepo.deleteAll();
         sut.run();
 
-        assertEquals("1", contractCustomerRepo.findById(1L).get().getExternalSystemId());
-        assertEquals("Persson Kommanditbolag", contractCustomerRepo.findById(1L).get().getCompanyName());
-        assertEquals("Maria Åslund", contractCustomerRepo.findById(1L).get().getContactName());
-        assertEquals("gardener", contractCustomerRepo.findById(1L).get().getContactTitle());
-        assertEquals("Anderssons Gata 259", contractCustomerRepo.findById(1L).get().getStreetAddress());
-        assertEquals("Kramland", contractCustomerRepo.findById(1L).get().getCity());
-        assertEquals("60843", contractCustomerRepo.findById(1L).get().getPostalCode());
-        assertEquals("Sverige", contractCustomerRepo.findById(1L).get().getCountry());
-        assertEquals("076-340-7143", contractCustomerRepo.findById(1L).get().getPhone());
-        assertEquals("1500-16026", contractCustomerRepo.findById(1L).get().getFax());
-
+        assertEquals("1", contractCustomerRepo.findByExternalSystemId("1").getExternalSystemId());
+        assertEquals("Persson Kommanditbolag", contractCustomerRepo.findByExternalSystemId("1").getCompanyName());
+        assertEquals("Maria Åslund", contractCustomerRepo.findByExternalSystemId("1").getContactName());
+        assertEquals("gardener", contractCustomerRepo.findByExternalSystemId("1").getContactTitle());
+        assertEquals("Anderssons Gata 259", contractCustomerRepo.findByExternalSystemId("1").getStreetAddress());
+        assertEquals("Kramland", contractCustomerRepo.findByExternalSystemId("1").getCity());
+        assertEquals("60843", contractCustomerRepo.findByExternalSystemId("1").getPostalCode());
+        assertEquals("Sverige", contractCustomerRepo.findByExternalSystemId("1").getCountry());
+        assertEquals("076-340-7143", contractCustomerRepo.findByExternalSystemId("1").getPhone());
+        assertEquals("1500-16026", contractCustomerRepo.findByExternalSystemId("1").getFax());
     }
+
 
     @Test
     void fetchContractCustomersWillFetch() throws IOException {
