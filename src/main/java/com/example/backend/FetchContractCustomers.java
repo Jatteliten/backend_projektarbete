@@ -1,25 +1,35 @@
 package com.example.backend;
 
 import com.example.backend.model.ContractCustomer;
+import com.example.backend.model.Customer;
 import com.example.backend.model.modelUti.ContractCustomers;
 import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.services.XmlStreamProvider;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.io.InputStream;
+import java.util.InputMismatchException;
 import java.util.Optional;
+import java.util.Set;
 
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
     private final ContractCustomerRepo ccr;
     XmlStreamProvider xmlStreamProvider;
+    public final Validator validator;
 
     public FetchContractCustomers(ContractCustomerRepo ccr, XmlStreamProvider xmlStreamProvider){
         this.ccr = ccr;
         this.xmlStreamProvider = xmlStreamProvider;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
     }
 
     @Override
@@ -31,6 +41,16 @@ public class FetchContractCustomers implements CommandLineRunner {
         ContractCustomers customers = xmlMapper.readValue(stream, ContractCustomers.class);
 
         for (ContractCustomer c : customers.getContractCustomers()) {
+            //validerar indatan
+            Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(c);
+            if (!violations.isEmpty()) {
+                StringBuilder errorMessages = new StringBuilder();
+                for (ConstraintViolation<ContractCustomer> violation : violations) {
+                    errorMessages.append(" - ").append(violation.getMessage());
+                }
+                throw new InputMismatchException("XML error for contract customer: " + errorMessages.toString());
+            }
+
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
             if (tempCustomer.isPresent()) {
                 ContractCustomer existingCustomer = findAndApplyChangesToContractCustomer(c, tempCustomer);
@@ -54,5 +74,6 @@ public class FetchContractCustomers implements CommandLineRunner {
         existingCustomer.setFax(c.getFax());
         return existingCustomer;
     }
+
 
 }
