@@ -68,15 +68,16 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 return !isBlacklisted;
             } else {
                 System.out.println("Request failed, status code: " + response.statusCode());
+                throw new RuntimeException("Failed to check blacklist status, status code: " + response.statusCode());
             }
         } catch (Exception e) {
             System.err.println("Request failed: " + e.getMessage());
+            throw new RuntimeException("Failed to check blacklist status: " + e.getMessage(), e);
         }
-        return false;
     }
 
     @Override
-    public void addPersonToBlacklist(String email, String name) {
+    public String addPersonToBlacklist(String email, String name) {
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BLACKLIST_API_URL))
@@ -87,13 +88,14 @@ public class BlacklistServicesImpl implements BlacklistServices {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("Mail added to blacklist");
+                return "Mail added to blacklist";
             } else {
-                System.out.println("Error when adding email to blacklist: " + response.statusCode());
+                return "Error when adding email to blacklist: " + response.statusCode();
             }
         } catch (Exception e) {
-            System.err.println("Error when adding email to blacklist: " + e.getMessage());
+            return "Error when adding email to blacklist: " + e.getMessage();
         }
+
     }
 
     @Override
