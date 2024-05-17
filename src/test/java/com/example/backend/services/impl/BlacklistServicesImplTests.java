@@ -17,6 +17,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BlacklistServicesImplTests {
@@ -46,14 +48,14 @@ public class BlacklistServicesImplTests {
         List<Blacklist> blacklist = blacklistServices.fetchBlacklist();
         assertEquals(5, blacklist.size());
 
-        assertEquals(29L, blacklist.get(0).getId());
-        assertEquals("Lise Martinsen", blacklist.get(0).getName());
-        assertEquals("lise@gmail.com", blacklist.get(0).getEmail());
+        assertEquals(1L, blacklist.get(0).getId());
+        assertEquals("John Doe", blacklist.get(0).getName());
+        assertEquals("john@example.com", blacklist.get(0).getEmail());
         assertTrue(blacklist.get(0).isOk());
 
-        assertEquals(30L, blacklist.get(1).getId());
-        assertEquals("Martin Harrysson", blacklist.get(1).getName());
-        assertEquals("martin@gmail.com", blacklist.get(1).getEmail());
+        assertEquals(2L, blacklist.get(1).getId());
+        assertEquals("Jane Smith", blacklist.get(1).getName());
+        assertEquals("jane@example.com", blacklist.get(1).getEmail());
         assertFalse(blacklist.get(1).isOk());
     }
 
@@ -242,12 +244,69 @@ public class BlacklistServicesImplTests {
     }
 
     @Test
-    void filterBlacklistReturnsExpectedData() throws IOException, InterruptedException {
+    void filterBlacklistReturnsMatchingEntries() throws IOException, InterruptedException {
+
+        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
+        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn(jsonContent);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        List<Blacklist> nameMatches = blacklistServices.filterBlacklist("John Doe");
+        assertEquals(1, nameMatches.size());
+        assertEquals("John Doe", nameMatches.get(0).getName());
+
+        List<Blacklist> emailMatches = blacklistServices.filterBlacklist("jane@example.com");
+        assertEquals(1, emailMatches.size());
+        assertEquals("jane@example.com", emailMatches.get(0).getEmail());
+
+        List<Blacklist> idMatches = blacklistServices.filterBlacklist("2");
+        assertEquals(1, idMatches.size());
+        assertEquals("2", idMatches.get(0).getId().toString());
 
     }
 
     @Test
-    void filterBlacklistReturnsEmptyList() throws IOException, InterruptedException {
+    void filterBlacklistReturnsEmptyListForNonMatchingSearch() throws IOException, InterruptedException {
 
+        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
+        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn(jsonContent);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        List<Blacklist> nonMatchingSearch = blacklistServices.filterBlacklist("NonExistentSearch");
+        assertEquals(0, nonMatchingSearch.size());
+    }
+
+    @Test
+    void findBlacklistObjByIdShouldReturnMatchingEntry() throws IOException, InterruptedException {
+        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
+        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn(jsonContent);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        Blacklist match = blacklistServices.findBlacklistObjById(1L);
+        assertEquals(1L, match.getId());
+        assertEquals("John Doe", match.getName());
+        assertEquals("john@example.com", match.getEmail());
+        assertTrue(true, String.valueOf(match.isOk()));
+    }
+
+    @Test
+    void findBlacklistObjByIdShouldReturnNoMatchingEntry() throws IOException, InterruptedException {
+        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
+        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
+        when(mockResponse.statusCode()).thenReturn(200);
+        when(mockResponse.body()).thenReturn(jsonContent);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        Blacklist match = blacklistServices.findBlacklistObjById(100L);
+        assertNull(match);
     }
 }
