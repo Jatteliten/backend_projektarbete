@@ -67,24 +67,6 @@ public class BookingAddViewController {
 
 
         String error = null;
-        Customer bookingCustomer = customerServices.findByEmail(email);
-
-        if (bookingCustomer == null) {
-            error = "No customer with email: " + email + " found.";
-        } else if (blacklistServices.isBlacklisted(email)) {
-            error = "Customer with email " + email + " is blacklisted.";
-        }
-
-        if (error != null) {
-            List<Room> rooms = List.of(roomServices.findById(roomId));
-            model.addAttribute("title", "Available rooms");
-            model.addAttribute("listOfRooms", rooms);
-            model.addAttribute("buttonText", "Book Room");
-            model.addAttribute("error", error);
-            model.addAttribute("start", startDateB);
-            model.addAttribute("end", endDateB);
-            return "Booking/addBooking.html";
-        }
 
         model.addAttribute("error", error);
         model.addAttribute("email", email);
@@ -126,7 +108,8 @@ public class BookingAddViewController {
         Room r = roomServices.findById(roomId);
         Booking b = new Booking(1L,startDateB,endDateB,0,r,c);
         double fullPrice = discountServices.calculateFullPrice(b);
-        double priceWithDiscount = discountServices.calculateTotalPriceWithDiscounts(b);
+        double sundayDiscountedPrice = fullPrice;
+        double priceToPay = discountServices.calculateTotalPriceWithDiscounts(b);
 
         model.addAttribute("customerName", c.getFirstName());
         model.addAttribute("customerPhone", c.getPhoneNumber());
@@ -136,24 +119,26 @@ public class BookingAddViewController {
 
         double sundayDiscount = 0.00;
         if (discountServices.checkSundayToMondayDiscount(b)){
-            sundayDiscount = discountServices.applySundayToMondayDiscount(b,fullPrice);
+            sundayDiscount = fullPrice - discountServices.applySundayToMondayDiscount(b,fullPrice);
+            sundayDiscountedPrice = discountServices.applySundayToMondayDiscount(b,fullPrice);
+
         }
         model.addAttribute("sundayDiscount", sundayDiscount);
 
-        double longstayDiscount = 0.00;
+        double longStayDiscount = 0.00;
         if (discountServices.checkMoreThanTwoNightsDiscount(b)){
-            longstayDiscount = discountServices.calculateMoreThanTwoNightsDiscount(priceWithDiscount);
+            longStayDiscount = discountServices.calculateMoreThanTwoNightsDiscount(sundayDiscountedPrice);
         }
-        model.addAttribute("longstayDiscount", longstayDiscount);
+        model.addAttribute("longStayDiscount", longStayDiscount);
 
         double tenDayDiscount = 0.00;
         if (discountServices.checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(b)){
-            tenDayDiscount = discountServices.calculateMoreThanTenNightsDiscount(priceWithDiscount);
+            tenDayDiscount = discountServices.calculateMoreThanTenNightsDiscount(sundayDiscountedPrice);
         }
         model.addAttribute("tenDayDiscount", tenDayDiscount);
 
         model.addAttribute("fullPrice", fullPrice);
-        model.addAttribute("discountedPrice", priceWithDiscount);
+        model.addAttribute("discountedPrice", priceToPay);
         model.addAttribute("email", email);
         model.addAttribute("roomId", roomId);
         model.addAttribute("start", startDateB);
