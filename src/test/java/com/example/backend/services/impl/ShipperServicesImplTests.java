@@ -50,7 +50,7 @@ class ShipperServicesImplTests {
             .build();
 
     @Test
-    void shipperToMiniShipperDto() {
+    void shipperToMiniShipperDtoShouldReturnCorrectInformation() {
         MiniShipperDto miniS = shipperServicesImpl.shipperToMiniShipperDto(s1);
 
         assertEquals(s1.getId(), miniS.getId());
@@ -62,10 +62,29 @@ class ShipperServicesImplTests {
     }
 
     @Test
-    void getAllMiniShippersDto() {
+    void getAllMiniShippersDtoShouldReturnCorrectAmountOfMiniDTOs() {
         when(shipperRepo.findAll()).thenReturn(Arrays.asList(s1, s2));
 
         List<MiniShipperDto> list = shipperServicesImpl.getAllMiniShippersDto();
         assertEquals(2, list.size());
+    }
+
+    @Test
+    void getAllMiniShippersDtoShouldReturnCorrectInformation() {
+        when(shipperRepo.findAll()).thenReturn(Arrays.asList(s1, s2));
+
+        List<MiniShipperDto> list = shipperServicesImpl.getAllMiniShippersDto();
+        assertEquals(list.get(0).getId(), s1.getId());
+        assertEquals(list.get(0).getEmail(), s1.getEmail());
+        assertEquals(list.get(0).getCompanyName(), s1.getCompanyName());
+        assertEquals(list.get(0).getContactName(), s1.getContactName());
+        assertEquals(list.get(0).getPhone(), s1.getPhone());
+        assertEquals(list.get(0).getCountry(), s1.getCountry());
+        assertEquals(list.get(1).getId(), s2.getId());
+        assertEquals(list.get(1).getEmail(), s2.getEmail());
+        assertEquals(list.get(1).getCompanyName(), s2.getCompanyName());
+        assertEquals(list.get(1).getContactName(), s2.getContactName());
+        assertEquals(list.get(1).getPhone(), s2.getPhone());
+        assertEquals(list.get(1).getCountry(), s2.getCountry());
     }
 }
