@@ -10,40 +10,179 @@
 <body>
 <div class="container">
     <div style="border: 1px solid #000; padding: 10px;">
-    <table class="table">
-        <thead class="thead-dark">
-        <th th:text="${title}"></th>
-        <th th:text="'Email '+${email}"></th>
-        <th th:text="'Check in: '+${start}"></th>
-        <th th:text="'Check out: '+${end}"></th>
+        <table class="table">
+            <thead class="thead-dark">
+            <th>BOOKING DETAILS</th>
+            <th></th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <label>Checkin:</label>
+                </td>
+                <td>
+                    <label th:text="${start}"></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Checkout:</label>
+                </td>
+                <td>
+                    <label th:text="${end}"></label>
+                </td>
+            </tr>
 
-        </thead>
-        <tbody>
+            </tbody>
+        </table>
+        <table class="table">
+            <thead class="thead-dark">
+            <th>CUSTOMER DETAILS</th>
+            <th></th>
 
-        <tr>
-            <form action="/Booking/BookingSuccess" method="post">
-                <input type="hidden" id="email" name="email" th:value="${email}" required readonly>
-                <input type="hidden" id="startDateB" name="startDateB" th:value="${start}" required readonly>
-                <input type="hidden" id="endDateB" name="endDateB" th:value="${end}" required readonly>
-                <input type="hidden" name="roomId" th:value="${roomId}">
-                <td>
-                    <label th:text="'Full price: '"></label>
-                </td>
-                <td>
-                    <label th:text="${fullPrice}+'0 kr'"></label>
-                </td>
-                <td>
-                    <label th:text="'Your discounted price: '"></label>
-                </td>
-                <td>
-                    <label th:text="${discountedPrice}+'0 kr'"></label>
-                    <button type="submit" class="btn btn-outline-secondary">    Book Room</button>
-                </td>
-            </form>
-        </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Customer name:</label>
+                    </td>
+                    <td>
+                        <label th:text="${customerName}"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Customer Email:</label>
+                    </td>
+                    <td>
+                        <label th:text="${email}"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Customer Phone number:</label>
+                    </td>
+                    <td>
+                        <label th:text="${customerPhone}"></label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <thead class="thead-dark">
+            <th>ROOM  DETAILS</th>
+            <th></th>
 
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Room number:</label>
+                    </td>
+                    <td>
+                        <label th:text="'Room nr '+${roomId}"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Room price per night:</label>
+                    </td>
+                    <td>
+                        <label th:text="${pricePerNight}+' :-'"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Room  size:</label>
+                    </td>
+                    <td>
+                        <label th:text="'Size: ' + ${roomSize}"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Number of nights:</label>
+                    </td>
+                    <td>
+                        <label th:text="${amountOfNights} + ' Nights'"></label>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <table class="table">
+            <thead class="thead-dark">
+            <th>DISCOUNT  DETAILS</th>
+            <th></th>
+                <tr>
+                    <td>
+                        <label>Sunday Discount:</label>
+                    </td>
+                    <td>
+                        <label th:text="'Discount amount: ' + ${sundayDiscount}+' :-'"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Longstay Discount:</label>
+                    </td>
+                    <td>
+                        <label th:text="'Discount amount: ' + ${longstayDiscount}+' :-'"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Longstay Discount:</label>
+                    </td>
+                    <td>
+                        <label th:text="'Discount amount: ' + ${tenDayDiscount}+' :-'"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Full price:</label>
+                    </td>
+                    <td>
+                        <label th:text="${fullPrice}+' :-'"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Discounted price:</label>
+                    </td>
+                    <td>
+                        <label th:text="${discountedPrice}+' :-'"></label>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <table class="table">
+            <thead class="thead-dark">
+            <th>CONFIRM   BOOKING</th>
+            <th></th>
+            <tr>
+                <td>
+                    <label th:text="'Your price ' + ${discountedPrice}"></label>
+                </td>
+                <td>
+                    <form action="/Booking/BookingSuccess" method="post">
+
+                        <input type="hidden" id="email" name="email" th:value="${email}" required readonly>
+                        <input type="hidden" id="startDateB" name="startDateB" th:value="${start}" required readonly>
+                        <input type="hidden" id="endDateB" name="endDateB" th:value="${end}" required readonly>
+                        <input type="hidden" name="roomId" th:value="${roomId}">
+                        <button type="submit" class="btn btn-outline-secondary">Confirm Booking</button>
+                    </form>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
 </div>
 </div>
 </body>

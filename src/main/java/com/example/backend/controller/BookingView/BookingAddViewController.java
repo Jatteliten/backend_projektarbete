@@ -127,6 +127,31 @@ public class BookingAddViewController {
         Booking b = new Booking(1L,startDateB,endDateB,0,r,c);
         double fullPrice = discountServices.calculateFullPrice(b);
         double priceWithDiscount = discountServices.calculateTotalPriceWithDiscounts(b);
+
+        model.addAttribute("customerName", c.getFirstName());
+        model.addAttribute("customerPhone", c.getPhoneNumber());
+        model.addAttribute("pricePerNight", r.getPricePerNight());
+        model.addAttribute("roomSize", r.getSize());
+        model.addAttribute("amountOfNights", discountServices.calculateAmountOfNightsBooked(b));
+
+        double sundayDiscount = 0.00;
+        if (discountServices.checkSundayToMondayDiscount(b)){
+            sundayDiscount = discountServices.applySundayToMondayDiscount(b,fullPrice);
+        }
+        model.addAttribute("sundayDiscount", sundayDiscount);
+
+        double longstayDiscount = 0.00;
+        if (discountServices.checkMoreThanTwoNightsDiscount(b)){
+            longstayDiscount = discountServices.calculateMoreThanTwoNightsDiscount(priceWithDiscount);
+        }
+        model.addAttribute("longstayDiscount", longstayDiscount);
+
+        double tenDayDiscount = 0.00;
+        if (discountServices.checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(b)){
+            tenDayDiscount = discountServices.calculateMoreThanTenNightsDiscount(priceWithDiscount);
+        }
+        model.addAttribute("tenDayDiscount", tenDayDiscount);
+
         model.addAttribute("fullPrice", fullPrice);
         model.addAttribute("discountedPrice", priceWithDiscount);
         model.addAttribute("email", email);
