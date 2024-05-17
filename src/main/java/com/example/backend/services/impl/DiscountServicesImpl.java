@@ -47,6 +47,7 @@ public class DiscountServicesImpl implements DiscountServices {
             totalDiscount += calculateMoreThanTenNightsDiscount(totalPriceToPay);
         }
 
+
         return totalPriceToPay - totalDiscount;
     }
 
