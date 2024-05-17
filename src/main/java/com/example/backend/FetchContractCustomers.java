@@ -48,7 +48,7 @@ public class FetchContractCustomers implements CommandLineRunner {
                 for (ConstraintViolation<ContractCustomer> violation : violations) {
                     errorMessages.append(" - ").append(violation.getMessage());
                 }
-                throw new InputMismatchException("XML error for contract customer: " + errorMessages.toString());
+                throw new InputMismatchException("XML error for contract customer: " + errorMessages);
             }
 
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
