@@ -13,5 +13,5 @@ public class Blacklist {
     private Long id;
     private String email;
     private String name;
-    private boolean isOk;
+    private boolean ok;
 }

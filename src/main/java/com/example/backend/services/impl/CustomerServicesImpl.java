@@ -31,25 +31,44 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     public DetailedCustomerDto customerToDetailedCustomerDto(Customer c) {
-        return DetailedCustomerDto.builder().id(c.getId()).phoneNumber(c.getPhoneNumber()).firstName(c.getFirstName())
-                .lastName(c.getLastName()).email(c.getEmail())
-                .miniBookingDto(createMiniBookingDtoListFromBookingList(c.getBookings())).build();
+        return DetailedCustomerDto.builder()
+                .id(c.getId()).phoneNumber(c.getPhoneNumber())
+                .firstName(c.getFirstName())
+                .lastName(c.getLastName())
+                .email(c.getEmail())
+                .miniBookingDto(createMiniBookingDtoListFromBookingList(c.getBookings()))
+                .build();
     }
 
     public MiniCustomerDto customerToMiniCustomerDto(Customer c) {
-        return MiniCustomerDto.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
-                .email(c.getEmail()).phoneNumber(c.getPhoneNumber()).build();
+        return MiniCustomerDto.builder()
+                .id(c.getId())
+                .firstName(c.getFirstName())
+                .lastName(c.getLastName())
+                .email(c.getEmail())
+                .phoneNumber(c.getPhoneNumber())
+                .build();
     }
 
     public Customer miniCustomerDtoToCustomer(MiniCustomerDto c) {
-        return Customer.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
-                .email(c.getEmail()).phoneNumber(c.getPhoneNumber()).build();
+        return Customer.builder()
+                .id(c.getId())
+                .firstName(c.getFirstName())
+                .lastName(c.getLastName())
+                .email(c.getEmail())
+                .phoneNumber(c.getPhoneNumber())
+                .build();
     }
 
     public Customer detailedCustomerDtoToCustomer(DetailedCustomerDto c) {
-        return Customer.builder().id(c.getId()).firstName(c.getFirstName()).lastName(c.getLastName())
-                .email(c.getEmail()).phoneNumber(c.getPhoneNumber())
-                .bookings(createBookingListFromMiniBookingsDtoList(c.getMiniBookingDto())).build();
+        return Customer.builder()
+                .id(c.getId())
+                .firstName(c.getFirstName())
+                .lastName(c.getLastName())
+                .email(c.getEmail())
+                .phoneNumber(c.getPhoneNumber())
+                .bookings(createBookingListFromMiniBookingsDtoList(c.getMiniBookingDto()))
+                .build();
     }
 
     public List<Booking> createBookingListFromMiniBookingsDtoList(List<MiniBookingDtoForCustomer> b) {
@@ -57,8 +76,17 @@ public class CustomerServicesImpl implements CustomerServices {
     }
 
     public List<MiniBookingDtoForCustomer> createMiniBookingDtoListFromBookingList(List<Booking> b) {
-        return b.stream().map(bb -> new MiniBookingDtoForCustomer(bb.getId(), bb.getStartDate(), bb.getEndDate(),
-                new MiniRoomDto(bb.getRoom().getId(), bb.getRoom().getSize(), bb.getRoom().getPricePerNight()))).collect(Collectors.toList());
+        return b.stream().map(bb -> MiniBookingDtoForCustomer.builder()
+                .id(bb.getId())
+                .startDate(bb.getStartDate())
+                .endDate(bb.getEndDate())
+                .miniRoomDto(MiniRoomDto.builder()
+                        .id(bb.getRoom().getId())
+                        .size(bb.getRoom().getSize())
+                        .pricePerNight(bb.getRoom().getPricePerNight())
+                        .build())
+                .build())
+                .collect(Collectors.toList());
     }
 
     public List<DetailedCustomerDto> getAllDetailedCustomers() {

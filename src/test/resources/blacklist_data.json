@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "email": "john@example.com",
+    "name": "John Doe",
+    "group": "asmadali",
+    "created": "2024-05-09T08:06:03.439655",
+    "ok": true
+  },
+  {
+    "id": 2,
+    "email": "jane@example.com",
+    "name": "Jane Smith",
+    "group": "asmadali",
+    "created": "2024-05-09T08:06:33.946877",
+    "ok": false
+  },
+  {
+    "id": 31,
+    "email": "daniel@gmail.com",
+    "name": "Daniel Isaksson",
+    "group": "asmadali",
+    "created": "2024-05-09T08:06:50.158327",
+    "ok": false
+  },
+  {
+    "id": 33,
+    "email": "astrid@gmail.com",
+    "name": "Astrid Rosen",
+    "group": "asmadali",
+    "created": "2024-05-09T08:07:00.009577",
+    "ok": true
+  },
+  {
+    "id": 78,
+    "email": "stefanH@gmail.com",
+    "name": "Stefan Holmberg",
+    "group": "asmadali",
+    "created": "2024-05-10T07:38:02.684",
+    "ok": false
+  }
+]

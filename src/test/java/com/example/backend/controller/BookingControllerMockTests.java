@@ -35,7 +35,7 @@ public class BookingControllerMockTests {
     private BookingController bc;
 
     @BeforeEach
-    private void init(){
+    public void init(){
         Booking b1 = new Booking(1L, LocalDate.of(2020,12,12),
                 LocalDate.of(2020,12,15),1,
                 Room.builder().id(1L).size(2).build(), Customer.builder().id(1L).firstName("Daniel").lastName("Isaksson")
