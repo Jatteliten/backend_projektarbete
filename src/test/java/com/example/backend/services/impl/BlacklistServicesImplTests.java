@@ -25,7 +25,6 @@ public class BlacklistServicesImplTests {
     //Är det korrekt att använda sig av riktiga api:et här??
     private static final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
 
-    private final String testData = "src/test/resources/blacklist_data.json";
     private String jsonContent;
 
     @Mock
@@ -34,11 +33,12 @@ public class BlacklistServicesImplTests {
 
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
         blacklistServices = new BlacklistServicesImpl(mockHttpClient);
         try {
+            String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
         } catch (IOException e) {
             System.err.println("Error reading test data file: " + e.getMessage());
