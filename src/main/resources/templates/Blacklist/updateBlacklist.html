@@ -20,14 +20,15 @@
 
     <form action="/blacklist/update/final" method="post" th:object="${blacklistObj}">
         <div class="form-group">
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" th:field="${blacklistObj.name}"><br>
 
-            <label for="email">Email:</label><br>
-            <input type="text" id="email" name="email" th:field="${blacklistObj.email}"><br>
+            <h5 type="text" th:text="${blacklistObj.email}"></h5><br>
+            <input type="hidden" id="email" name="email" th:field="${blacklistObj.email}">
+
+            <label for="name">Name: </label>
+            <input type="text" id="name" name="name" th:field="${blacklistObj.name}"><br><br>
 
             <label for="isOk">Allow customer in system:</label>
-            <input type="checkbox" id="isOk" name="isOk" th:checked="${blacklistObj.isOk}"><br>
+            <input type="checkbox" id="isOk" name="isOk" th:checked="${blacklistObj.isOk}"><br><br>
 
            <input type="submit" class="btn btn-outline-secondary" value="Update"><br>
        </div>
