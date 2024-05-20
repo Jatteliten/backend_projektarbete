@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class FetchContractCustomersIntegrationTest {
+class FetchContractCustomersTestIntegration {
     @Autowired
     ContractCustomerRepo contractCustomerRepo;
     @Autowired

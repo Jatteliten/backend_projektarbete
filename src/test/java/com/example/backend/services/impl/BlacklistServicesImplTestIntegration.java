@@ -18,7 +18,7 @@ import java.net.http.HttpResponse;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class BlacklistServicesImplIntegrationTests {
+public class BlacklistServicesImplTestIntegration {
 
     @Autowired
     HttpClient httpClient;
