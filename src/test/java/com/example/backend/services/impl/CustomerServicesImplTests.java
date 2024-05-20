@@ -213,7 +213,7 @@ class CustomerServicesImplTests {
         assertEquals(customer.getPhoneNumber(), miniCustomerDto.getPhoneNumber());
     }
 
-    //Funkar ej
+
     @Test
     void findCustomers() {
         List<Customer> allCustomers = Arrays.asList(Customer.builder().id(1L).firstName("John").lastName("Doe")

@@ -1,7 +1,6 @@
 package com.example.backend.services.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-;
 
 import com.example.backend.model.Blacklist;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,28 +16,38 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BlacklistServicesImplTests {
 
     private BlacklistServicesImpl blacklistServices;
+
+    //Är det korrekt att använda sig av riktiga api:et här??
     private static final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
+
+    private final String testData = "src/test/resources/blacklist_data.json";
+    private String jsonContent;
 
     @Mock
     private HttpClient mockHttpClient;
+    private HttpResponse<String> mockResponse;
+
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
+        mockResponse = Mockito.mock(HttpResponse.class);
         blacklistServices = new BlacklistServicesImpl(mockHttpClient);
+        try {
+            jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
+        } catch (IOException e) {
+            System.err.println("Error reading test data file: " + e.getMessage());
+            fail("Unable to read test data file: " + e.getMessage());
+        }
     }
 
     @Test
     void fetchBlacklistReturnsExpectedData() throws IOException, InterruptedException {
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonContent);
 
@@ -61,8 +70,6 @@ public class BlacklistServicesImplTests {
 
     @Test
     void fetchBlacklistReturnsEmptyList() throws IOException, InterruptedException {
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(500);
         when(mockResponse.body()).thenReturn("");
 
@@ -78,7 +85,6 @@ public class BlacklistServicesImplTests {
         String email = "test@example.com";
         String jsonResponse = "{\"ok\": false}";
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonResponse);
 
@@ -94,7 +100,6 @@ public class BlacklistServicesImplTests {
         String email = "test@example.com";
         String jsonResponse = "{\"ok\": true}";
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonResponse);
 
@@ -108,8 +113,6 @@ public class BlacklistServicesImplTests {
     @Test
     void isBlacklistedThrowsExceptionWhenStatusCodeIsOtherThan200() throws IOException, InterruptedException {
         String email = "test@example.com";
-
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(500);
 
         when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
@@ -140,7 +143,6 @@ public class BlacklistServicesImplTests {
         String email = "test@example.com";
         String name = "Test Person";
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         //Returnar API:et någon body vid success/fail? Isåfall kanske testa det?
         when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
@@ -167,7 +169,6 @@ public class BlacklistServicesImplTests {
         String email = "test@example.com";
         String name = "John Doe";
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(500);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockResponse);
@@ -186,22 +187,22 @@ public class BlacklistServicesImplTests {
         assertEquals("Error when adding email to blacklist: 500", result);
     }
 
+
     @Test
     void updateBlacklistedPersonSuccess() throws IOException, InterruptedException {
         String email = "test@example.com";
         String newName = "New Name";
         boolean newOkStatus = true;
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(204);
-        when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockResponse);
 
         String resultMessage = blacklistServices.updateBlacklistedPerson(email, newName, newOkStatus);
 
         verify(mockHttpClient).send(argThat(req -> {
             try {
-                return req.uri().equals(new URI(BLACKLIST_API_URL + email))
+                return req.uri().equals(new URI(BLACKLIST_API_URL + "/" +  email))
                         && req.method().equals("PUT")
                         && req.headers().firstValue("Content-Type").get().equals("application/json")
                         && req.bodyPublisher().isPresent()
@@ -215,13 +216,13 @@ public class BlacklistServicesImplTests {
 
     }
 
+
     @Test
     void updateBlacklistedPersonFail() throws IOException, InterruptedException {
         String email = "test@example.com";
         String newName = "New Name";
         boolean newOkStatus = true;
 
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(400);
         when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockResponse);
@@ -230,7 +231,7 @@ public class BlacklistServicesImplTests {
 
         verify(mockHttpClient).send(argThat(req -> {
             try {
-                return req.uri().equals(new URI(BLACKLIST_API_URL + email))
+                return req.uri().equals(new URI(BLACKLIST_API_URL + "/" + email))
                         && req.method().equals("PUT")
                         && req.headers().firstValue("Content-Type").get().equals("application/json")
                         && req.bodyPublisher().isPresent()
@@ -246,8 +247,6 @@ public class BlacklistServicesImplTests {
     @Test
     void filterBlacklistReturnsMatchingEntries() throws IOException, InterruptedException {
 
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonContent);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
@@ -270,8 +269,6 @@ public class BlacklistServicesImplTests {
     @Test
     void filterBlacklistReturnsEmptyListForNonMatchingSearch() throws IOException, InterruptedException {
 
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonContent);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
@@ -283,8 +280,6 @@ public class BlacklistServicesImplTests {
 
     @Test
     void findBlacklistObjByIdShouldReturnMatchingEntry() throws IOException, InterruptedException {
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonContent);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
@@ -299,8 +294,6 @@ public class BlacklistServicesImplTests {
 
     @Test
     void findBlacklistObjByIdShouldReturnNoMatchingEntry() throws IOException, InterruptedException {
-        String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/blacklist_data.json")));
-        HttpResponse<String> mockResponse = Mockito.mock(HttpResponse.class);
         when(mockResponse.statusCode()).thenReturn(200);
         when(mockResponse.body()).thenReturn(jsonContent);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
