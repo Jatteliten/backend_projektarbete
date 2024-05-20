@@ -37,9 +37,14 @@ public class FetchEventQueueTests {
     @InjectMocks
     private FetchEventQueue fetchEventQueue;
 
+    Room room;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        room = new Room();
+        room.setId(1L);
+        when(roomServices.findById(1L)).thenReturn(room);
     }
 
 
@@ -48,10 +53,6 @@ public class FetchEventQueueTests {
         RoomOpened roomOpened = new RoomOpened();
         roomOpened.RoomNo = "1";
         roomOpened.TimeStamp = LocalDateTime.now();
-        Room room = new Room();
-        room.setId(1L);
-
-        when(roomServices.findById(1L)).thenReturn(room);
 
         fetchEventQueue.saveRoomOpened(roomOpened);
 
@@ -74,10 +75,6 @@ public class FetchEventQueueTests {
         RoomClosed roomClosed = new RoomClosed();
         roomClosed.RoomNo = "1";
         roomClosed.TimeStamp = LocalDateTime.now();
-        Room room = new Room();
-        room.setId(1L);
-
-        when(roomServices.findById(1L)).thenReturn(room);
 
         fetchEventQueue.saveRoomClosed(roomClosed);
 
@@ -96,10 +93,6 @@ public class FetchEventQueueTests {
         roomCleaningStarted.RoomNo = "1";
         roomCleaningStarted.TimeStamp = LocalDateTime.now();
         roomCleaningStarted.CleaningByUser = "User1";
-        Room room = new Room();
-        room.setId(1L);
-
-        when(roomServices.findById(1L)).thenReturn(room);
 
         fetchEventQueue.saveRoomCleaningStarted(roomCleaningStarted);
 
@@ -120,10 +113,6 @@ public class FetchEventQueueTests {
         roomCleaningFinished.RoomNo = "1";
         roomCleaningFinished.TimeStamp = LocalDateTime.now();
         roomCleaningFinished.CleaningByUser = "User1";
-        Room room = new Room();
-        room.setId(1L);
-
-        when(roomServices.findById(1L)).thenReturn(room);
 
         fetchEventQueue.saveRoomCleaningFinished(roomCleaningFinished);
 
