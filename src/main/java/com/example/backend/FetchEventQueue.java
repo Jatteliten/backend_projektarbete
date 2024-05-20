@@ -69,21 +69,21 @@ public class FetchEventQueue implements CommandLineRunner {
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }
 
-    private void saveRoomOpened(RoomEvent roomEvent) {
+    void saveRoomOpened(RoomEvent roomEvent) {
         dr.save(DoorEvent.builder()
                 .type("Opened")
                 .timeStamp(roomEvent.TimeStamp)
                 .room(getRoom(((RoomOpened) roomEvent).RoomNo)).build());
     }
 
-    private void saveRoomClosed(RoomEvent roomEvent) {
+    void saveRoomClosed(RoomEvent roomEvent) {
         dr.save(DoorEvent.builder()
                 .type("Closed")
                 .timeStamp(roomEvent.TimeStamp)
                 .room(getRoom(((RoomClosed) roomEvent).RoomNo)).build());
     }
 
-    private void saveRoomCleaningStarted(RoomEvent roomEvent) {
+    void saveRoomCleaningStarted(RoomEvent roomEvent) {
         cr.save(CleaningEvent.builder()
                 .type("Start")
                 .timeStamp(roomEvent.TimeStamp)
@@ -91,7 +91,7 @@ public class FetchEventQueue implements CommandLineRunner {
                 .room(getRoom(((RoomCleaningStarted) roomEvent).RoomNo)).build());
     }
 
-    private void saveRoomCleaningFinished(RoomEvent roomEvent) {
+    void saveRoomCleaningFinished(RoomEvent roomEvent) {
         cr.save(CleaningEvent.builder()
                 .type("Finished")
                 .timeStamp(roomEvent.TimeStamp)
