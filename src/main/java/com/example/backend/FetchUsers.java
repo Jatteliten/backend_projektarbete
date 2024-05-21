@@ -1,31 +1,37 @@
-package com.example.backend.security;
+package com.example.backend;
 
+import com.example.backend.security.Role;
+import com.example.backend.security.RoleRepository;
+import com.example.backend.security.User;
+import com.example.backend.security.UserRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service
-public class UserDataSeeder {
-    final UserRepository userRepository;
-    final RoleRepository roleRepository;
+@ComponentScan
+public class FetchUsers implements CommandLineRunner {
+    UserRepository userRepository;
+    RoleRepository roleRepository;
 
-    public UserDataSeeder(UserRepository userRepository, RoleRepository roleRepository) {
+    public FetchUsers(UserRepository userRepository, RoleRepository roleRepository){
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-    public void Seed(){
+    @Override
+    public void run(String... args) {
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
         if (roleRepository.findByName("Receptionist") == null) {
             addRole("Receptionist");
         }
-        if(userRepository.getUserByUsername("admin") == null){
+        if(userRepository.getUserByUsername("admin@admin.se") == null){
             addUser("admin@admin.se","Admin");
         }
-        if(userRepository.getUserByUsername("recep") == null){
+        if(userRepository.getUserByUsername("recep@recep.se") == null){
             addUser("recep@recep.se","Receptionist");
         }
     }
