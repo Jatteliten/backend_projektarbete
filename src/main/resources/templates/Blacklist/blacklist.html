@@ -20,18 +20,15 @@
 <div class="container">
     <h4 th:text="${message}" style="color: darkred"></h4>
 
-    <h3>Search Blacklist</h3>
+    <h2>Blacklist</h2>
     <form action="/blacklist/filter" method="post">
         <div class="form-group">
             <label for="input"></label><br>
-            <input type="text" id="input" name="input" value=""><br><br>
+            <input type="text" id="input" name="input" value="">
             <input type="submit" class="btn btn-outline-secondary" value="Search"><br>
         </div>
     </form>
 
-    <br>
-
-    <h2 th:text="${header}"></h2>
     <div class="blacklist" th:unless="${#lists.isEmpty(allOnBlacklist)}">
         <table class="table">
             <tbody>
@@ -48,7 +45,19 @@
     <br>
     <a href="/blacklist/all">
         <button class="btn btn-outline-secondary">Full Blacklist</button>
-    </a>
+    </a><br>
+    <br>
+    <h3>Add To Blacklist</h3>
+    <form action="/blacklist/add" method="post">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="">
+            <input type="submit" class="btn btn-outline-secondary" value="Add"><br>
+        </div>
+    </form>
+
 </div>
 </body>
 

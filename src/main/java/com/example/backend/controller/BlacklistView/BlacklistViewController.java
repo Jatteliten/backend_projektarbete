@@ -23,6 +23,12 @@ public class BlacklistViewController {
         return "Blacklist/blacklist.html";
     }
 
+    @PostMapping("/add")
+    public String addToBlacklist(@RequestParam String name, @RequestParam String email, Model model) {
+        model.addAttribute("message", blacklistServices.addPersonToBlacklist(email, name));
+        return getBlacklist(model);
+    }
+
     @RequestMapping("/update/{id}")
     public String updateBlacklist(@PathVariable Long id, Model model) {
         Blacklist b = blacklistServices.findBlacklistObjById(id);
@@ -37,10 +43,10 @@ public class BlacklistViewController {
     }
 
     @RequestMapping("/update/final")
-    public String updateFinalBlacklist(@RequestParam("name") String name,
-                                       @RequestParam("email") String email,
-                                       @RequestParam(value = "isOk", defaultValue = "false") boolean isOk,
-                                       Model model) {
+    public String updateFinalBlacklist(
+                                        @RequestParam("email") String email,
+                                        @RequestParam("name") String name,
+                                        @RequestParam(value = "isOk", defaultValue = "false") boolean isOk, Model model) {
         System.out.println(name);
         System.out.println(email);
         System.out.println(isOk);
@@ -49,7 +55,7 @@ public class BlacklistViewController {
         return getBlacklist(model);
     }
 
-    @PostMapping("/filter")
+    @RequestMapping("/filter")
     public String filterBlacklist(@RequestParam("input") String searchWord, Model model) {
         List<Blacklist> filteredBlacklist = blacklistServices.filterBlacklist(searchWord);
         if (!filteredBlacklist.isEmpty()) {
