@@ -42,6 +42,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
 }
 tasks.withType<Test> {
