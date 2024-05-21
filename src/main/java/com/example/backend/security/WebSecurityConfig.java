@@ -62,28 +62,20 @@ public class WebSecurityConfig {
     }
 
     private GrantedAuthoritiesMapper userAuthoritiesMapper() {
-
         return (authorities) -> {
             List<SimpleGrantedAuthority> mappedAuthorities = new ArrayList<>();
 
-
             authorities.forEach(authority -> {
-
                 if (authority instanceof OAuth2UserAuthority oauth2UserAuthority) {
-
                     Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
-
                     String login = userAttributes.get("login").toString();
 
-                    if(login.equals("aspcodenet")){
+                    if(login.equals("admin")){
                         mappedAuthorities.add(new SimpleGrantedAuthority("Admin"));
                     }
                 }
 
             });
-
-
-
 
             return mappedAuthorities;
         };
