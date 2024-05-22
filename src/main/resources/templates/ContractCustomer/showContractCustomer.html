@@ -34,7 +34,7 @@
         <input type="text" name="q" class="form-control" id="searchBox" placeholder="Search for contract customer..." th:value="${q}">
         </form>
     </div>
-    <div id="tableOfContractCustomers"> <!--th:unless="${#lists.isEmpty(allContractCustomers)}"-->
+    <div id="tableOfContractCustomers"> <!--om man inte vill att tabellen laddas ifall datan saknas ska detta vara i taggen: th:unless="${#lists.isEmpty(allContractCustomers)}"-->
         <table class="table">
             <thead>
             <tr>
@@ -72,9 +72,6 @@
             </tbody>
         </table>
     </div>
-
-
-
 </div>
 </body>
 

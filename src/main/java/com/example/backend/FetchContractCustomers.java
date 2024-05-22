@@ -41,15 +41,7 @@ public class FetchContractCustomers implements CommandLineRunner {
         ContractCustomers customers = xmlMapper.readValue(stream, ContractCustomers.class);
 
         for (ContractCustomer c : customers.getContractCustomers()) {
-            //validerar indatan
-            Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(c);
-            if (!violations.isEmpty()) {
-                StringBuilder errorMessages = new StringBuilder();
-                for (ConstraintViolation<ContractCustomer> violation : violations) {
-                    errorMessages.append(" - ").append(violation.getMessage());
-                }
-                throw new InputMismatchException("XML error for contract customer: " + errorMessages);
-            }
+            validateContractCustomer(c, false);
 
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
             if (tempCustomer.isPresent()) {
@@ -75,5 +67,23 @@ public class FetchContractCustomers implements CommandLineRunner {
         return existingCustomer;
     }
 
+
+    public String validateContractCustomer(ContractCustomer concust, Boolean isTest) {
+        Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            errorMessages.append("XML error for contract customer: ");
+            for (ConstraintViolation<ContractCustomer> violation : violations) {
+                errorMessages.append(" - ").append(violation.getMessage());
+            }
+            if (!isTest) {
+                throw new InputMismatchException(errorMessages.toString());
+            }
+            else {
+                return errorMessages.toString();
+            }
+        }
+        return null;
+    }
 
 }

@@ -55,4 +55,34 @@ public class FetchContractCustomersTests {
         assertEquals("123-456-7890", updatedCustomer.getPhone());
         assertEquals("123-456-7891", updatedCustomer.getFax());
     }
+
+    @Test
+    public void testValidateContractCustomer() {
+        ContractCustomer concust1 = new ContractCustomer();
+        concust1.setCompanyName("New Company");
+        concust1.setContactName("New Contact");
+        concust1.setContactTitle("New Title");
+        concust1.setStreetAddress("New Street");
+        concust1.setCity("New City");
+        concust1.setPostalCode("12345");
+        concust1.setCountry("New Country");
+        concust1.setPhone("123-456-7890");
+        concust1.setFax("123-456-7891");
+
+        String actualResult1 = fetchContractCustomers.validateContractCustomer(concust1, true);
+        String expectedResult1 = null;
+        assertEquals(expectedResult1, actualResult1);
+
+        concust1.setPostalCode("thisIsAnIncorrectPostalCode");
+        String actualResult2 = fetchContractCustomers.validateContractCustomer(concust1, true);
+        String expectedResult2 = "XML error for contract customer: Wrong postal code format";
+        assertEquals(expectedResult2, actualResult2);
+
+        concust1.setCountry(null);
+        String actualResult3 = fetchContractCustomers.validateContractCustomer(concust1, true);
+        String expectedResult3 = "XML error for contract customer: Country is empty";
+        assertEquals(expectedResult3, actualResult3);
+
+    }
+
 }
