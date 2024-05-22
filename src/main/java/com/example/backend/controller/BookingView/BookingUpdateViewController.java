@@ -38,7 +38,7 @@ public class BookingUpdateViewController {
         return "Booking/updateBooking.html";
     }
 
-    @PostMapping("/filter/update")
+    @RequestMapping("/filter/update")
     public String filter(@RequestParam String input, Model model) {
         List<MiniBookingDto> bookings = bookingServices.findBookings(input);
 
