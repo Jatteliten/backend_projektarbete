@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
+    <style>
+        .bold-header {
+            color: white;
+            background-color: black;
+            padding: 10px;
+        }
+
+    </style>
 </head>
 
 <body class="container">
@@ -25,7 +33,7 @@
 
     <div class="allProducts" th:unless="${#lists.isEmpty(allCustomers)}">
         <table class="table">
-            <thead>
+            <thead class="bold-header">
             <tr>
                 <th>ID</th>
                 <th>First Name</th>

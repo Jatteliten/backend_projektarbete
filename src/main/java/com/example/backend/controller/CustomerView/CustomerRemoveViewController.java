@@ -39,7 +39,7 @@ public class CustomerRemoveViewController {
         return allWithDelete(model);
     }
 
-    @PostMapping("/filter/delete")
+    @RequestMapping("/filter/delete")
     @PreAuthorize("isAuthenticated()")
     public String filter(@RequestParam String input, Model model) {
         List<MiniCustomerDto> customers = customerServices.findCustomers(input);

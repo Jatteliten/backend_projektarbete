@@ -28,10 +28,10 @@
     <h5 class="bold-header">Add To Blacklist</h5>
     <form action="/blacklist/add" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div class="form-row m-1 align-items-center justify-content-between">
-            <input type="text" id="name" name="name" placeholder="Full Name">
-            <input type="email" id="email" name="email" placeholder="Email Address">
-            <input type="submit" class="btn btn-outline-secondary" value="Add"><br>
+        <div class="form-row m-1 align-items-center">
+            <input class="mr-2" type="text" id="name" name="name" placeholder="Full Name">
+            <input class="mr-2" type="email" id="email" name="email" placeholder="Email Address">
+            <input type="submit" class="btn btn-outline-secondary mr-2" value="Add"><br>
         </div>
     </form>
     </div>
