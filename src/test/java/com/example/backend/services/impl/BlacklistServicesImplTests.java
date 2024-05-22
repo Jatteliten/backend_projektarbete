@@ -2,9 +2,11 @@ package com.example.backend.services.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.example.backend.configuration.IntegrationProperties;
 import com.example.backend.model.Blacklist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -21,8 +23,6 @@ import java.util.List;
 
 public class BlacklistServicesImplTests {
 
-    private BlacklistServicesImpl blacklistServices;
-
     //Är det korrekt att använda sig av riktiga api:et här??
     private static final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
 
@@ -30,6 +30,9 @@ public class BlacklistServicesImplTests {
 
     @Mock
     private HttpClient mockHttpClient;
+    @InjectMocks
+    private BlacklistServicesImpl blacklistServices;
+
     private HttpResponse<String> mockResponse;
 
 
@@ -37,7 +40,6 @@ public class BlacklistServicesImplTests {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
-        blacklistServices = new BlacklistServicesImpl(mockHttpClient);
         try {
             String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
