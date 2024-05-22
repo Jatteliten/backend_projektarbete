@@ -23,7 +23,7 @@ public class EmailSender {
 
     public static void main(String[] args) {
         EmailSender emailSender = new EmailSender();
-        emailSender.sendEmail("mottagare@example.com", "Hej! Detta är ett testmeddelande från JavaMail.");
+        emailSender.sendEmail("receiver@example.com", "Test from JavaMail");
     }
 
     public void sendEmail(String recipient, String messageText) {
@@ -52,7 +52,7 @@ public class EmailSender {
 
             Transport.send(message);
 
-            System.out.println("Meddelandet har skickats framgångsrikt!");
+            System.out.println("Message sent successfully!");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
