@@ -17,6 +17,7 @@
     <h2 th:text="${header}" style="color: darkred">Lägg till kund</h2>
 
     <form action="addCustomerSuccess" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
             <label for="firstName">First name:</label><br>
             <input type="text" id="firstName" name="firstName"><br>

@@ -2,6 +2,7 @@ package com.example.backend.controller.BlacklistView;
 
 import com.example.backend.model.Blacklist;
 import com.example.backend.services.BlacklistServices;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +19,21 @@ public class BlacklistViewController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
     public String getBlacklist(Model model) {
         model.addAttribute("allOnBlacklist", blacklistServices.fetchBlacklist());
         return "Blacklist/blacklist.html";
     }
 
     @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()")
     public String addToBlacklist(@RequestParam String name, @RequestParam String email, Model model) {
         model.addAttribute("message", blacklistServices.addPersonToBlacklist(email, name));
         return getBlacklist(model);
     }
 
     @RequestMapping("/update/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String updateBlacklist(@PathVariable Long id, Model model) {
         Blacklist b = blacklistServices.findBlacklistObjById(id);
         if (b != null) {
@@ -43,6 +47,7 @@ public class BlacklistViewController {
     }
 
     @RequestMapping("/update/final")
+    @PreAuthorize("isAuthenticated()")
     public String updateFinalBlacklist(
                                         @RequestParam("email") String email,
                                         @RequestParam("name") String name,
@@ -56,6 +61,7 @@ public class BlacklistViewController {
     }
 
     @RequestMapping("/filter")
+    @PreAuthorize("isAuthenticated()")
     public String filterBlacklist(@RequestParam("input") String searchWord, Model model) {
         List<Blacklist> filteredBlacklist = blacklistServices.filterBlacklist(searchWord);
         if (!filteredBlacklist.isEmpty()) {

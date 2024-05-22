@@ -3,6 +3,7 @@ package com.example.backend.controller.CustomerView;
 
 import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.services.CustomerServices;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ public class CustomerRemoveViewController {
     }
 
     @RequestMapping("/allWithDelete")
+    @PreAuthorize("isAuthenticated()")
     public String allWithDelete(Model model) {
         List<MiniCustomerDto> customers = customerServices.getAllMiniCustomers();
         model.addAttribute("allCustomers", customers);
@@ -31,12 +33,14 @@ public class CustomerRemoveViewController {
     }
 
     @RequestMapping("/deleteById/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String deleteById(@PathVariable Long id, Model model) {
         customerServices.deleteCustomerById(id);
         return allWithDelete(model);
     }
 
     @PostMapping("/filter/delete")
+    @PreAuthorize("isAuthenticated()")
     public String filter(@RequestParam String input, Model model) {
         List<MiniCustomerDto> customers = customerServices.findCustomers(input);
 

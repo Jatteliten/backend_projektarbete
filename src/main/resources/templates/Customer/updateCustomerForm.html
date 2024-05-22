@@ -19,6 +19,7 @@
     <h2 th:text="${validationMess}">Fill Out Form To Update</h2>
 
     <form action="/Customer/update/final" method="post" th:object="${customer}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
             <!-- För att man inte ska råka ändra Id är den hidden -->
             <input type="hidden" id="id" name="id" th:value="${customer.id}">

@@ -4,6 +4,7 @@ import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class BookingAddViewController {
     }
 
     @RequestMapping("/availableRooms")
+    @PreAuthorize("isAuthenticated()")
     public String findRooms(@RequestParam(required = false) Integer beds,
                             @RequestParam(required = false) Integer extraBeds,
                             @RequestParam(required = false) LocalDate startDate,
@@ -62,6 +64,7 @@ public class BookingAddViewController {
     }
 
     @RequestMapping("/BookingSuccess")
+    @PreAuthorize("isAuthenticated()")
     public String bookingSuccess(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
                                  @RequestParam LocalDate endDateB, Model model) {
 
@@ -85,6 +88,7 @@ public class BookingAddViewController {
         return "Booking/BookingSuccess.html";
     }
     @RequestMapping("/confirmBooking")
+    @PreAuthorize("isAuthenticated()")
     public String confirmBooking(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
                                  @RequestParam LocalDate endDateB, Model model) {
         String error = null;

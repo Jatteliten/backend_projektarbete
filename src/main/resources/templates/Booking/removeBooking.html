@@ -16,6 +16,7 @@
 
     <h2 th:text="${header}"></h2>
     <form action="removeBookingSuccess" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
             <label for="id">Booking id:</label><br>
             <input type="text" id="id" name="id"><br>

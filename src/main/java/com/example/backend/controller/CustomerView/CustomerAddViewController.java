@@ -2,6 +2,7 @@ package com.example.backend.controller.CustomerView;
 
 import com.example.backend.model.Customer;
 import com.example.backend.services.CustomerServices;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,13 @@ public class CustomerAddViewController {
     }
 
     @RequestMapping("/addCustomer")
+    @PreAuthorize("isAuthenticated()")
     public String addCustomer(){
         return "Customer/addCustomer.html";
     }
 
     @PostMapping("/addCustomerSuccess")
+    @PreAuthorize("isAuthenticated()")
     public String addCustomerSuccess(@RequestParam String firstName, @RequestParam String lastName,
                                      @RequestParam String pNr, @RequestParam String email, Model model){
         model.addAttribute("firstName", firstName);
