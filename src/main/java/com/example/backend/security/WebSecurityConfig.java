@@ -36,19 +36,20 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/",  "/js/**", "/css/**", "/images/**", "/login/**", "/logout"
-                        , "/blacklist/**", "/Booking/**", "/Room/**", "/ContractCustomer/**",
-                                "/Customer/**", "/Shipper/**").permitAll()
+                        .requestMatchers("/", "/js/**", "/css/**", "/images/**", "/login/**", "/logout",
+                                "/blacklist/**", "/Booking/**", "/Room/**", "/ContractCustomer/**",
+                                "/Customer/**", "/Shipper/**", "/forgottenPW/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-//                        .loginPage("/login")
-                          .permitAll()
+                        .loginPage("/login")
+                        .permitAll()
                 )
                 .logout((logout) -> {
                     logout.permitAll();
                     logout.logoutSuccessUrl("/");
                 });
+
 
         return http.build();
     }
