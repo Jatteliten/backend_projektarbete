@@ -19,6 +19,7 @@
     <h2 th:text="${validationMess}">Fill Out Form To Update</h2>
 
     <form action="/blacklist/update/final" method="post" th:object="${blacklistObj}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
 
             <h5 type="text" th:text="${blacklistObj.email}"></h5><br>

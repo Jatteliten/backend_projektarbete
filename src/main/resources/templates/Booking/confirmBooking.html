@@ -179,6 +179,7 @@
                 </td>
                 <td>
                     <form action="/Booking/BookingSuccess" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <input type="hidden" id="email" name="email" th:value="${email}" required readonly>
                         <input type="hidden" id="startDateB" name="startDateB" th:value="${start}" required readonly>

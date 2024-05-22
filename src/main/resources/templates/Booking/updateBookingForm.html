@@ -41,6 +41,7 @@
     <div style="border: 1px solid #000; padding: 10px;">
         <h1>Search available rooms</h1>
         <form action="/Booking/update/availableRooms" method="get">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <input type="hidden" name="id" th:value="${oldBookingId}">
             <input type="hidden" name="custId" th:value="${custId}">
@@ -77,6 +78,7 @@
 
         <tr th:each="room : ${listOfRooms}">
             <form action="/Booking/update/BookingSuccess" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="form-group">
                     <input type="hidden" name="oldBookingId" th:value="${oldBookingId}">
                     <input type="hidden" name="extraBeds" th:value="${extraBeds}">

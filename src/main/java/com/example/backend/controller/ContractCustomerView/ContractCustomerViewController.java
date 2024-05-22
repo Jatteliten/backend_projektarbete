@@ -6,6 +6,7 @@ import com.example.backend.model.ContractCustomer;
 import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.services.ContractCustomerServices;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class ContractCustomerViewController {
 
 
     @GetMapping("/viewCustomer")
+    @PreAuthorize("isAuthenticated()")
     public String viewCustomer(Model model, @RequestParam (defaultValue = "CompanyName") String sortCol,
                                @RequestParam (defaultValue = "ASC") String sortOrder, @RequestParam (defaultValue = "") String q){
 
@@ -63,6 +65,7 @@ public class ContractCustomerViewController {
     }
 
     @RequestMapping("/{externalId}")
+    @PreAuthorize("isAuthenticated()")
     public String detailedContractCustomer(@PathVariable String externalId, Model model){
         List<DetailedContractCustomer> detailedContractCustomer = List.of(
                 contractCustomerServices.contractCustomerToDetailedContractCustomerDto(
