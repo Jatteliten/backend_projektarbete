@@ -1,5 +1,6 @@
 package com.example.backend;
 
+import com.example.backend.configuration.IntegrationProperties;
 import com.example.backend.model.modelUti.CleaningEvent;
 import com.example.backend.model.modelUti.DoorEvent;
 import com.example.backend.model.Room;
@@ -10,6 +11,7 @@ import events.RoomCleaningFinished;
 import events.RoomCleaningStarted;
 import events.RoomClosed;
 import events.RoomOpened;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,23 +29,24 @@ import java.util.concurrent.TimeoutException;
 
 @ComponentScan
 public class FetchEventQueue implements CommandLineRunner {
-
-    private static final String QUEUE_NAME = "43a6c52f-8237-4a29-801f-6cbc1c8fd2d1";
+    IntegrationProperties integrationProperties;
     private final CleaningEventRepo cr;
     private final DoorEventRepo dr;
     private final RoomServices rs;
-    public FetchEventQueue(CleaningEventRepo cr, DoorEventRepo dr, RoomServices rr){
+
+    public FetchEventQueue(CleaningEventRepo cr, DoorEventRepo dr, RoomServices rr, IntegrationProperties integrationProperties){
         this.cr = cr;
         this.dr = dr;
         this.rs = rr;
+        this.integrationProperties = integrationProperties;
     }
 
     @Override
     public void run(String... args) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
+        factory.setHost(integrationProperties.getEventQueue().getHost());
+        factory.setUsername(integrationProperties.getEventQueue().getUserName());
+        factory.setPassword(integrationProperties.getEventQueue().getPassword());
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -66,7 +69,7 @@ public class FetchEventQueue implements CommandLineRunner {
             }
             System.out.println(" [x] Received '" + message + "'");
         };
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+        channel.basicConsume(integrationProperties.getEventQueue().getQueueName(), true, deliverCallback, consumerTag -> { });
     }
 
     void saveRoomOpened(RoomEvent roomEvent) {

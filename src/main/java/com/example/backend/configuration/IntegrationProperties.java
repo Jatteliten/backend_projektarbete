@@ -16,4 +16,5 @@ public class IntegrationProperties {
     private ContractCustomersProperties contractCustomers;
     private BlackListProperties blacklist;
     private EtherealProperties ethereal;
+    private EventQueueProperties eventQueue;
 }
