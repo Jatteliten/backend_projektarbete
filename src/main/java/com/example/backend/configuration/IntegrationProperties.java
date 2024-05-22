@@ -15,4 +15,5 @@ public class IntegrationProperties {
     private ShippersProperties shippers;
     private ContractCustomersProperties contractCustomers;
     private BlackListProperties blacklist;
+    private EtherealProperties ethereal;
 }

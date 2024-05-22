@@ -1,6 +1,9 @@
 package com.example.backend;
 
 import java.util.Properties;
+
+import com.example.backend.configuration.EtherealProperties;
+import com.example.backend.configuration.IntegrationProperties;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
@@ -8,32 +11,45 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailSender {
+
+
+    //@Autowired
+    private IntegrationProperties properties;
+
     public static void main(String[] args) {
-        // Konfigurationsinställningar för e-postservern
+        EmailSender emailSender = new EmailSender();
+        emailSender.sendEmail("mottagare@example.com", "Hej! Detta är ett testmeddelande från JavaMail.");
+    }
+
+    public void sendEmail(String recipient, String messageText) {
+
+        //EtherealProperties ethereal = properties.getEthereal();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.ethereal.email");
         props.put("mail.smtp.port", "587");
 
-        // Skapa en session med autentisering
         Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("delphia.oberbrunner12@ethereal.email", "QGBmHrKQTnf6FyDgmR");
+                //return new PasswordAuthentication(ethereal.getUserName(), ethereal.getPassword());
             }
         });
 
         try {
-            // Skapa ett MimeMessage-objekt
             Message message = new MimeMessage(session);
+            //message.setFrom(new InternetAddress(ethereal.getUserName()));
             message.setFrom(new InternetAddress("delphia.oberbrunner12@ethereal.email"));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("mottagare@example.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject("Test Email");
-            message.setText("Hej! Detta är ett testmeddelande från JavaMail.");
+            message.setText(messageText);
 
-            // Skicka meddelandet
             Transport.send(message);
 
             System.out.println("Meddelandet har skickats framgångsrikt!");
