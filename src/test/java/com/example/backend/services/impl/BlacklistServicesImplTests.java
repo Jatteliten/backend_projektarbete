@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
 import java.net.URI;
@@ -161,7 +162,7 @@ public class BlacklistServicesImplTests {
            }
        }), any(HttpResponse.BodyHandler.class));
 
-       assertEquals("Mail added to blacklist", result);
+       assertEquals("Person added to blacklist", result);
     }
 
     @Test

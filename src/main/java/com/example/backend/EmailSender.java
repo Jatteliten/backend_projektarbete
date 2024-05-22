@@ -18,9 +18,6 @@ import org.springframework.stereotype.Service;
 public class EmailSender {
 
 
-    //@Autowired
-    private IntegrationProperties properties;
-
     public static void main(String[] args) {
         EmailSender emailSender = new EmailSender();
         emailSender.sendEmail("receiver@example.com", "Test from JavaMail");

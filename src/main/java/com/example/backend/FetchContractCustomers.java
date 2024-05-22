@@ -1,7 +1,6 @@
 package com.example.backend;
 
 import com.example.backend.model.ContractCustomer;
-import com.example.backend.model.Customer;
 import com.example.backend.model.modelUti.ContractCustomers;
 import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.services.XmlStreamProvider;

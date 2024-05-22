@@ -6,6 +6,7 @@ import com.example.backend.services.BlacklistServices;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -19,9 +20,6 @@ import java.util.List;
 
 @Service
 public class BlacklistServicesImpl implements BlacklistServices {
-
-    @Autowired
-    IntegrationProperties integrationProperties;
     private final HttpClient httpClient;
 
     @Autowired
@@ -32,7 +30,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     public List<Blacklist> fetchBlacklist() {
         List<Blacklist> blacklist = new ArrayList<>();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(integrationProperties.getBlacklist().getTestUrl()))
+                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
                 .GET()
                 .build();
         try {
@@ -55,7 +53,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     @Override
     public boolean isBlacklisted(String email) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(integrationProperties.getBlacklist().getTestUrl() + "check/" + email))
+                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist" + "check/" + email))
                 .GET()
                 .build();
         try {
@@ -81,7 +79,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     public String addPersonToBlacklist(String email, String name) {
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(integrationProperties.getBlacklist().getTestUrl()))
+                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                 .build();
@@ -109,7 +107,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 + "}";
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(integrationProperties.getBlacklist().getTestUrl() + "/" + email))
+                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist" + "/" + email))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                 .build();
