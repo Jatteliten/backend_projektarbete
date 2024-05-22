@@ -4,15 +4,22 @@ import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.*;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/Booking")
@@ -22,15 +29,20 @@ public class BookingAddViewController {
     private final RoomServices roomServices;
     private final BlacklistServices blacklistServices;
     private final DiscountServices discountServices;
+    private SendEmailServices sendEmail;
+    private HttpSession session;
 
     public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
                                     RoomServices roomServices, BlacklistServices blacklistServices,
-                                    DiscountServices discountServices) {
+                                    DiscountServices discountServices, SendEmailServices sendEmail,
+                                    HttpSession session) {
         this.bookingServices = bookingServices;
         this.customerServices = customerServices;
         this.roomServices = roomServices;
         this.blacklistServices = blacklistServices;
         this.discountServices = discountServices;
+        this.sendEmail = sendEmail;
+        this.session = session;
     }
 
     @RequestMapping("/availableRooms")
@@ -66,7 +78,7 @@ public class BookingAddViewController {
     @RequestMapping("/BookingSuccess")
     @PreAuthorize("isAuthenticated()")
     public String bookingSuccess(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
-                                 @RequestParam LocalDate endDateB, Model model) {
+                                 @RequestParam LocalDate endDateB,Model model) {
 
 
         String error = null;
@@ -85,12 +97,15 @@ public class BookingAddViewController {
             return "Booking/addBooking.html";
         }
 
+
+        sendConfirmDetailsEmail(email);
+
         return "Booking/BookingSuccess.html";
     }
     @RequestMapping("/confirmBooking")
     @PreAuthorize("isAuthenticated()")
     public String confirmBooking(@RequestParam String email, @RequestParam Long roomId, @RequestParam LocalDate startDateB,
-                                 @RequestParam LocalDate endDateB, Model model) {
+                                 @RequestParam LocalDate endDateB, Model model, HttpServletRequest request) {
         String error = null;
         Customer c = customerServices.findByEmail(email);
         if (c == null) {
@@ -148,6 +163,41 @@ public class BookingAddViewController {
         model.addAttribute("start", startDateB);
         model.addAttribute("end", endDateB);
 
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken != null) {
+            model.addAttribute("_csrf", csrfToken);
+        }
+
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAllAttributes(model.asMap());
+        session.setAttribute("modelMap", modelMap);
+
+
+
         return "Booking/confirmBooking.html";
+    }
+
+    private void sendConfirmDetailsEmail(String to) {
+        ModelMap storedModel = (ModelMap) session.getAttribute("modelMap");
+        for (Map.Entry<String, Object> entry : storedModel.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+
+        // email sender test
+//        Map<String, Object> templateModel = new HashMap<>();
+//        templateModel.put("test1", "test från controller");
+//        templateModel.put("test2", "text från controller");
+//
+//        ModelMap modelMap = new ModelMap();
+//        modelMap.addAllAttributes(model.asMap());
+
+
+        try {
+            sendEmail.sendConfirmationEmail(to, "Booking Confirmed", storedModel);
+            System.out.println("Email sent successfully");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Error while sending email");
+        }
     }
 }

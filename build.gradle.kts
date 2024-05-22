@@ -45,7 +45,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("jakarta.mail:jakarta.mail-api:2.1.2")
     // https://mvnrepository.com/artifact/org.eclipse.angus/jakarta.mail
-    implementation("org.eclipse.angus:jakarta.mail:2.0.2")
+//    implementation("org.eclipse.angus:jakarta.mail:2.0.2")
+    implementation("com.sun.mail:jakarta.mail:2.0.1")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
 
 
 
