@@ -43,6 +43,11 @@ dependencies {
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("jakarta.mail:jakarta.mail-api:2.1.2")
+    // https://mvnrepository.com/artifact/org.eclipse.angus/jakarta.mail
+    implementation("org.eclipse.angus:jakarta.mail:2.0.2")
+
+
 
 }
 tasks.withType<Test> {
