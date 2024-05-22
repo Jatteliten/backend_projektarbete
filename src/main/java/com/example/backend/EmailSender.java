@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class EmailSender {
 
 
-    //@Autowired
+    @Autowired
     private IntegrationProperties properties;
 
     public static void main(String[] args) {
