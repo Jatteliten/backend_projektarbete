@@ -38,7 +38,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/js/**", "/css/**", "/images/**", "/login/**", "/logout",
                                 "/blacklist/**", "/Booking/**", "/Room/**", "/ContractCustomer/**",
-                                "/Customer/**", "/Shipper/**", "/forgottenPW/**").permitAll()
+                                "/Customer/**", "/Shipper/**", "/forgottenPW/**", "/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
