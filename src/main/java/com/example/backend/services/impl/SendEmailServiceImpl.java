@@ -1,52 +1,63 @@
 package com.example.backend.services.impl;
+import com.example.backend.model.ThymeLeafTemplates;
+import com.example.backend.repos.ThymeleafTemplateRepo;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
 import java.util.Map;
+import java.util.Optional;
 
 import com.example.backend.services.SendEmailServices;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 
 @Service
 public class SendEmailServiceImpl implements SendEmailServices {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+    private final ThymeleafTemplateRepo thymeleafTemplateRepo;
 
-    public void sendConfirmationEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
-        String template = "hämta från databas";
-
-        Context context = new Context();
-        context.setVariables(templateModel);
-        String htmlBody = templateEngine.process("Booking/confirmBooking.html", context);
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(htmlBody, true);
-        mailSender.send(message);
+    public SendEmailServiceImpl(JavaMailSender mailSender, ThymeleafTemplateRepo thymeleafTemplateRepo) {
+        this.mailSender = mailSender;
+        this.thymeleafTemplateRepo = thymeleafTemplateRepo;
     }
 
-    public void sendTemplateEmail(String to, String subject, Map<String, Object> templateModel,String templateSource) throws MessagingException {
-        Context context = new Context();
-        context.setVariables(templateModel);
-        String htmlBody = templateEngine.process(templateSource, context);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(htmlBody, true);
-        mailSender.send(message);
+    public void sendConfirmationEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+        TemplateEngine templateEngine = new TemplateEngine();
+        StringTemplateResolver templateResolvers = new StringTemplateResolver();
+        templateResolvers.setTemplateMode(TemplateMode.HTML);
+        templateEngine.setTemplateResolver(templateResolvers);
+
+        String templateFromDatabase;
+        Optional<ThymeLeafTemplates> templateOptional = thymeleafTemplateRepo.findByTitle("confirm");
+        if (templateOptional.isPresent()) {
+            templateFromDatabase = templateOptional.get().getHtmlTemplateString();
+            Context context = new Context();
+            context.setVariables(templateModel);
+            String htmlBody = templateEngine.process(templateFromDatabase, context);
+
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+            mailSender.send(message);
+        } else {
+            //gör felhantering
+            System.out.println("mallen hittades inte");
+        }
+
+
+
     }
 
 }

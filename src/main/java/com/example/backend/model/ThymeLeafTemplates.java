@@ -1,8 +1,6 @@
 package com.example.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +15,8 @@ public class ThymeLeafTemplates {
     private long id;
 
     private String title;
+    @Lob
+    @Column(length = 10000)
     private String htmlTemplateString;
 
     public ThymeLeafTemplates(String title, String htmlTemplateString) {
