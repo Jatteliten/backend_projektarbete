@@ -22,9 +22,24 @@ public class SendEmailServiceImpl implements SendEmailServices {
     private TemplateEngine templateEngine;
 
     public void sendConfirmationEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+        String template = "hämta från databas";
+
         Context context = new Context();
         context.setVariables(templateModel);
         String htmlBody = templateEngine.process("Booking/confirmBooking.html", context);
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlBody, true);
+        mailSender.send(message);
+    }
+
+    public void sendTemplateEmail(String to, String subject, Map<String, Object> templateModel,String templateSource) throws MessagingException {
+        Context context = new Context();
+        context.setVariables(templateModel);
+        String htmlBody = templateEngine.process(templateSource, context);
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
