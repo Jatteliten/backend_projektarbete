@@ -33,7 +33,7 @@ public class BackendApplication {
             application.run(args);
         }
 
-        EmailSender emailSender = new EmailSender();
-        emailSender.sendEmail("receiver@example.com", "Test", "Test from JavaMail");
+       // EmailSender emailSender = new EmailSender();
+       // emailSender.sendEmail("receiver@example.com", "Test", "Test from JavaMail");
     }
 }
