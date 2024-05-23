@@ -1,6 +1,5 @@
 package com.example.backend;
 
-import com.example.backend.services.impl.EmailSender;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

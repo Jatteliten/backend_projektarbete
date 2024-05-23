@@ -1,4 +1,4 @@
-package com.example.backend.services.impl;
+package com.example.backend;
 
 import java.util.Properties;
 
@@ -10,10 +10,12 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSender {
+    @Autowired
     IntegrationProperties integrationProperties;
 
     public void sendEmail(String recipient, String subject, String messageText) {
@@ -36,7 +38,7 @@ public class EmailSender {
         try {
             Message message = new MimeMessage(session);
             //message.setFrom(new InternetAddress(ethereal.getUserName()));
-            message.setFrom(new InternetAddress(integrationProperties.getEthereal().));
+            message.setFrom(new InternetAddress(integrationProperties.getEthereal().getUserName()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
             message.setText(messageText);
