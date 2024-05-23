@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSender {
+    final IntegrationProperties integrationProperties;
+
     @Autowired
-    IntegrationProperties integrationProperties;
+    public EmailSender(IntegrationProperties integrationProperties) {
+        this.integrationProperties = integrationProperties;
+    }
 
     public void sendEmail(String recipient, String subject, String messageText) {
         Properties props = new Properties();
