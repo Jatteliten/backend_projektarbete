@@ -52,7 +52,7 @@ public class CustomerUpdateViewController {
         return allWithUpdate(model);
     }
 
-    @PostMapping("/filter/update")
+    @RequestMapping("/filter/update")
     @PreAuthorize("isAuthenticated()")
     public String filter(@RequestParam String input, Model model) {
         List<MiniCustomerDto> customers = customerServices.findCustomers(input);

@@ -6,6 +6,7 @@ import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.BookingServices;
 import com.example.backend.services.CustomerServices;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class BookingUpdateViewController {
     }
 
     @RequestMapping("/allWithUpdate")
+    @PreAuthorize("isAuthenticated()")
     public String allWithUpdate(Model model) {
         List<MiniBookingDto> bookings = bookingServices.getAllMiniBookings();
         model.addAttribute("allBookings", bookings);
@@ -38,7 +40,8 @@ public class BookingUpdateViewController {
         return "Booking/updateBooking.html";
     }
 
-    @PostMapping("/filter/update")
+    @RequestMapping("/filter/update")
+    @PreAuthorize("isAuthenticated()")
     public String filter(@RequestParam String input, Model model) {
         List<MiniBookingDto> bookings = bookingServices.findBookings(input);
 
@@ -94,6 +97,7 @@ public class BookingUpdateViewController {
     }
 
     @RequestMapping("/update/BookingSuccess")
+    @PreAuthorize("isAuthenticated()")
     public String bookingSuccess(@RequestParam Long oldBookingId,
                                  @RequestParam int extraBeds,
                                  @RequestParam String email,
@@ -135,6 +139,7 @@ public class BookingUpdateViewController {
     }
 
     @RequestMapping("/cancel/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String cancel(@PathVariable Long id, Model model) {
         bookingServices.deleteBookingById(id);
         model.addAttribute("message", "Booking cancelled!");

@@ -2,6 +2,7 @@ package com.example.backend.controller.BookingView;
 
 import com.example.backend.model.Booking;
 import com.example.backend.services.BookingServices;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +21,13 @@ public class BookingRemoveViewController {
     }
 
     @RequestMapping("/removeBooking")
+    @PreAuthorize("isAuthenticated()")
     public String removeBooking(){
         return "Booking/removeBooking.html";
     }
 
     @PostMapping("/removeBookingSuccess")
+    @PreAuthorize("isAuthenticated()")
     public String removeBookingSuccess(@RequestParam String id, Model model){
         try {
             Long idLong = Long.parseLong(id);

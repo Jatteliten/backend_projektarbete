@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
         .miniHeader {
             font-weight: bold;
         }
+
     </style>
 </head>
 
@@ -17,22 +18,24 @@
 <a href="/" style="text-decoration: none; color: #333333">
     <h1>Booking</h1>
 </a>
-<div class="container">
-    <h4 th:text="${message}"></h4>
+<div sec:authorize="isAuthenticated()" class="user-info">
+    <form action="/logout"
+          method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <h3>Search for Booking</h3>
-    <form action="/Booking/filter/update" method="post">
+        <button class="btn btn-danger" value="submit">Logout</button>
+    </form>
+</div>
+<div class="container mt-3">
+    <h4 th:text="${message}"></h4>
+    <h3 th:text="${header}"></h3>
+    <form action="/Booking/filter/update" method="get">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
-            <label for="input"></label><br>
-            <input type="text" id="input" name="input" value=""><br><br>
-            <input type="submit" class="btn btn-outline-secondary" value="Search"><br>
+            <input type="text" id="input" name="input" class="form-control" placeholder="Search for booking...">
         </div>
     </form>
 
-    <br>
-
-    <h2 th:text="${header}"></h2>
     <div class="allBookings" th:unless="${#lists.isEmpty(allBookings)}">
         <table class="table">
             <tbody th:each="b : ${allBookings}">
@@ -82,8 +85,6 @@
 
         </table>
     </div>
-
-    <br>
     <a href="/Booking/allWithUpdate">
         <button class="btn btn-outline-secondary">All Bookings</button>
     </a>

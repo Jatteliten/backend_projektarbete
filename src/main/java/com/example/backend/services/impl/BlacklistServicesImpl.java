@@ -22,15 +22,18 @@ import java.util.List;
 public class BlacklistServicesImpl implements BlacklistServices {
     private final HttpClient httpClient;
 
+    IntegrationProperties integrationProperties;
+
     @Autowired
-    public BlacklistServicesImpl(HttpClient httpClient) {
+    public BlacklistServicesImpl(HttpClient httpClient, IntegrationProperties integrationProperties) {
         this.httpClient = httpClient;
+        this.integrationProperties = integrationProperties;
     }
 
     public List<Blacklist> fetchBlacklist() {
         List<Blacklist> blacklist = new ArrayList<>();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
+                .uri(URI.create(integrationProperties.getBlacklist().getUrl()))
                 .GET()
                 .build();
         try {
@@ -53,7 +56,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     @Override
     public boolean isBlacklisted(String email) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist" + "check/" + email))
+                .uri(URI.create(integrationProperties.getBlacklist().getUrl() + "check/" + email))
                 .GET()
                 .build();
         try {
@@ -79,7 +82,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
     public String addPersonToBlacklist(String email, String name) {
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist"))
+                .uri(URI.create(integrationProperties.getBlacklist().getUrl()))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                 .build();
@@ -87,7 +90,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return "Person added to blacklist";
+                return "Person added to blacklist successfully.";
             } else {
                 //När man försöker lägga till en mailadress som redan finns får man 400.
                 //Är det ok att anta att 400 alltid innebär just det?
@@ -107,7 +110,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 + "}";
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/asmadali/blacklist" + "/" + email))
+                .uri(URI.create(integrationProperties.getBlacklist().getUrl() + "/" + email))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
                 .build();

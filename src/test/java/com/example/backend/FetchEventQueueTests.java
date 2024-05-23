@@ -1,12 +1,15 @@
 package com.example.backend;
 
+import com.example.backend.events.RoomCleaningFinished;
+import com.example.backend.events.RoomCleaningStarted;
+import com.example.backend.events.RoomClosed;
+import com.example.backend.events.RoomOpened;
 import com.example.backend.model.Room;
 import com.example.backend.model.modelUti.CleaningEvent;
 import com.example.backend.model.modelUti.DoorEvent;
 import com.example.backend.repos.CleaningEventRepo;
 import com.example.backend.repos.DoorEventRepo;
 import com.example.backend.services.RoomServices;
-import events.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

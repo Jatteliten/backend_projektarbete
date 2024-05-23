@@ -8,9 +8,12 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
     <style>
-        h3 {
-            margin-bottom: 5px;
+        .bold-header {
+            color: white;
+            background-color: black;
+            padding: 10px;
         }
+
     </style>
 </head>
 
@@ -18,20 +21,54 @@
 <a href="/" class="link-dark" style="text-decoration: none; color: #333333">
     <h1>Booking</h1>
 </a>
-<div class="container">
-    <h4 th:text="${message}" style="color: darkred"></h4>
+<div sec:authorize="isAuthenticated()" class="user-info">
+    <form action="/logout"
+          method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <h2>Blacklist</h2>
-    <form action="/blacklist/filter" method="post">
-        <div class="form-group">
-            <label for="input"></label><br>
-            <input type="text" id="input" name="input" value="">
-            <input type="submit" class="btn btn-outline-secondary" value="Search"><br>
+        <button class="btn btn-danger" value="submit">Logout</button>
+    </form>
+</div>
+<div class="container mt-3">
+
+    <h5 class="" th:if="${message != null} and !${message.isEmpty()}">
+        <span th:text="${message}" th:if="${#strings.contains(message.toLowerCase(), 'success')}" style="color: green"></span>
+        <span th:text="${message}" th:unless="${#strings.contains(message.toLowerCase(), 'success')}"
+              style="color: darkred"></span>
+    </h5>
+
+    <div class="mb-4">
+    <h5>Add To Blacklist</h5>
+    <form action="/blacklist/add" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="form-row m-1 align-items-center">
+            <input class="mr-2" type="text" id="name" name="name" placeholder="Full Name">
+            <input class="mr-2" type="email" id="email" name="email" placeholder="Email Address">
+            <input type="submit" class="btn btn-outline-secondary mr-2" value="Add"><br>
         </div>
     </form>
+    </div>
 
-    <div class="blacklist" th:unless="${#lists.isEmpty(allOnBlacklist)}">
+    <h3 th:text="${header}">Blacklist</h3>
+    <div>
+    <form action="/blacklist/filter" method="get">
+        <form>
+            <input type="text" id="input" name="input" class="form-control" placeholder="Search for blacklisted people...">
+        </form>
+    </form>
+    </div>
+
+    <div class="blacklist mt-2" th:unless="${#lists.isEmpty(allOnBlacklist)}">
         <table class="table">
+            <thead class="bold-header">
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Allowed</th>
+                <th></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="b : ${allOnBlacklist}">
                 <td th:text="${b.id}"></td>
@@ -43,23 +80,9 @@
             </tbody>
         </table>
     </div>
-    <br>
     <a href="/blacklist/all">
         <button class="btn btn-outline-secondary">Full Blacklist</button>
-    </a><br>
-    <br>
-    <h3>Add To Blacklist</h3>
-    <form action="/blacklist/add" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="">
-            <input type="submit" class="btn btn-outline-secondary" value="Add"><br>
-        </div>
-    </form>
-
+    </a>
 </div>
 </body>
 

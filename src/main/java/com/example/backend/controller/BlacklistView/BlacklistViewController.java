@@ -22,6 +22,7 @@ public class BlacklistViewController {
     @PreAuthorize("isAuthenticated()")
     public String getBlacklist(Model model) {
         model.addAttribute("allOnBlacklist", blacklistServices.fetchBlacklist());
+        model.addAttribute("header", "Blacklist");
         return "Blacklist/blacklist.html";
     }
 

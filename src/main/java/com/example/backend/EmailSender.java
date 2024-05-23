@@ -2,7 +2,6 @@ package com.example.backend;
 
 import java.util.Properties;
 
-import com.example.backend.configuration.EtherealProperties;
 import com.example.backend.configuration.IntegrationProperties;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -16,17 +15,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSender {
+    final IntegrationProperties integrationProperties;
 
-
-    public static void main(String[] args) {
-        EmailSender emailSender = new EmailSender();
-        emailSender.sendEmail("receiver@example.com", "Test from JavaMail");
+    @Autowired
+    public EmailSender(IntegrationProperties integrationProperties) {
+        this.integrationProperties = integrationProperties;
     }
 
-    public void sendEmail(String recipient, String messageText) {
-
-        //EtherealProperties ethereal = properties.getEthereal();
+    public void sendEmail(String recipient, String subject, String messageText) {
         Properties props = new Properties();
+        //Lägg in i properties när vi vet hur det ska hanteras.
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.ethereal.email");
@@ -34,17 +32,16 @@ public class EmailSender {
 
         Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("delphia.oberbrunner12@ethereal.email", "QGBmHrKQTnf6FyDgmR");
-                //return new PasswordAuthentication(ethereal.getUserName(), ethereal.getPassword());
+                return new PasswordAuthentication(integrationProperties.getEthereal().getUserName(),
+                        integrationProperties.getEthereal().getPassword());
             }
         });
 
         try {
             Message message = new MimeMessage(session);
-            //message.setFrom(new InternetAddress(ethereal.getUserName()));
-            message.setFrom(new InternetAddress("delphia.oberbrunner12@ethereal.email"));
+            message.setFrom(new InternetAddress(integrationProperties.getEthereal().getUserName()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject("Test Email");
+            message.setSubject(subject);
             message.setText(messageText);
 
             Transport.send(message);
