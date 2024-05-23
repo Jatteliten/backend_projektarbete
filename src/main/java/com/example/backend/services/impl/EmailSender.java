@@ -1,8 +1,7 @@
-package com.example.backend;
+package com.example.backend.services.impl;
 
 import java.util.Properties;
 
-import com.example.backend.configuration.EtherealProperties;
 import com.example.backend.configuration.IntegrationProperties;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -11,12 +10,11 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSender {
-
+    IntegrationProperties integrationProperties;
 
     public void sendEmail(String recipient, String subject, String messageText) {
 
@@ -29,7 +27,8 @@ public class EmailSender {
 
         Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("delphia.oberbrunner12@ethereal.email", "QGBmHrKQTnf6FyDgmR");
+                return new PasswordAuthentication(integrationProperties.getEthereal().getUserName(),
+                        integrationProperties.getEthereal().getPassword());
                 //return new PasswordAuthentication(ethereal.getUserName(), ethereal.getPassword());
             }
         });
@@ -37,7 +36,7 @@ public class EmailSender {
         try {
             Message message = new MimeMessage(session);
             //message.setFrom(new InternetAddress(ethereal.getUserName()));
-            message.setFrom(new InternetAddress("delphia.oberbrunner12@ethereal.email"));
+            message.setFrom(new InternetAddress(integrationProperties.getEthereal().));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
             message.setText(messageText);

@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 
-import com.example.backend.EmailSender;
+import com.example.backend.services.impl.EmailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
 
-    private EmailSender emailSender = new EmailSender();
+    private final EmailSender emailSender;
+
+    public LoginController(EmailSender emailSender){
+        this.emailSender = emailSender;
+    }
+
     @GetMapping("/login")
     public String login() {
         return "loginPage";
