@@ -90,7 +90,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return "Person added to blacklist";
+                return "Person added to blacklist successfully.";
             } else {
                 //När man försöker lägga till en mailadress som redan finns får man 400.
                 //Är det ok att anta att 400 alltid innebär just det?

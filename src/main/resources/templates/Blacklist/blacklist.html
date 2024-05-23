@@ -30,7 +30,12 @@
     </form>
 </div>
 <div class="container mt-3">
-    <h4 th:text="${message}" style="color: darkred"></h4>
+
+    <h5 class="" th:if="${message != null} and !${message.isEmpty()}">
+        <span th:text="${message}" th:if="${#strings.contains(message.toLowerCase(), 'success')}" style="color: green"></span>
+        <span th:text="${message}" th:unless="${#strings.contains(message.toLowerCase(), 'success')}"
+              style="color: darkred"></span>
+    </h5>
 
     <div class="mb-4">
     <h5>Add To Blacklist</h5>
@@ -44,7 +49,7 @@
     </form>
     </div>
 
-    <h3>BLACKLIST</h3>
+    <h3 th:text="${header}">Blacklist</h3>
     <div>
     <form action="/blacklist/filter" method="get">
         <form>
