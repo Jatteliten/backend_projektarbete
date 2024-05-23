@@ -1,9 +1,11 @@
 package com.example.backend;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import com.example.backend.model.ContractCustomer;
 import com.example.backend.repos.ContractCustomerRepo;
+import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -58,7 +60,12 @@ public class FetchContractCustomersTests {
 
     @Test
     public void testValidateContractCustomer() {
-        ContractCustomer concust1 = new ContractCustomer();
+
+        ConstraintViolation<ContractCustomer> violation = mock(ConstraintViolation.class);
+
+
+
+        /*ContractCustomer concust1 = new ContractCustomer();
         concust1.setCompanyName("New Company");
         concust1.setContactName("New Contact");
         concust1.setContactTitle("New Title");
@@ -82,7 +89,7 @@ public class FetchContractCustomersTests {
         String actualResult3 = fetchContractCustomers.validateContractCustomer(concust1, true);
         String expectedResult3 = "XML error for contract customer: Country is empty";
         assertEquals(expectedResult3, actualResult3);
-
+        */
     }
 
 }

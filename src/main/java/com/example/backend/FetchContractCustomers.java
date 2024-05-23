@@ -68,7 +68,7 @@ public class FetchContractCustomers implements CommandLineRunner {
     }
 
 
-    public String validateContractCustomer(ContractCustomer concust, Boolean isTest) {
+    /*public String validateContractCustomer(ContractCustomer concust, Boolean isTest) {
         Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
         if (!violations.isEmpty()) {
             StringBuilder errorMessages = new StringBuilder();
@@ -84,6 +84,19 @@ public class FetchContractCustomers implements CommandLineRunner {
             }
         }
         return null;
+    }*/
+
+    public void validateContractCustomer(ContractCustomer concust) {
+        Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            errorMessages.append("XML error for contract customer: ");
+            for (ConstraintViolation<ContractCustomer> violation : violations) {
+                errorMessages.append(" - ").append(violation.getMessage());
+            }
+            throw new InputMismatchException(errorMessages.toString());
+
+        }
     }
 
 }
