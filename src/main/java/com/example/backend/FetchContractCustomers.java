@@ -22,7 +22,7 @@ import java.util.Set;
 public class FetchContractCustomers implements CommandLineRunner {
     private final ContractCustomerRepo ccr;
     XmlStreamProvider xmlStreamProvider;
-    public final Validator validator;
+    public Validator validator;
 
     public FetchContractCustomers(ContractCustomerRepo ccr, XmlStreamProvider xmlStreamProvider){
         this.ccr = ccr;
@@ -40,15 +40,7 @@ public class FetchContractCustomers implements CommandLineRunner {
         ContractCustomers customers = xmlMapper.readValue(stream, ContractCustomers.class);
 
         for (ContractCustomer c : customers.getContractCustomers()) {
-            //validerar indatan
-            Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(c);
-            if (!violations.isEmpty()) {
-                StringBuilder errorMessages = new StringBuilder();
-                for (ConstraintViolation<ContractCustomer> violation : violations) {
-                    errorMessages.append(" - ").append(violation.getMessage());
-                }
-                throw new InputMismatchException("XML error for contract customer: " + errorMessages);
-            }
+            validateContractCustomer(c);
 
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
             if (tempCustomer.isPresent()) {
@@ -73,6 +65,17 @@ public class FetchContractCustomers implements CommandLineRunner {
         existingCustomer.setFax(c.getFax());
         return existingCustomer;
     }
+    public void validateContractCustomer(ContractCustomer concust) {
+        Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessages = new StringBuilder();
+            errorMessages.append("XML error for contract customer: ");
+            for (ConstraintViolation<ContractCustomer> violation : violations) {
+                errorMessages.append(" - ").append(violation.getMessage());
+            }
+            throw new InputMismatchException(errorMessages.toString());
 
+        }
+    }
 
 }
