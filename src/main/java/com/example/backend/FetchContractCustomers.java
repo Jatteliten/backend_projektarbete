@@ -23,7 +23,7 @@ import java.util.Set;
 public class FetchContractCustomers implements CommandLineRunner {
     private final ContractCustomerRepo ccr;
     XmlStreamProvider xmlStreamProvider;
-    public final Validator validator;
+    public Validator validator;
 
     public FetchContractCustomers(ContractCustomerRepo ccr, XmlStreamProvider xmlStreamProvider){
         this.ccr = ccr;
@@ -41,7 +41,7 @@ public class FetchContractCustomers implements CommandLineRunner {
         ContractCustomers customers = xmlMapper.readValue(stream, ContractCustomers.class);
 
         for (ContractCustomer c : customers.getContractCustomers()) {
-            validateContractCustomer(c, false);
+            validateContractCustomer(c);
 
             Optional<ContractCustomer> tempCustomer = Optional.ofNullable(ccr.findByExternalSystemId(c.getExternalSystemId()));
             if (tempCustomer.isPresent()) {
@@ -66,26 +66,6 @@ public class FetchContractCustomers implements CommandLineRunner {
         existingCustomer.setFax(c.getFax());
         return existingCustomer;
     }
-
-
-    /*public String validateContractCustomer(ContractCustomer concust, Boolean isTest) {
-        Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
-        if (!violations.isEmpty()) {
-            StringBuilder errorMessages = new StringBuilder();
-            errorMessages.append("XML error for contract customer: ");
-            for (ConstraintViolation<ContractCustomer> violation : violations) {
-                errorMessages.append(" - ").append(violation.getMessage());
-            }
-            if (!isTest) {
-                throw new InputMismatchException(errorMessages.toString());
-            }
-            else {
-                return errorMessages.toString();
-            }
-        }
-        return null;
-    }*/
-
     public void validateContractCustomer(ContractCustomer concust) {
         Set<ConstraintViolation<ContractCustomer>> violations = validator.validate(concust);
         if (!violations.isEmpty()) {

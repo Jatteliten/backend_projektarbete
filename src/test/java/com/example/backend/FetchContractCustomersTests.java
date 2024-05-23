@@ -1,18 +1,25 @@
 package com.example.backend;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.example.backend.model.ContractCustomer;
 import com.example.backend.repos.ContractCustomerRepo;
+import com.example.backend.services.XmlStreamProvider;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
+import java.util.Set;
 
 public class FetchContractCustomersTests {
 
@@ -21,6 +28,7 @@ public class FetchContractCustomersTests {
 
     @InjectMocks
     private FetchContractCustomers fetchContractCustomers;
+
 
     @BeforeEach
     public void setUp() {
@@ -61,35 +69,38 @@ public class FetchContractCustomersTests {
     @Test
     public void testValidateContractCustomer() {
 
-        ConstraintViolation<ContractCustomer> violation = mock(ConstraintViolation.class);
+        ContractCustomer validCustomer = new ContractCustomer();
+        validCustomer.setExternalSystemId("12345");
+        validCustomer.setCompanyName("Valid Company");
+        validCustomer.setContactName("Valid Contact");
+        validCustomer.setContactTitle("Valid Title");
+        validCustomer.setStreetAddress("Valid Street");
+        validCustomer.setCity("Valid City");
+        validCustomer.setPostalCode("12345");
+        validCustomer.setCountry("Valid Country");
+        validCustomer.setPhone("123-456-7890");
+        validCustomer.setFax("123-456-7891");
 
+        assertDoesNotThrow(() -> fetchContractCustomers.validateContractCustomer(validCustomer));
 
+        ContractCustomer invalidCustomer = new ContractCustomer();
+        invalidCustomer.setExternalSystemId("12345");
+        invalidCustomer.setCompanyName("Valid Company");
+        invalidCustomer.setContactName("Valid Contact");
+        invalidCustomer.setContactTitle("Valid Title");
+        invalidCustomer.setStreetAddress("Valid Street");
+        invalidCustomer.setCity("Valid City");
+        invalidCustomer.setPostalCode("Invalid postal code");
+        invalidCustomer.setCountry("Valid Country");
+        invalidCustomer.setPhone("123-456-7890");
+        invalidCustomer.setFax("123-456-7891");
 
-        /*ContractCustomer concust1 = new ContractCustomer();
-        concust1.setCompanyName("New Company");
-        concust1.setContactName("New Contact");
-        concust1.setContactTitle("New Title");
-        concust1.setStreetAddress("New Street");
-        concust1.setCity("New City");
-        concust1.setPostalCode("12345");
-        concust1.setCountry("New Country");
-        concust1.setPhone("123-456-7890");
-        concust1.setFax("123-456-7891");
+        InputMismatchException exception = assertThrows(InputMismatchException.class, () -> {
+            fetchContractCustomers.validateContractCustomer(invalidCustomer);
+        });
 
-        String actualResult1 = fetchContractCustomers.validateContractCustomer(concust1, true);
-        String expectedResult1 = null;
-        assertEquals(expectedResult1, actualResult1);
+        assertTrue(exception.getMessage().contains("Wrong postal code format"));
 
-        concust1.setPostalCode("thisIsAnIncorrectPostalCode");
-        String actualResult2 = fetchContractCustomers.validateContractCustomer(concust1, true);
-        String expectedResult2 = "XML error for contract customer: Wrong postal code format";
-        assertEquals(expectedResult2, actualResult2);
-
-        concust1.setCountry(null);
-        String actualResult3 = fetchContractCustomers.validateContractCustomer(concust1, true);
-        String expectedResult3 = "XML error for contract customer: Country is empty";
-        assertEquals(expectedResult3, actualResult3);
-        */
     }
 
 }
