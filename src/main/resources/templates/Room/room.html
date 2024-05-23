@@ -10,7 +10,13 @@
         h3 {
             margin-bottom: 5px;
         }
+        .bold-header {
+            color: white;
+            background-color: black;
+            padding: 10px;
+        }
     </style>
+
 </head>
 
 <body class="container">
@@ -42,7 +48,7 @@
     <h2 th:text="${header}"></h2>
     <div class="" th:unless="${#lists.isEmpty(rooms)}">
         <table class="table">
-            <thead>
+            <thead class="bold-header">
             <tr>
                 <th>Id</th>
                 <th>Size</th>

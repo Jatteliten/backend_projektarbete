@@ -10,11 +10,6 @@
         .miniHeader {
             font-weight: bold;
         }
-        .bold-header {
-            color: white;
-            background-color: black;
-            padding: 10px;
-        }
 
     </style>
 </head>
@@ -33,7 +28,7 @@
 </div>
 <div class="container mt-3">
     <h4 th:text="${message}"></h4>
-    <h3 class="bold-header" th:text="${header}"></h3>
+    <h3 th:text="${header}"></h3>
     <form action="/Booking/filter/update" method="get">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">

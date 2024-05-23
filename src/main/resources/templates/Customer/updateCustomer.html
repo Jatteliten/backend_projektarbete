@@ -35,7 +35,7 @@
 <div class="container mt-3">
     <h4 th:text="${message}" style="color: darkred"></h4>
 
-    <h3 class="bold-header" th:text="${header}"></h3>
+    <h3 th:text="${header}"></h3>
     <form action="/Customer/filter/update" method="get">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
@@ -45,7 +45,7 @@
 
     <div class="allCustomers" th:unless="${#lists.isEmpty(allCustomers)}">
         <table class="table">
-            <thead>
+            <thead class="bold-header" >
             <tr>
                 <th>ID</th>
                 <th>First Name</th>
