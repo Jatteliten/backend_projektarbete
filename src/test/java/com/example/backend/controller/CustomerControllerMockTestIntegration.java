@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CustomerControllerMockTests {
+public class CustomerControllerMockTestIntegration {
     @Autowired
     private CustomerController cc;
 
