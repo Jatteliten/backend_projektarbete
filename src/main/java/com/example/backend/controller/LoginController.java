@@ -3,6 +3,7 @@ package com.example.backend.controller;
 
 import com.example.backend.EmailSender;
 import com.example.backend.security.PasswordLink;
+import com.example.backend.security.User;
 import com.example.backend.security.UserRepository;
 import com.example.backend.services.PasswordLinkServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +42,20 @@ public class LoginController {
 
     @PostMapping("/forgottenPW")
     public String handleForgottenPassword(@RequestParam("username") String username) {
-        PasswordLink passwordLink = PasswordLink.builder()
-                .timeSent(LocalDate.now())
-                .user(userRepository.getUserByUsername(username))
-                .linkKey(UUID.randomUUID().toString())
-                .build();
-        passwordLinkServices.saveNewPassWordLink(passwordLink);
-        String emailText = "To reset password, please use the following link: \n"
-                + passwordLinkServices.generateCreateNewPasswordLink(passwordLink);
-        String subject = "Reset Password - Asmadali";
-        emailSender.sendEmail(username, subject, emailText);
+        User user = userRepository.getUserByUsername(username);
+        if(user != null) {
+            PasswordLink passwordLink = PasswordLink.builder()
+                    .timeSent(LocalDate.now())
+                    .user(user)
+                    .linkKey(UUID.randomUUID().toString())
+                    .build();
+            passwordLinkServices.saveNewPassWordLink(passwordLink);
+            String emailText = "To reset password, please use the following link: \n"
+                    + passwordLinkServices.generateCreateNewPasswordLink(passwordLink);
+            String subject = "Reset Password - Asmadali";
+            emailSender.sendEmail(username, subject, emailText);
 
+        }
         return "loginPage";
     }
 }
