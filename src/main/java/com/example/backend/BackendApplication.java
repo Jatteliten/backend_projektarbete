@@ -32,7 +32,8 @@ public class BackendApplication {
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         }
+
+        //EmailSender emailSender = new EmailSender();
+        //emailSender.sendEmail("receiver@example.com", "Test from JavaMail");
     }
-
-
 }

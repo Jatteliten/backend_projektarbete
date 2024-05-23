@@ -18,11 +18,6 @@ import org.springframework.stereotype.Service;
 public class EmailSender {
 
 
-    public static void main(String[] args) {
-        EmailSender emailSender = new EmailSender();
-        emailSender.sendEmail("receiver@example.com", "Test from JavaMail");
-    }
-
     public void sendEmail(String recipient, String messageText) {
 
         //EtherealProperties ethereal = properties.getEthereal();
