@@ -22,6 +22,7 @@ public class EmailSender {
 
         //EtherealProperties ethereal = properties.getEthereal();
         Properties props = new Properties();
+        //Lägg in i properties när vi vet hur det ska hanteras.
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.ethereal.email");
