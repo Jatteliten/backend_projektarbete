@@ -24,6 +24,7 @@ public class EmailSender {
 
     public void sendEmail(String recipient, String subject, String messageText) {
         Properties props = new Properties();
+        //Lägg in i properties när vi vet hur det ska hanteras.
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.ethereal.email");
