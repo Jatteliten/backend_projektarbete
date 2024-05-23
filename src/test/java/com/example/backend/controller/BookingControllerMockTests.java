@@ -61,7 +61,7 @@ public class BookingControllerMockTests {
     public void contextLoads() {assertThat(bc).isNotNull();}
 
     @Test
-    void getBookingById() throws Exception {
+    void getBookingByIdReturnsCorrectObject() throws Exception {
         this.mvc.perform(get("/booking/getBooking/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":1}"));
