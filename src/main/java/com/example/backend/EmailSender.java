@@ -19,8 +19,6 @@ public class EmailSender {
     IntegrationProperties integrationProperties;
 
     public void sendEmail(String recipient, String subject, String messageText) {
-
-        //EtherealProperties ethereal = properties.getEthereal();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -31,13 +29,11 @@ public class EmailSender {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(integrationProperties.getEthereal().getUserName(),
                         integrationProperties.getEthereal().getPassword());
-                //return new PasswordAuthentication(ethereal.getUserName(), ethereal.getPassword());
             }
         });
 
         try {
             Message message = new MimeMessage(session);
-            //message.setFrom(new InternetAddress(ethereal.getUserName()));
             message.setFrom(new InternetAddress(integrationProperties.getEthereal().getUserName()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
