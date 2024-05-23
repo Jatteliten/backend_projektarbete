@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class EmailSender {
 
 
-    public void sendEmail(String recipient, String messageText) {
+    public void sendEmail(String recipient, String subject, String messageText) {
 
         //EtherealProperties ethereal = properties.getEthereal();
         Properties props = new Properties();
@@ -39,7 +39,7 @@ public class EmailSender {
             //message.setFrom(new InternetAddress(ethereal.getUserName()));
             message.setFrom(new InternetAddress("delphia.oberbrunner12@ethereal.email"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject("Test Email");
+            message.setSubject(subject);
             message.setText(messageText);
 
             Transport.send(message);

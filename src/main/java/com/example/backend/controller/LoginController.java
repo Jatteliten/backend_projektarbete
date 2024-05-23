@@ -24,7 +24,8 @@ public class LoginController {
     public String handleForgottenPassword(@RequestParam("email") String email) {
 
         String emailText = "tillfällig text - ändra senare";
-        emailSender.sendEmail(email, emailText);
+        String subject = "Subject";
+        emailSender.sendEmail(email, subject, emailText);
 
         return "loginPage";
     }
