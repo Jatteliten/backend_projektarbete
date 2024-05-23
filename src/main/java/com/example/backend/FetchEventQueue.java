@@ -7,11 +7,10 @@ import com.example.backend.model.Room;
 import com.example.backend.repos.CleaningEventRepo;
 import com.example.backend.repos.DoorEventRepo;
 import com.example.backend.services.RoomServices;
-import events.RoomCleaningFinished;
-import events.RoomCleaningStarted;
-import events.RoomClosed;
-import events.RoomOpened;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.events.RoomCleaningFinished;
+import com.example.backend.events.RoomCleaningStarted;
+import com.example.backend.events.RoomClosed;
+import com.example.backend.events.RoomOpened;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,10 +20,9 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import events.RoomEvent;
+import com.example.backend.events.RoomEvent;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 @ComponentScan
