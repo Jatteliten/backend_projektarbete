@@ -37,7 +37,6 @@ public class BlacklistServicesImplTests {
 
     private HttpClient mockHttpClient = mock(HttpClient.class);
 
-    @InjectMocks
     private BlacklistServicesImpl blacklistServices;
 
     private HttpResponse<String> mockResponse;
@@ -54,7 +53,7 @@ public class BlacklistServicesImplTests {
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
 
-        when(integrationProperties.getBlacklist().getUrl()).thenReturn(blacklistUrl);
+        //when(integrationProperties.getBlacklist().getUrl()).thenReturn(blacklistUrl);
         try {
             String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));

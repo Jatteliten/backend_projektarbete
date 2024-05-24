@@ -1,5 +1,6 @@
 package com.example.backend.services.impl;
 
+import com.example.backend.HttpClientConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,16 +24,17 @@ import java.net.http.HttpResponse;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class BlacklistServicesImplTestIntegration {
 
     @Autowired
-    HttpClient httpClient;
+    private HttpClient httpClient;
 
-   // @Value("${integrations.blacklist.url}")
-    private String blacklistUrl = "https://javabl.systementor.se/api/asmadali/blacklist";
+   @Value("${integrations.blacklist.url}")
+    private String blacklistUrl;
 
-   // @Value("${integrations.blacklist.url.email.check}")
-    private String blacklistUrlCheckEmail = "https://javabl.systementor.se/api/asmadali/blacklistcheck/test@example.com";
+   @Value("${integrations.blacklist.testUrlEmailCheck}")
+    private String blacklistUrlCheckEmail;
 
 
     @Test
