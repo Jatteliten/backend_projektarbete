@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,12 +22,13 @@ import java.util.UUID;
 @Builder
 public class PasswordLink {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID  )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String linkKey;
     LocalDate timeSent;
+    private boolean alreadyUsed;
 
-    @OneToOne
+    @ManyToOne
     User user;
 }

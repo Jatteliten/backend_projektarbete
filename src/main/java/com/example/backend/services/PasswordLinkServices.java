@@ -6,5 +6,6 @@ public interface PasswordLinkServices {
     String saveNewPassword(String email, String newPassword);
     String generateCreateNewPasswordLink(PasswordLink passwordLink);
     PasswordLink findByLinkKey(String linkKey);
-    void saveNewPassWordLink(PasswordLink passwordLink);
+    void savePassWordLink(PasswordLink passwordLink);
+    void setPassWordLinkToUsed(PasswordLink passwordLink);
 }
