@@ -15,4 +15,5 @@ public class BlackListProperties {
     private String url;
     private String testUrl;
     private String testUrlEmailCheck;
+    private String testData;
 }

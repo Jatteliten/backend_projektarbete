@@ -32,15 +32,11 @@ import java.util.List;
 public class BlacklistServicesImplTests {
     private String jsonContent;
 
+    @Autowired
     private IntegrationProperties integrationProperties;
 
-    @Mock
-    private IntegrationProperties mockIntegrationProperties;
+    private HttpClient mockHttpClient = mock(HttpClient.class);
 
-    @Mock
-    private HttpClient mockHttpClient;
-
-    @InjectMocks
     private BlacklistServicesImpl blacklistServices;
 
     private HttpResponse<String> mockResponse;
@@ -51,15 +47,16 @@ public class BlacklistServicesImplTests {
     @Value("${integrations.blacklist.testUrlEmailCheck}")
     private String blacklistUrlCheckEmail;
 
+    @Value("${integrations.blacklist.testData}")
+    private String testData;
+
     @BeforeEach
     void setUp() {
-        //blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
+        blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
 
         try {
-            //Lägg in i properties
-            String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
         } catch (IOException e) {
             System.err.println("Error reading test data file: " + e.getMessage());
@@ -182,7 +179,7 @@ public class BlacklistServicesImplTests {
             }
         }), any(HttpResponse.BodyHandler.class));
 
-        assertEquals("Person added to blacklist", result);
+        assertEquals("Person added to blacklist successfully.", result);
     }
 
     @Test
@@ -324,3 +321,4 @@ public class BlacklistServicesImplTests {
         assertNull(match);
     }
 }
+
