@@ -32,6 +32,8 @@ public class User {
     private String password;
     private boolean enabled;
 
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
