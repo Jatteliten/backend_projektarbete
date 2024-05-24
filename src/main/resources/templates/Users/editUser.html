@@ -16,9 +16,7 @@
 </a>
 <div sec:authorize="isAuthenticated()" class="user-info">
     <form action="/logout" method="post">
-        <!-- Changed th:name and th:value for CSRF token -->
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <!-- Changed button type from value to type -->
         <button class="btn btn-danger" type="submit">Logout</button>
     </form>
 </div>
@@ -28,11 +26,9 @@
         <table class="table">
             <tbody>
             <tr>
-                <!-- Changed href to th:href with Thymeleaf syntax -->
                 <td><a th:href="@{/addUser}">Add new user...</a></td>
             </tr>
             <tr th:each="user : ${allUsers}">
-                <!-- Changed user.getUsername to user.username -->
                 <td th:text="${user.username}"></td>
                 <td><a href="#">EDIT</a></td>
                 <td><a href="#">DELETE</a></td>
