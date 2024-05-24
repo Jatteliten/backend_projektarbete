@@ -46,13 +46,13 @@ public class UserViewController {
         model.addAttribute("header", "Users");
         model.addAttribute("allUsers", concreteUsers);
 
-        return "User/manageUsers.html";
+        return "Users/manageUsers.html";
 
     }
     @GetMapping("/addUser")
     @PreAuthorize("isAuthenticated()")
     public String addUser() {
-        return "User/addUser.html";
+        return "Users/addUser.html";
     }
 
     @PostMapping("/addUser")
@@ -66,7 +66,7 @@ public class UserViewController {
         try {
             UserDetails test = userDetailsService.loadUserByUsername(username);
 
-            model.addAttribute("header", "User already exists");
+            model.addAttribute("header", "Users already exists");
         } catch (UsernameNotFoundException e) {
             // lägg till user i database
         }
@@ -77,7 +77,7 @@ public class UserViewController {
     @GetMapping("/editUser")
     @PreAuthorize("isAuthenticated()")
     public String editUser() {
-        return "User/editUser.html";
+        return "Users/editUser.html";
     }
 
 
