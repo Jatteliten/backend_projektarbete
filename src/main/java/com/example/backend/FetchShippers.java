@@ -42,7 +42,7 @@ public class FetchShippers implements CommandLineRunner {
 
         for(ShipperDto s : shippers){
 
-            validate(s);
+            validateShippers(s);
 
             Shipper shipper = sr.findByExternalId(s.id);
 
@@ -84,7 +84,7 @@ public class FetchShippers implements CommandLineRunner {
                 .fax(s.fax).build();
     }
 
-    private void validate (ShipperDto shipperDto) {
+    public void validateShippers (ShipperDto shipperDto) {
         Shipper shipper = createNewShipper(shipperDto);
         Set<ConstraintViolation<Shipper>> violations = validator.validate(shipper);
         if (!violations.isEmpty()) {
