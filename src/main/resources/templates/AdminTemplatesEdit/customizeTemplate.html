@@ -23,7 +23,7 @@
 <div class="container">
 
     <br>
-    <div th:text="${error} ? ${error} : 'Book a room'">
+    <div th:text="${message} ? ${message} : 'Book a room'">
 
     </div>
     <br>
@@ -45,10 +45,6 @@
         <tr>
             <td>Customer Name:</td>
             <td>${customerName}</td>
-        </tr>
-        <tr>
-            <td>Customer phonenumber:</td>
-            <td>${customerPhone}</td>
         </tr>
         <tr>
             <td>Price per night:</td>
@@ -103,8 +99,10 @@
         </thead>
         <tbody>
 
-        <form action="/newLinkCreate" method="post">
+        <form action="/manageTemplates/editTemplate/success" method="post">
             <tr>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="templateId" th:value="${templateId}">
                 <td>
                     <textarea name="templateText" class="form-control w-100" style="height: 500px;"
                               placeholder="Customize your template &#10;Example:&#10;Hej ${customerName}!&#10; Tack för din bokning"></textarea>

@@ -23,7 +23,7 @@
 <div class="container">
 
     <br>
-    <div th:text="${error} ? ${error} : ''">
+    <div th:text="${message} ? ${message} : ''">
 
     </div>
     <br>
@@ -51,15 +51,22 @@
 
         <tr th:each="template : ${listOfTemplates}">
 
-            <form action="/manageTemplates/editTemplate" method="post">
+            <form id="templateForm" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <td th:text="'Template title: ' + ${template.title}"></td>
 
                 <td>
                     <input type="hidden" name="templateId" th:value="${template.id}">
-                    <button type="submit" class="btn btn-outline-secondary">Edit</button>
+                    <button type="submit" class="btn btn-outline-secondary" onclick="setFormAction('/manageTemplates/editTemplate')">Edit</button>
+                    <button type="submit" class="btn btn-outline-secondary" onclick="setFormAction('/manageTemplates/editTemplate/testSendEmail')">Test Send Email</button>
                 </td>
             </form>
+
+            <script>
+                function setFormAction(action) {
+                    document.getElementById('templateForm').action = action;
+                }
+            </script>
         </tr>
 
         <thead class="thead-dark">
