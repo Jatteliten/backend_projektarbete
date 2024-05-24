@@ -1,5 +1,6 @@
 package com.example.backend.controller.BookingView;
 
+import com.example.backend.EmailSender;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
@@ -25,21 +26,19 @@ public class BookingAddViewController {
     private final RoomServices roomServices;
     private final BlacklistServices blacklistServices;
     private final DiscountServices discountServices;
-    private final SendEmailServices sendEmail;
+    private final EmailSender emailSender;
 
 
     public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
                                     RoomServices roomServices, BlacklistServices blacklistServices,
-                                    DiscountServices discountServices
-                                    ,SendEmailServices sendEmail
-
+                                    DiscountServices discountServices, EmailSender emailSender
     ) {
         this.bookingServices = bookingServices;
         this.customerServices = customerServices;
         this.roomServices = roomServices;
         this.blacklistServices = blacklistServices;
         this.discountServices = discountServices;
-        this.sendEmail = sendEmail;
+        this.emailSender = emailSender;
     }
 
     @RequestMapping("/availableRooms")
@@ -100,7 +99,7 @@ public class BookingAddViewController {
         Map<String, Object> modelMap = createTemplateModel(b, c, r, discountServices, email, roomId, startDateB, endDateB);
 
         try {
-            sendEmail.sendConfirmationEmail(email, "Booking Confirmed", modelMap);
+            emailSender.sendEmailWithDatabaseTemplate(email,"Booking Confirmed",modelMap,"confirm");
             System.out.println("Email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
