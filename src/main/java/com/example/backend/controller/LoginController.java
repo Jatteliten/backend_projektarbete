@@ -19,7 +19,6 @@ import java.util.UUID;
 
 
 @Controller
-@RequestMapping("/Login")
 public class LoginController {
 
     private final EmailSender emailSender;
