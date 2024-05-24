@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
@@ -21,16 +23,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@SpringBootTest
 public class BlacklistServicesImplTests {
-
-    //Är det korrekt att använda sig av riktiga api:et här??
-    private static final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
-
     private String jsonContent;
 
-    @Mock
-    private HttpClient mockHttpClient;
-    @InjectMocks
+    @Autowired
+    private IntegrationProperties integrationProperties;
+
+    private HttpClient mockHttpClient = mock(HttpClient.class);
+
     private BlacklistServicesImpl blacklistServices;
 
     private HttpResponse<String> mockResponse;
@@ -38,6 +39,7 @@ public class BlacklistServicesImplTests {
 
     @BeforeEach
     void setUp() {
+        blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
         try {
@@ -155,7 +157,7 @@ public class BlacklistServicesImplTests {
 
        verify(mockHttpClient).send(argThat(req -> {
            try {
-               return req.uri().equals(new URI(BLACKLIST_API_URL))
+               return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl()))
                && req.headers().firstValue("Content-Type").get().equals("application/json")
                && req.bodyPublisher().isPresent()
                && req.bodyPublisher().get().contentLength() > 0;
@@ -179,7 +181,7 @@ public class BlacklistServicesImplTests {
         String result = blacklistServices.addPersonToBlacklist(email, name);
 
         verify(mockHttpClient).send(argThat(request ->
-                        request.uri().equals(URI.create(BLACKLIST_API_URL)) &&
+                        request.uri().equals(URI.create(integrationProperties.getBlacklist().getUrl())) &&
                                 request.method().equals("POST") &&
                                 request.headers().firstValue("Content-Type").orElse("").equals("application/json") &&
                                 request.bodyPublisher().isPresent() &&
@@ -205,7 +207,7 @@ public class BlacklistServicesImplTests {
 
         verify(mockHttpClient).send(argThat(req -> {
             try {
-                return req.uri().equals(new URI(BLACKLIST_API_URL + "/" +  email))
+                return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl() + "/" +  email))
                         && req.method().equals("PUT")
                         && req.headers().firstValue("Content-Type").get().equals("application/json")
                         && req.bodyPublisher().isPresent()
@@ -234,7 +236,7 @@ public class BlacklistServicesImplTests {
 
         verify(mockHttpClient).send(argThat(req -> {
             try {
-                return req.uri().equals(new URI(BLACKLIST_API_URL + "/" + email))
+                return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl() + "/" + email))
                         && req.method().equals("PUT")
                         && req.headers().firstValue("Content-Type").get().equals("application/json")
                         && req.bodyPublisher().isPresent()
