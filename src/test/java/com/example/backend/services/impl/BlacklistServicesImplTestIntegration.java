@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.URI;
@@ -23,12 +24,17 @@ public class BlacklistServicesImplTestIntegration {
     @Autowired
     HttpClient httpClient;
 
-    private static final String BLACKLIST_API_URL = "https://javabl.systementor.se/api/asmadali/blacklist";
+   // @Value("${integrations.blacklist.url}")
+    private String blacklistUrl = "https://javabl.systementor.se/api/asmadali/blacklist";
+
+   // @Value("${integrations.blacklist.url.email.check}")
+    private String blacklistUrlCheckEmail = "https://javabl.systementor.se/api/asmadali/blacklistcheck/test@example.com";
+
 
     @Test
     void restApiReturnsCorrectJsonStructure() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(BLACKLIST_API_URL))
+                .uri(new URI(blacklistUrl))
                 .header("Accept", "application/json")
                 .build();
 
@@ -66,7 +72,7 @@ public class BlacklistServicesImplTestIntegration {
     @Test
     void restApiReturnsCorrectJsonWhenCheckingEmail() throws Exception{
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BLACKLIST_API_URL + "check/test@example.com"))
+                .uri(URI.create(blacklistUrlCheckEmail))
                 .GET()
                 .build();
 
@@ -78,27 +84,4 @@ public class BlacklistServicesImplTestIntegration {
         assertTrue(jsonResponse.get("ok").asBoolean(), "Expected email to be not blacklisted");
     }
 
-    @Test
-    void restApiReturnsCorrectJsonWhenAddingToBlacklist() {
-        /*
-        Format på det man får som respons:
-        {
-         "id": 206,
-         "email": "lotta@example.com",
-         "name": "Lotta Holmgren",
-         "group": "asmadali",
-         "created": "2024-05-20T09:26:06.564391009",
-         "ok": false
-        }
-        Går detta ens att testa på riktigt utan att hela listan fylls med massa test personer?
-         */
-    }
-
-    @Test
-    void restApiReturnsCorrectJsonWhenUpdatingBlacklist() {
-        /*
-        Rest api:et ska inte returnera någon json body vid uppdatering, går det att testa?
-        Ska man kanske skapa en egen grupp bara för tester?
-         */
-    }
 }

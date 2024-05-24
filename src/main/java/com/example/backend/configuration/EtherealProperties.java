@@ -15,4 +15,10 @@ public class EtherealProperties {
     private String name;
     private String userName;
     private String password;
+
+    private String smtpHost;
+    private int smtpPort;
+    private boolean smtpAuth;
+    private boolean starttlsEnable;
+
 }
