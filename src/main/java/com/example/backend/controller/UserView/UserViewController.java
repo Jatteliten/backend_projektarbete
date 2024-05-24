@@ -1,11 +1,9 @@
 package com.example.backend.controller.UserView;
 
-import com.example.backend.model.Customer;
 import com.example.backend.security.ConcreteUserDetails;
 import com.example.backend.security.User;
 import com.example.backend.security.UserDetailsServiceImpl;
 import com.example.backend.security.UserRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
