@@ -14,7 +14,9 @@ public class ThymeLeafTemplates {
     @GeneratedValue
     private long id;
 
+    @Column(unique = true)
     private String title;
+
     @Lob
     @Column(length = 10000)
     private String htmlTemplateString;

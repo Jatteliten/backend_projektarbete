@@ -51,7 +51,7 @@
 
         <tr th:each="template : ${listOfTemplates}">
 
-            <form action="/newLink" method="post">
+            <form action="/manageTemplates/editTemplate" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <td th:text="'Template title: ' + ${template.title}"></td>
 
