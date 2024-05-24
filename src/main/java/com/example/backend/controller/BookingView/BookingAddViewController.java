@@ -1,9 +1,11 @@
 package com.example.backend.controller.BookingView;
 
+import com.example.backend.EmailSender;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
 import com.example.backend.model.Room;
 import com.example.backend.services.*;
+import jakarta.mail.MessagingException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/Booking")
@@ -22,15 +26,19 @@ public class BookingAddViewController {
     private final RoomServices roomServices;
     private final BlacklistServices blacklistServices;
     private final DiscountServices discountServices;
+    private final EmailSender emailSender;
+
 
     public BookingAddViewController(BookingServices bookingServices, CustomerServices customerServices,
                                     RoomServices roomServices, BlacklistServices blacklistServices,
-                                    DiscountServices discountServices) {
+                                    DiscountServices discountServices, EmailSender emailSender
+    ) {
         this.bookingServices = bookingServices;
         this.customerServices = customerServices;
         this.roomServices = roomServices;
         this.blacklistServices = blacklistServices;
         this.discountServices = discountServices;
+        this.emailSender = emailSender;
     }
 
     @RequestMapping("/availableRooms")
@@ -85,6 +93,18 @@ public class BookingAddViewController {
             return "Booking/addBooking.html";
         }
 
+        Customer c = customerServices.findByEmail(email);
+        Room r = roomServices.findById(roomId);
+        Booking b = new Booking(1L,startDateB,endDateB,0,r,c);
+        Map<String, Object> modelMap = createTemplateModel(b, c, r, discountServices, email, roomId, startDateB, endDateB);
+
+        try {
+            emailSender.sendEmailWithDatabaseTemplate(email,"Booking Confirmed",modelMap,"confirm");
+            System.out.println("Email sent successfully");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Error while sending email");
+        }
         return "Booking/BookingSuccess.html";
     }
     @RequestMapping("/confirmBooking")
@@ -111,43 +131,61 @@ public class BookingAddViewController {
 
         Room r = roomServices.findById(roomId);
         Booking b = new Booking(1L,startDateB,endDateB,0,r,c);
+
+        Map<String, Object> modelMap = createTemplateModel(b, c, r, discountServices, email, roomId, startDateB, endDateB);
+        addAttributesToModel(model, modelMap);
+
+
+
+        return "Booking/confirmBooking.html";
+    }
+
+
+    private Map<String, Object> createTemplateModel(Booking b, Customer c, Room r, DiscountServices discountServices, String email, Long roomId, LocalDate startDateB, LocalDate endDateB) {
+        Map<String, Object> modelMap = new HashMap<>();
+
         double fullPrice = discountServices.calculateFullPrice(b);
         double sundayDiscountedPrice = fullPrice;
         double priceToPay = discountServices.calculateTotalPriceWithDiscounts(b);
 
-        model.addAttribute("customerName", c.getFirstName());
-        model.addAttribute("customerPhone", c.getPhoneNumber());
-        model.addAttribute("pricePerNight", r.getPricePerNight());
-        model.addAttribute("roomSize", r.getSize());
-        model.addAttribute("amountOfNights", discountServices.calculateAmountOfNightsBooked(b));
+        modelMap.put("customerName", c.getFirstName());
+        modelMap.put("customerPhone", c.getPhoneNumber());
+        modelMap.put("pricePerNight", r.getPricePerNight());
+        modelMap.put("roomSize", r.getSize());
+        modelMap.put("amountOfNights", discountServices.calculateAmountOfNightsBooked(b));
 
         double sundayDiscount = 0.00;
-        if (discountServices.checkSundayToMondayDiscount(b)){
-            sundayDiscount = fullPrice - discountServices.applySundayToMondayDiscount(b,fullPrice);
-            sundayDiscountedPrice = discountServices.applySundayToMondayDiscount(b,fullPrice);
-
+        if (discountServices.checkSundayToMondayDiscount(b)) {
+            sundayDiscount = fullPrice - discountServices.applySundayToMondayDiscount(b, fullPrice);
+            sundayDiscountedPrice = discountServices.applySundayToMondayDiscount(b, fullPrice);
         }
-        model.addAttribute("sundayDiscount", sundayDiscount);
+        modelMap.put("sundayDiscount", sundayDiscount);
 
         double longStayDiscount = 0.00;
-        if (discountServices.checkMoreThanTwoNightsDiscount(b)){
+        if (discountServices.checkMoreThanTwoNightsDiscount(b)) {
             longStayDiscount = discountServices.calculateMoreThanTwoNightsDiscount(sundayDiscountedPrice);
         }
-        model.addAttribute("longStayDiscount", longStayDiscount);
+        modelMap.put("longStayDiscount", longStayDiscount);
 
         double tenDayDiscount = 0.00;
-        if (discountServices.checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(b)){
+        if (discountServices.checkIfCustomerHaveMoreThanTenBookingNightsWithinAYear(b)) {
             tenDayDiscount = discountServices.calculateMoreThanTenNightsDiscount(sundayDiscountedPrice);
         }
-        model.addAttribute("tenDayDiscount", tenDayDiscount);
+        modelMap.put("tenDayDiscount", tenDayDiscount);
 
-        model.addAttribute("fullPrice", fullPrice);
-        model.addAttribute("discountedPrice", priceToPay);
-        model.addAttribute("email", email);
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("start", startDateB);
-        model.addAttribute("end", endDateB);
+        modelMap.put("fullPrice", fullPrice);
+        modelMap.put("discountedPrice", priceToPay);
+        modelMap.put("email", email);
+        modelMap.put("roomId", roomId);
+        modelMap.put("start", startDateB);
+        modelMap.put("end", endDateB);
 
-        return "Booking/confirmBooking.html";
+        return modelMap;
+    }
+
+    private void addAttributesToModel(Model model, Map<String, Object> modelMap) {
+        for (Map.Entry<String, Object> entry : modelMap.entrySet()) {
+            model.addAttribute(entry.getKey(), entry.getValue());
+        }
     }
 }
