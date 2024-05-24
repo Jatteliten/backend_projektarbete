@@ -30,7 +30,7 @@
         <table class="table">
             <tbody>
             <tr>
-                <td><a th:href="addUser">Add new user...</a></td>
+                <td><a th:href="Users/addUser">Add new user...</a></td>
             </tr>
             <tr th:each="user : ${allUsers}">
                 <td th:text="${user.getUsername}"></td>
