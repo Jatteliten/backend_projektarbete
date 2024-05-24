@@ -99,7 +99,7 @@ public class BookingAddViewController {
         Map<String, Object> modelMap = createTemplateModel(b, c, r, discountServices, email, roomId, startDateB, endDateB);
 
         try {
-            emailSender.sendEmailWithDatabaseTemplate(email,"Booking Confirmed",modelMap,"confirm");
+            emailSender.sendEmailWithDatabaseTemplate(email,"Booking Confirmed",modelMap,"confirmBookingEmailTemplate");
             System.out.println("Email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
