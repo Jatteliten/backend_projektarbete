@@ -28,33 +28,37 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @SpringBootTest
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 public class BlacklistServicesImplTests {
     private String jsonContent;
 
-    @Autowired
     private IntegrationProperties integrationProperties;
 
-    private HttpClient mockHttpClient = mock(HttpClient.class);
+    @Mock
+    private IntegrationProperties mockIntegrationProperties;
 
+    @Mock
+    private HttpClient mockHttpClient;
+
+    @InjectMocks
     private BlacklistServicesImpl blacklistServices;
 
     private HttpResponse<String> mockResponse;
 
-    @Value("${integrations.blacklist.url}")
+    @Value("${integrations.blacklist.testUrl}")
     private String blacklistUrl;
 
-    @Value("${integrations.blacklist.url.email.check}")
+    @Value("${integrations.blacklist.testUrlEmailCheck}")
     private String blacklistUrlCheckEmail;
 
     @BeforeEach
     void setUp() {
-        blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
+        //blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
 
-        //when(integrationProperties.getBlacklist().getUrl()).thenReturn(blacklistUrl);
         try {
+            //Lägg in i properties
             String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
         } catch (IOException e) {

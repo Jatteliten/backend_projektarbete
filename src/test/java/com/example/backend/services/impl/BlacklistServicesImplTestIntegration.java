@@ -30,7 +30,7 @@ public class BlacklistServicesImplTestIntegration {
     @Autowired
     private HttpClient httpClient;
 
-   @Value("${integrations.blacklist.url}")
+   @Value("${integrations.blacklist.testUrl}")
     private String blacklistUrl;
 
    @Value("${integrations.blacklist.testUrlEmailCheck}")

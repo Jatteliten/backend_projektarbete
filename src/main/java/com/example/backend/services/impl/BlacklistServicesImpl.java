@@ -20,6 +20,7 @@ import java.util.List;
 
 @Service
 public class BlacklistServicesImpl implements BlacklistServices {
+
     private final HttpClient httpClient;
 
     IntegrationProperties integrationProperties;
