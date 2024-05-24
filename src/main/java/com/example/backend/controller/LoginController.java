@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.UUID;
 
+
 @Controller
+@RequestMapping("/Login")
 public class LoginController {
 
     private final EmailSender emailSender;

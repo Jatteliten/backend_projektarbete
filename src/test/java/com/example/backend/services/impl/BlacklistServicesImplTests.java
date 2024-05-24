@@ -166,7 +166,7 @@ public class BlacklistServicesImplTests {
            }
        }), any(HttpResponse.BodyHandler.class));
 
-       assertEquals("Person added to blacklist", result);
+       assertEquals("Person added to blacklist successfully", result);
     }
 
     @Test
