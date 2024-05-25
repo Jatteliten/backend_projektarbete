@@ -89,15 +89,12 @@ public class AdminManageTemplatesController {
         model.addAttribute("listOfTemplates",listOfTemplates);
 
         String templateTitle;
-        System.out.println("här1");
         Optional<ThymeLeafTemplates> optionalTemplate = thymeleafTemplateRepo.findById(templateId);
-        System.out.println(optionalTemplate.get().getId());
 
 
         if (optionalTemplate.isPresent()) {
             ThymeLeafTemplates templateFromDatabase = optionalTemplate.get();
             templateTitle = templateFromDatabase.getTitle();
-            System.out.println("här2");
         } else {
             model.addAttribute("message","No template found");
             return "AdminTemplatesEdit/ManageTemplates";
