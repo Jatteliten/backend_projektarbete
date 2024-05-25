@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/manageTemplates")
 public class AdminManageTemplatesController {
     private final ThymeleafTemplateRepo thymeleafTemplateRepo;
-    private EmailSender emailSender;
+    private final EmailSender emailSender;
 
     public AdminManageTemplatesController(ThymeleafTemplateRepo thymeleafTemplateRepo,EmailSender emailSender){
         this.thymeleafTemplateRepo = thymeleafTemplateRepo;
@@ -50,37 +49,13 @@ public class AdminManageTemplatesController {
 
         ThymeLeafTemplates templateFromDatabase = thymeleafTemplateRepo.findById(templateId).get();
 
-        String convertedString = convertToThymeleafTemplateString(templateText);
-
-//        String modifiedTemplateText = templateText.replace("${", "'+${").replace("}", "}+'");
-//        System.out.println(modifiedTemplateText);
-
-//        templateFromDatabase.setHtmlTemplateString("<div style=\"width: 100%; max-width: 80%;\"><textarea style=\"width: 100%; height: 100%; resize: none;\" readonly>"+templateText+"</textarea></div>");
-        templateFromDatabase.setHtmlTemplateString("<div style=\"width: 100%; max-width: 80%;\"><textarea style=\"width: 100%; height: 100%; resize: none;\" readonly th:text="+convertedString+"</textarea></div>");
+        templateFromDatabase.setHtmlTemplateString("<div style=\"width: 100%; max-width: 80%;\"><textarea style=\"width: 100%; height: 100%; resize: none;\" readonly th:text=\"|"+templateText+"|\"></textarea></div>");
         thymeleafTemplateRepo.save(templateFromDatabase);
 
         return "AdminTemplatesEdit/ManageTemplates.html";
     }
-    private String convertToThymeleafTemplateString(String templateText){
-        String[] split = templateText.split(" ");
 
-        List<String> stringList = Arrays.asList(split);
-        StringBuilder build = new StringBuilder();
-        build.append('"');
-        build.append("'");
 
-        for (String s : stringList) {
-            if (s.startsWith("${")) {
-                build.append("'+" + s + "+'");
-            } else {
-                build.append(s+" ");
-            }
-        }
-        build.append("'");
-        build.append('"');
-
-        return build.toString();
-    }
 
     @RequestMapping("/editTemplate/testSendEmail")
     @PreAuthorize("isAuthenticated()")
