@@ -10,12 +10,10 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mail.javamail.JavaMailSender;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -50,7 +48,6 @@ class EmailSenderTests {
         thymeLeafTemplates.setHtmlTemplateString(optionalTemplate);
 
         when(thymeleafTemplateRepo.findByTitle(anyString())).thenReturn(Optional.of(thymeLeafTemplates));
-
 
         emailSender.sendEmailWithDatabaseTemplate("martin@hej.se","hej",modelMap,"name");
         assertEquals("martin@hej.se", mimeMessage.getRecipients(Message.RecipientType.TO)[0].toString());
@@ -87,7 +84,6 @@ class EmailSenderTests {
         ThymeLeafTemplates thymeLeafTemplates = new ThymeLeafTemplates();
 
         when(thymeleafTemplateRepo.findByTitle(anyString())).thenReturn(Optional.of(thymeLeafTemplates));
-
 
 
         assertThrows(MessagingException.class, () -> {
