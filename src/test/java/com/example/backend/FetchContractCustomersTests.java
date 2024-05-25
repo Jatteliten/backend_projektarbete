@@ -29,7 +29,6 @@ public class FetchContractCustomersTests {
     @InjectMocks
     private FetchContractCustomers fetchContractCustomers;
 
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);

@@ -2,6 +2,7 @@ package com.example.backend.services.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.example.backend.configuration.BlackListProperties;
 import com.example.backend.configuration.IntegrationProperties;
 import com.example.backend.model.Blacklist;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class BlacklistServicesImplTests {
     private String jsonContent;
 
@@ -36,14 +40,22 @@ public class BlacklistServicesImplTests {
 
     private HttpResponse<String> mockResponse;
 
+    @Value("${integrations.blacklist.testUrl}")
+    private String blacklistUrl;
+
+    @Value("${integrations.blacklist.testUrlEmailCheck}")
+    private String blacklistUrlCheckEmail;
+
+    @Value("${integrations.blacklist.testData}")
+    private String testData;
 
     @BeforeEach
     void setUp() {
         blacklistServices = new BlacklistServicesImpl(mockHttpClient, integrationProperties);
         MockitoAnnotations.initMocks(this);
         mockResponse = Mockito.mock(HttpResponse.class);
+
         try {
-            String testData = "src/test/resources/blacklist_data.json";
             jsonContent = new String(Files.readAllBytes(Paths.get(testData)));
         } catch (IOException e) {
             System.err.println("Error reading test data file: " + e.getMessage());
@@ -155,18 +167,18 @@ public class BlacklistServicesImplTests {
 
         String result = blacklistServices.addPersonToBlacklist(email, name);
 
-       verify(mockHttpClient).send(argThat(req -> {
-           try {
-               return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl()))
-               && req.headers().firstValue("Content-Type").get().equals("application/json")
-               && req.bodyPublisher().isPresent()
-               && req.bodyPublisher().get().contentLength() > 0;
-           } catch (Exception e) {
-               return false;
-           }
-       }), any(HttpResponse.BodyHandler.class));
+        verify(mockHttpClient).send(argThat(req -> {
+            try {
+                return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl()))
+                        && req.headers().firstValue("Content-Type").get().equals("application/json")
+                        && req.bodyPublisher().isPresent()
+                        && req.bodyPublisher().get().contentLength() > 0;
+            } catch (Exception e) {
+                return false;
+            }
+        }), any(HttpResponse.BodyHandler.class));
 
-       assertEquals("Person added to blacklist successfully.", result);
+        assertEquals("Person added to blacklist successfully.", result);
     }
 
     @Test
@@ -207,7 +219,7 @@ public class BlacklistServicesImplTests {
 
         verify(mockHttpClient).send(argThat(req -> {
             try {
-                return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl() + "/" +  email))
+                return req.uri().equals(new URI(integrationProperties.getBlacklist().getUrl() + "/" + email))
                         && req.method().equals("PUT")
                         && req.headers().firstValue("Content-Type").get().equals("application/json")
                         && req.bodyPublisher().isPresent()

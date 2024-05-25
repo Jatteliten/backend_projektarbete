@@ -20,6 +20,7 @@ import java.util.List;
 
 @Service
 public class BlacklistServicesImpl implements BlacklistServices {
+
     private final HttpClient httpClient;
 
     IntegrationProperties integrationProperties;
@@ -80,6 +81,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
     @Override
     public String addPersonToBlacklist(String email, String name) {
+
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(integrationProperties.getBlacklist().getUrl()))
