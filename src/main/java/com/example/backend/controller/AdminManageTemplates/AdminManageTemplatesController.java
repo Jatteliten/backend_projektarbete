@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/manageTemplates")
@@ -31,14 +32,14 @@ public class AdminManageTemplatesController {
     public String getTemplates(Model model) {
         List<ThymeLeafTemplates> listOfTemplates = thymeleafTemplateRepo.findAll();
         model.addAttribute("listOfTemplates",listOfTemplates);
-        return "AdminTemplatesEdit/ManageTemplates.html";
+        return "AdminTemplatesEdit/ManageTemplates";
     }
     @RequestMapping("/editTemplate")
     @PreAuthorize("isAuthenticated()")
     public String editTemplate(@RequestParam Long templateId, Model model) {
         System.out.println(templateId);
         model.addAttribute("templateId",templateId);
-    return "AdminTemplatesEdit/customizeTemplate.html";
+    return "AdminTemplatesEdit/customizeTemplate";
     }
     @RequestMapping("/editTemplate/success")
     @PreAuthorize("isAuthenticated()")
@@ -47,12 +48,21 @@ public class AdminManageTemplatesController {
         model.addAttribute("message","Template updated");
         model.addAttribute("listOfTemplates",listOfTemplates);
 
-        ThymeLeafTemplates templateFromDatabase = thymeleafTemplateRepo.findById(templateId).get();
+        ThymeLeafTemplates templateFromDatabase;
+        Optional<ThymeLeafTemplates> optionalTemplate = thymeleafTemplateRepo.findById(templateId);
+
+
+        if (optionalTemplate.isPresent()) {
+            templateFromDatabase = optionalTemplate.get();
+        } else {
+            model.addAttribute("message","No template found");
+            return "AdminTemplatesEdit/ManageTemplates";
+        }
 
         templateFromDatabase.setHtmlTemplateString("<div style=\"width: 100%; max-width: 80%;\"><textarea style=\"width: 100%; height: 100%; resize: none;\" readonly th:text=\"|"+templateText+"|\"></textarea></div>");
         thymeleafTemplateRepo.save(templateFromDatabase);
 
-        return "AdminTemplatesEdit/ManageTemplates.html";
+        return "AdminTemplatesEdit/ManageTemplates";
     }
 
 
@@ -64,8 +74,20 @@ public class AdminManageTemplatesController {
         model.addAttribute("message","Test Email sent");
         model.addAttribute("listOfTemplates",listOfTemplates);
 
-        ThymeLeafTemplates templateFromDatabase = thymeleafTemplateRepo.findById(templateId).get();
-        String templateTitle = templateFromDatabase.getTitle();
+        String templateTitle;
+
+        Optional<ThymeLeafTemplates> optionalTemplate = thymeleafTemplateRepo.findById(templateId);
+
+
+        if (optionalTemplate.isPresent()) {
+            ThymeLeafTemplates templateFromDatabase = optionalTemplate.get();
+            templateTitle = templateFromDatabase.getTitle();
+        } else {
+            model.addAttribute("message","No template found");
+            return "AdminTemplatesEdit/ManageTemplates";
+        }
+
+
 
 
 
@@ -77,7 +99,7 @@ public class AdminManageTemplatesController {
             System.out.println("Error while sending email");
         }
 
-        return "AdminTemplatesEdit/ManageTemplates.html";
+        return "AdminTemplatesEdit/ManageTemplates";
     }
 
     private Map<String, Object> mockModelMap() {

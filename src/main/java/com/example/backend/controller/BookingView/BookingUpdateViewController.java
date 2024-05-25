@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,7 +36,7 @@ public class BookingUpdateViewController {
         List<MiniBookingDto> bookings = bookingServices.getAllMiniBookings();
         model.addAttribute("allBookings", bookings);
         model.addAttribute("header", "All Bookings");
-        return "Booking/updateBooking.html";
+        return "Booking/updateBooking";
     }
 
     @RequestMapping("/filter/update")
@@ -51,7 +50,7 @@ public class BookingUpdateViewController {
         } else {
             model.addAttribute("header", "No Matches Found");
         }
-        return "Booking/updateBooking.html";
+        return "Booking/updateBooking";
     }
 
     @RequestMapping("/update/availableRooms")
@@ -93,7 +92,7 @@ public class BookingUpdateViewController {
         model.addAttribute("error", error);
         model.addAttribute("start", startDate);
         model.addAttribute("end", endDate);
-        return "Booking/updateBookingForm.html";
+        return "Booking/updateBookingForm";
     }
 
     @RequestMapping("/update/BookingSuccess")
@@ -128,14 +127,14 @@ public class BookingUpdateViewController {
             model.addAttribute("error", error);
 
 
-            return "Booking/updateBookingForm.html";
+            return "Booking/updateBookingForm";
         }
         System.out.println(roomId);
         model.addAttribute("error", error);
         model.addAttribute("email", email);
         model.addAttribute("roomId", roomId);
 
-        return "Booking/BookingSuccess.html";
+        return "Booking/BookingSuccess";
     }
 
     @RequestMapping("/cancel/{id}")
