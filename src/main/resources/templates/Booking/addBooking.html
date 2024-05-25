@@ -59,7 +59,7 @@
         </tr>
 
         <tr th:each="room : ${listOfRooms}">
-<!--            <form action="/Booking/BookingSuccess" method="post">-->
+
             <form action="/Booking/confirmBooking" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <td th:text="'room size: ' + ${room.size} + ' id:' + ${room.id}"></td>
@@ -69,13 +69,10 @@
 
                     <label for="pricePerNight">Price per night: </label>
                     <input type="text" id="pricePerNight" name="pricePerNight" th:value="${room.pricePerNight}" required readonly>
-<!--                    <label for="startDateB">Start Date:</label>-->
+
 
                 </td>
-<!--                <td>-->
-<!--                    <label for="endDateB">End Date:</label>-->
 
-<!--                </td>-->
                 <td>
                     <input type="hidden" id="startDateB" name="startDateB" th:value="${start}" required readonly>
                     <input type="hidden" id="endDateB" name="endDateB" th:value="${end}" required readonly>

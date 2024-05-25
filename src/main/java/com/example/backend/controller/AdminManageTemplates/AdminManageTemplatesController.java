@@ -64,6 +64,20 @@ public class AdminManageTemplatesController {
 
         return "AdminTemplatesEdit/ManageTemplates";
     }
+    @RequestMapping("/createNewTemplates")
+    @PreAuthorize("isAuthenticated()")
+    public String createNewTemplates(@RequestParam String titleName, Model model) {
+        if (!thymeleafTemplateRepo.findByTitle(titleName).isPresent()){
+            thymeleafTemplateRepo.save(new ThymeLeafTemplates(titleName,""));
+        } else {
+            model.addAttribute("message","Template with title "+ titleName+" already exists, choose another name.");
+        }
+
+
+        List<ThymeLeafTemplates> listOfTemplates = thymeleafTemplateRepo.findAll();
+        model.addAttribute("listOfTemplates",listOfTemplates);
+        return "AdminTemplatesEdit/ManageTemplates";
+    }
 
 
 
@@ -75,13 +89,15 @@ public class AdminManageTemplatesController {
         model.addAttribute("listOfTemplates",listOfTemplates);
 
         String templateTitle;
-
+        System.out.println("här1");
         Optional<ThymeLeafTemplates> optionalTemplate = thymeleafTemplateRepo.findById(templateId);
+        System.out.println(optionalTemplate.get().getId());
 
 
         if (optionalTemplate.isPresent()) {
             ThymeLeafTemplates templateFromDatabase = optionalTemplate.get();
             templateTitle = templateFromDatabase.getTitle();
+            System.out.println("här2");
         } else {
             model.addAttribute("message","No template found");
             return "AdminTemplatesEdit/ManageTemplates";

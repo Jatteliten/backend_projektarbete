@@ -32,6 +32,7 @@
 
         <th>ADMIN CREATE OR UPDATE DATABASE TEMPLATES</th>
         <th></th>
+        <th></th>
         </thead>
         <TBOdy>
         <tr>
@@ -43,6 +44,7 @@
 
         <th>TEMPLATES IN DATABASE</th>
         <th></th>
+        <th></th>
         </thead>
         <tbody>
         <tr th:if="${listOfTemplates.isEmpty()}">
@@ -50,34 +52,41 @@
         </tr>
 
         <tr th:each="template : ${listOfTemplates}">
-
-            <form id="templateForm" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <td th:text="'Template title: ' + ${template.title}"></td>
-
                 <td>
-                    <input type="hidden" name="templateId" th:value="${template.id}">
-                    <button type="submit" class="btn btn-outline-secondary" onclick="setFormAction('/manageTemplates/editTemplate')">Edit</button>
-                    <button type="submit" class="btn btn-outline-secondary" onclick="setFormAction('/manageTemplates/editTemplate/testSendEmail')">Test Send Email</button>
+                    <form action="/manageTemplates/editTemplate" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="templateId" th:value="${template.id}">
+                        <button type="submit" class="btn btn-outline-secondary">Edit</button>
+                    </form>
                 </td>
-            </form>
+                <td>
+                    <form action="/manageTemplates/editTemplate/testSendEmail" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="templateId" th:value="${template.id}">
+                        <button type="submit" class="btn btn-outline-secondary">Test Send Email</button>
+                    </form>
+                </td>
 
-            <script>
-                function setFormAction(action) {
-                    document.getElementById('templateForm').action = action;
-                }
-            </script>
+
+
         </tr>
 
         <thead class="thead-dark">
 
         <th>CREATE NEW TEMPLATE</th>
         <th></th>
+        <th></th>
         </thead>
         <TBOdy>
-        <form action="/newLinkCreate" method="post">
+        <form action="/manageTemplates/createNewTemplates" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <td>
+                <label>Enter a UNIQUE title name for your template</label>
+                <input type="text" name="titleName" placeholder="Enter Template Title Name" required>
+            </td>
+            <td>
+
                 <button type="submit" class="btn btn-outline-secondary">CREATE TEMPLATE</button>
             </td>
         </form>
