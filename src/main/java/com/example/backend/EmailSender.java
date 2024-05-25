@@ -70,31 +70,34 @@ public class EmailSender {
 
     public void sendEmailWithDatabaseTemplate(String to, String subject, Map<String, Object> templateModel,
                                               String templateNameInDatabase ) throws MessagingException {
+        try {
 
-        TemplateEngine templateEngine = new TemplateEngine();
-        StringTemplateResolver templateResolvers = new StringTemplateResolver();
-        templateResolvers.setTemplateMode(TemplateMode.HTML);
-        templateEngine.setTemplateResolver(templateResolvers);
+            TemplateEngine templateEngine = new TemplateEngine();
+            StringTemplateResolver templateResolvers = new StringTemplateResolver();
+            templateResolvers.setTemplateMode(TemplateMode.HTML);
+            templateEngine.setTemplateResolver(templateResolvers);
 
-        String templateFromDatabase;
-        Optional<ThymeLeafTemplates> templateOptional = thymeleafTemplateRepo.findByTitle(templateNameInDatabase);
+            String templateFromDatabase;
+            Optional<ThymeLeafTemplates> templateOptional = thymeleafTemplateRepo.findByTitle(templateNameInDatabase);
 
-        if (templateOptional.isPresent()) {
-            templateFromDatabase = templateOptional.get().getHtmlTemplateString();
-            Context context = new Context();
-            context.setVariables(templateModel);
-            String htmlBody = templateEngine.process(templateFromDatabase, context);
+            if (templateOptional.isPresent()) {
+                templateFromDatabase = templateOptional.get().getHtmlTemplateString();
+                Context context = new Context();
+                context.setVariables(templateModel);
+                String htmlBody = templateEngine.process(templateFromDatabase, context);
 
 
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(htmlBody, true);
-            mailSender.send(message);
-        } else {
-            //gör ordentlig felhantering
-            System.out.println("mallen hittades inte, inget email skickat");
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                helper.setTo(to);
+                helper.setSubject(subject);
+                helper.setText(htmlBody, true);
+                mailSender.send(message);
+            }else {
+                System.out.println("mallen hittades inte, inget email skickat");
+            }
+        } catch (Exception e) {
+            throw new MessagingException();
         }
     }
 }

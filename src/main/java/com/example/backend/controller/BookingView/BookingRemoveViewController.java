@@ -23,7 +23,7 @@ public class BookingRemoveViewController {
     @RequestMapping("/removeBooking")
     @PreAuthorize("isAuthenticated()")
     public String removeBooking(){
-        return "Booking/removeBooking.html";
+        return "Booking/removeBooking";
     }
 
     @PostMapping("/removeBookingSuccess")
@@ -35,14 +35,14 @@ public class BookingRemoveViewController {
             bs.deleteBooking(b);
         }catch(NumberFormatException e){
             model.addAttribute("header", "Only enter numbers");
-            return "Booking/removeBooking.html";
+            return "Booking/removeBooking";
         }catch(NoSuchElementException e){
             model.addAttribute("header", "Booking with given Id does not exist");
-            return "Booking/removeBooking.html";
+            return "Booking/removeBooking";
         }
 
         model.addAttribute("bookingId", id);
-        return "Booking/removeBookingSuccess.html";
+        return "Booking/removeBookingSuccess";
     }
 
 

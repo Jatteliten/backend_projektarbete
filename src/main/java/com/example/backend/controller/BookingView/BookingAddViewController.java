@@ -68,7 +68,7 @@ public class BookingAddViewController {
         model.addAttribute("start", startDate);
         model.addAttribute("end", endDate);
 
-        return "Booking/addBooking.html";
+        return "Booking/addBooking";
     }
 
     @RequestMapping("/BookingSuccess")
@@ -90,7 +90,7 @@ public class BookingAddViewController {
             model.addAttribute("error", error);
             model.addAttribute("start", startDateB);
             model.addAttribute("end", endDateB);
-            return "Booking/addBooking.html";
+            return "Booking/addBooking";
         }
 
         Customer c = customerServices.findByEmail(email);
@@ -102,10 +102,9 @@ public class BookingAddViewController {
             emailSender.sendEmailWithDatabaseTemplate(email,"Booking Confirmed",modelMap,"confirmBookingEmailTemplate");
             System.out.println("Email sent successfully");
         } catch (MessagingException e) {
-            e.printStackTrace();
             System.out.println("Error while sending email");
         }
-        return "Booking/BookingSuccess.html";
+        return "Booking/BookingSuccess";
     }
     @RequestMapping("/confirmBooking")
     @PreAuthorize("isAuthenticated()")
@@ -126,7 +125,7 @@ public class BookingAddViewController {
             model.addAttribute("error", error);
             model.addAttribute("start", startDateB);
             model.addAttribute("end", endDateB);
-            return "Booking/addBooking.html";
+            return "Booking/addBooking";
         }
 
         Room r = roomServices.findById(roomId);
@@ -137,7 +136,7 @@ public class BookingAddViewController {
 
 
 
-        return "Booking/confirmBooking.html";
+        return "Booking/confirmBooking";
     }
 
 
