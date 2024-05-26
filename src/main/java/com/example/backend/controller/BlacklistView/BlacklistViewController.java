@@ -38,7 +38,6 @@ public class BlacklistViewController {
     public String updateBlacklist(@PathVariable Long id, Model model) {
         Blacklist b = blacklistServices.findBlacklistObjById(id);
         if (b != null) {
-            System.out.println(b);
             model.addAttribute("blacklistObj", b);
             return "Blacklist/updateBlacklist.html";
         } else {
@@ -50,14 +49,21 @@ public class BlacklistViewController {
     @RequestMapping("/update/final")
     @PreAuthorize("isAuthenticated()")
     public String updateFinalBlacklist(
+                                        @RequestParam("id") Long id,
                                         @RequestParam("email") String email,
                                         @RequestParam("name") String name,
                                         @RequestParam(value = "isOk", defaultValue = "false") boolean isOk, Model model) {
         System.out.println(name);
         System.out.println(email);
         System.out.println(isOk);
+        String message = blacklistServices.updateBlacklistedPerson(email, name, isOk);
 
-        model.addAttribute("message", blacklistServices.updateBlacklistedPerson(email, name, isOk));
+        if (message.contains("Invalid")) {
+            model.addAttribute("validationMess", message);
+            return updateBlacklist(id, model);
+
+        }
+        model.addAttribute("message", message);
         return getBlacklist(model);
     }
 

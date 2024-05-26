@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class BlacklistServicesImpl implements BlacklistServices {
@@ -83,6 +85,25 @@ public class BlacklistServicesImpl implements BlacklistServices {
     public String addPersonToBlacklist(String email, String name) {
 
         String jsonBody = "{\"email\":\"" + email + "\", \"name\":\"" + name + "\"}";
+
+        StringBuilder errorMess = new StringBuilder();
+
+        boolean nameIsValid = validName(name);
+        boolean emailIsValid = validEmail(email);
+
+        if (!nameIsValid || !emailIsValid) {
+            if (!nameIsValid) {
+                errorMess.append("Invalid name");
+            }
+            if (!emailIsValid) {
+                if (!errorMess.isEmpty()) {
+                    errorMess.append("; ");
+                }
+                errorMess.append("Invalid email");
+            }
+            return errorMess.toString();
+        }
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(integrationProperties.getBlacklist().getUrl()))
                 .header("Content-Type", "application/json")
@@ -93,9 +114,9 @@ public class BlacklistServicesImpl implements BlacklistServices {
 
             if (response.statusCode() == 200) {
                 return "Person added to blacklist successfully.";
+            } else if (response.statusCode() == 400) {
+                return "Email already on blacklist.";
             } else {
-                //När man försöker lägga till en mailadress som redan finns får man 400.
-                //Är det ok att anta att 400 alltid innebär just det?
                 return "Error when adding email to blacklist: " + response.statusCode();
             }
         } catch (Exception e) {
@@ -110,6 +131,10 @@ public class BlacklistServicesImpl implements BlacklistServices {
                 + "\"name\":\"" + newName + "\", "
                 + "\"ok\":" + newOkStatus
                 + "}";
+
+        if (!validName(newName)) {
+            return "Invalid name";
+        }
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(integrationProperties.getBlacklist().getUrl() + "/" + email))
@@ -157,6 +182,30 @@ public class BlacklistServicesImpl implements BlacklistServices {
             }
         }
         return null;
+    }
+
+    public boolean validEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public boolean validName(String name) {
+        String nameRegex = "^[a-zA-ZàáâäãåąčćèéêëėįìíîïłńñòóôöõùúûüųūýÿżźžÀÁÂÄÃÅĄČĆÈÉÊËĖĮÌÍÎÏŁŃÑÒÓÔÖÕÙÚÛÜŲŪÝŸŻŹŽ'\\-\\s]+$";
+
+        Pattern pattern = Pattern.compile(nameRegex);
+
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
     }
 
 }
