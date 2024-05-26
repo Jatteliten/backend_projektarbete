@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/manageTemplates")
+@PreAuthorize("hasAuthority('Admin')")
 public class AdminManageTemplatesController {
     private final ThymeleafTemplateRepo thymeleafTemplateRepo;
     private final EmailSender emailSender;
@@ -28,21 +29,21 @@ public class AdminManageTemplatesController {
     }
 
     @RequestMapping("/allTemplatesFromDatabase")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String getTemplates(Model model) {
         List<ThymeLeafTemplates> listOfTemplates = thymeleafTemplateRepo.findAll();
         model.addAttribute("listOfTemplates",listOfTemplates);
         return "AdminTemplatesEdit/ManageTemplates";
     }
     @RequestMapping("/editTemplate")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String editTemplate(@RequestParam Long templateId, Model model) {
         System.out.println(templateId);
         model.addAttribute("templateId",templateId);
     return "AdminTemplatesEdit/customizeTemplate";
     }
     @RequestMapping("/editTemplate/success")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String editTemplateSuccess(@RequestParam String templateText,@RequestParam Long templateId, Model model) {
         List<ThymeLeafTemplates> listOfTemplates = thymeleafTemplateRepo.findAll();
         model.addAttribute("message","Template updated");
@@ -65,9 +66,9 @@ public class AdminManageTemplatesController {
         return "AdminTemplatesEdit/ManageTemplates";
     }
     @RequestMapping("/createNewTemplates")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String createNewTemplates(@RequestParam String titleName, Model model) {
-        if (!thymeleafTemplateRepo.findByTitle(titleName).isPresent()){
+        if (thymeleafTemplateRepo.findByTitle(titleName).isEmpty()){
             thymeleafTemplateRepo.save(new ThymeLeafTemplates(titleName,""));
         } else {
             model.addAttribute("message","Template with title "+ titleName+" already exists, choose another name.");
@@ -82,7 +83,7 @@ public class AdminManageTemplatesController {
 
 
     @RequestMapping("/editTemplate/testSendEmail")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String testSendEmail(@RequestParam Long templateId, Model model) {
         List<ThymeLeafTemplates> listOfTemplates = thymeleafTemplateRepo.findAll();
         model.addAttribute("message","Test Email sent");
