@@ -319,4 +319,27 @@ public class BlacklistServicesImplTests {
         Blacklist match = blacklistServices.findBlacklistObjById(100L);
         assertNull(match);
     }
+
+    @Test
+    void validEmailShouldReturnTrue() throws IOException, InterruptedException {
+
+    }
+
+    @Test
+    void validEmailShouldReturnFalse() throws IOException, InterruptedException {
+
+    }
+
+    @Test
+    void validNameShouldReturnTrue() throws IOException, InterruptedException {
+
+    }
+
+    @Test
+    void validNameShouldReturnFalse() throws IOException, InterruptedException {
+
+    }
+
+
+    //Testa även att rätt strängar returneras när man försöker lägga till en email som redan finns
 }
