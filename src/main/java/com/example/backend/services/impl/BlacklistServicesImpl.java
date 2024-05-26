@@ -184,6 +184,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
         return null;
     }
 
+    @Override
     public boolean validEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -195,6 +196,7 @@ public class BlacklistServicesImpl implements BlacklistServices {
         return matcher.matches();
     }
 
+    @Override
     public boolean validName(String name) {
         String nameRegex = "^[a-zA-ZàáâäãåąčćèéêëėįìíîïłńñòóôöõùúûüųūýÿżźžÀÁÂÄÃÅĄČĆÈÉÊËĖĮÌÍÎÏŁŃÑÒÓÔÖÕÙÚÛÜŲŪÝŸŻŹŽ'\\-\\s]+$";
 
