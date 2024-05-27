@@ -92,7 +92,7 @@ public class UserViewController {
             userRepo.save(user);
         }
 
-        return "Users/manageUsers.html";
+        return getAllUsers(model);
     }
 
     @GetMapping("/editUser/{username}")
@@ -106,8 +106,9 @@ public class UserViewController {
     @PostMapping("/editUser")
     @PreAuthorize("isAuthenticated()")
     public String editUser(@RequestParam String username, @RequestParam String originalUsername,
-                           @RequestParam String password, @RequestParam(required = false) boolean enabled,
-                           @RequestParam(required = false) boolean adminRole, @RequestParam(required = false) boolean recepRole) {
+                           @RequestParam String password, @RequestParam String originalPassword,
+                           @RequestParam(required = false) boolean enabled, @RequestParam(required = false) boolean adminRole,
+                           @RequestParam(required = false) boolean recepRole, Model model) {
 
         User user = userRepo.getUserByUsername(originalUsername);
         User newUser = new User();
@@ -119,16 +120,18 @@ public class UserViewController {
         if(recepRole){
             roles.add(roleRepository.findByName("Receptionist"));
         }
+        if (!originalPassword.equals(password)) {
+            newUser.setPassword(password);
+        }
         newUser.setId(user.getId());
         newUser.setUsername(username);
         newUser.setEnabled(enabled);
-        newUser.setPassword(password);
         newUser.setRoles(roles);
 
         userRepo.delete(user);
         userRepo.save(newUser);
 
-        return "Users/manageUsers";
+        return getAllUsers(model);
     }
 
     @GetMapping("/deleteUser/{username}")
@@ -141,12 +144,12 @@ public class UserViewController {
 
     @PostMapping("/deleteUser")
     @PreAuthorize("isAuthenticated()")
-    public String deleteUser(@RequestParam String username) {
+    public String deleteUserById(@RequestParam String username, Model model) {
 
         User user = userRepo.getUserByUsername(username);
         userRepo.deleteById(user.getId());
 
-        return "Users/manageUsers.html";
+        return getAllUsers(model);
 
     }
 
