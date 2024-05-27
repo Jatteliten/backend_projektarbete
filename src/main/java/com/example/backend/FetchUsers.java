@@ -47,7 +47,6 @@ public class FetchUsers implements CommandLineRunner {
     }
 
     private void addRole(String name) {
-        Role role = new Role();
         roleRepository.save(Role.builder().name(name).build());
     }
 
