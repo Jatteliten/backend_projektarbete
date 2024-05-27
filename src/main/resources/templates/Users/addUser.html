@@ -56,12 +56,12 @@
 
 <script>
     document.getElementById('addUserForm').addEventListener('submit', function() {
-        var enabledCheckbox = document.getElementById('enabled');
-        var adminCheckbox = document.getElementById('admin');
-        var recepCheckbox = document.getElementById('recep');
-        var hiddenEnabledInput = document.querySelector('input[type="hidden"][name="enabled"]');
-        var hiddenAdminInput = document.querySelector('input[type="hidden"][name="admin"]')
-        var hiddenRecepInput = document.querySelector('input[type="hidden"][name="recep"]')
+        const enabledCheckbox = document.getElementById('enabled');
+        const adminCheckbox = document.getElementById('admin');
+        const recepCheckbox = document.getElementById('recep');
+        const hiddenEnabledInput = document.querySelector('input[type="hidden"][name="enabled"]');
+        const hiddenAdminInput = document.querySelector('input[type="hidden"][name="admin"]');
+        const hiddenRecepInput = document.querySelector('input[type="hidden"][name="recep"]');
         hiddenEnabledInput.value = enabledCheckbox.checked ? 'true' : 'false';
         hiddenAdminInput.value = adminCheckbox.checked ? 'true' : 'false';
         hiddenRecepInput.value = recepCheckbox.checked ? 'true' : 'false';

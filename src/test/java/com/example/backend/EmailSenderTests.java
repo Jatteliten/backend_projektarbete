@@ -35,7 +35,7 @@ class EmailSenderTests {
         integrationProperties = mock(IntegrationProperties.class);
     }
     @Test
-    public void sendEmailWithDatabaseTemplateShouldSendEmailToCorrectEmail() throws MessagingException, IOException {
+    public void sendEmailWithDatabaseTemplateShouldSendEmailToCorrectEmail() throws MessagingException {
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
         emailSender = new EmailSender(integrationProperties,thymeleafTemplateRepo,javaMailSender);
 
@@ -54,7 +54,7 @@ class EmailSenderTests {
         assertEquals("hej", mimeMessage.getSubject());
     }
     @Test
-    public void sendEmailWithDatabaseTemplateShouldSendCorrectSubject() throws MessagingException, IOException {
+    public void sendEmailWithDatabaseTemplateShouldSendCorrectSubject() throws MessagingException {
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
         emailSender = new EmailSender(integrationProperties,thymeleafTemplateRepo,javaMailSender);
 
@@ -73,7 +73,7 @@ class EmailSenderTests {
         assertEquals("hej", mimeMessage.getSubject());
     }
     @Test
-    public void sendEmailWithDatabaseTemplateShouldThrowMessagingException() throws MessagingException, IOException {
+    public void sendEmailWithDatabaseTemplateShouldThrowMessagingException() {
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
         emailSender = new EmailSender(integrationProperties,thymeleafTemplateRepo,javaMailSender);
 

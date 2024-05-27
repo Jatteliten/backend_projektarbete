@@ -2,7 +2,6 @@ package com.example.backend.repos;
 
 import com.example.backend.model.ContractCustomer;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

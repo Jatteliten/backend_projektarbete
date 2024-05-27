@@ -1,16 +1,9 @@
 package com.example.backend;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.example.backend.model.ContractCustomer;
 import com.example.backend.repos.ContractCustomerRepo;
-import com.example.backend.services.XmlStreamProvider;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.InputMismatchException;
 import java.util.Optional;
-import java.util.Set;
 
 public class FetchContractCustomersTests {
 
