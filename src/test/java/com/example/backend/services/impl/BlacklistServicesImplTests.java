@@ -161,7 +161,6 @@ public class BlacklistServicesImplTests {
         String name = "Test Person";
 
         when(mockResponse.statusCode()).thenReturn(200);
-        //Returnar API:et någon body vid success/fail? Isåfall kanske testa det?
         when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockResponse);
 
@@ -182,7 +181,7 @@ public class BlacklistServicesImplTests {
     }
 
     @Test
-    void addPersonToBlacklistFail() throws IOException, InterruptedException {
+    void addPersonToBlacklistStatus500() throws IOException, InterruptedException {
         String email = "test@example.com";
         String name = "John Doe";
 
@@ -202,6 +201,29 @@ public class BlacklistServicesImplTests {
                 any(HttpResponse.BodyHandler.class));
 
         assertEquals("Error when adding email to blacklist: 500", result);
+    }
+
+    @Test
+    void addPersonAlreadyOnBlacklistStatus400() throws IOException, InterruptedException{
+        String email = "test@example.com";
+        String name = "John Doe";
+
+        when(mockResponse.statusCode()).thenReturn(400);
+        when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(mockResponse);
+
+        String result = blacklistServices.addPersonToBlacklist(email, name);
+
+        verify(mockHttpClient).send(argThat(request ->
+                        request.uri().equals(URI.create(integrationProperties.getBlacklist().getUrl())) &&
+                                request.method().equals("POST") &&
+                                request.headers().firstValue("Content-Type").orElse("").equals("application/json") &&
+                                request.bodyPublisher().isPresent() &&
+                                request.bodyPublisher().get().contentLength() > 0
+                ),
+                any(HttpResponse.BodyHandler.class));
+
+        assertEquals("Email already on blacklist.", result);
     }
 
 
@@ -320,26 +342,38 @@ public class BlacklistServicesImplTests {
         assertNull(match);
     }
 
-    @Test
-    void validEmailShouldReturnTrue() throws IOException, InterruptedException {
 
+    @Test
+    void validEmailShouldReturnTrue() {
+        assertTrue(blacklistServices.validEmail("test@example.com"));
+        assertTrue(blacklistServices.validEmail("user_name@example.com"));
+        assertTrue(blacklistServices.validEmail("username@sub.domain.com"));
     }
 
     @Test
-    void validEmailShouldReturnFalse() throws IOException, InterruptedException {
-
+    void validEmailShouldReturnFalse() {
+        assertFalse(blacklistServices.validEmail("plainaddress"));
+        assertFalse(blacklistServices.validEmail("@missingusername.com"));
+        assertFalse(blacklistServices.validEmail("username@.com"));
+        assertFalse(blacklistServices.validEmail("username@.com."));
+        assertFalse(blacklistServices.validEmail("username@domain..com"));
     }
 
     @Test
-    void validNameShouldReturnTrue() throws IOException, InterruptedException {
-
+    void validNameShouldReturnTrue() {
+        assertTrue(blacklistServices.validName("John Doe"));
+        assertTrue(blacklistServices.validName("Émilie du Châtelet"));
+        assertTrue(blacklistServices.validName("O'Connor"));
+        assertTrue(blacklistServices.validName("Anne-Marie"));
+        assertTrue(blacklistServices.validName("Łukasz Żółć"));
     }
 
     @Test
-    void validNameShouldReturnFalse() throws IOException, InterruptedException {
-
+    void validNameShouldReturnFalse() {
+        assertFalse(blacklistServices.validName("John123"));
+        assertFalse(blacklistServices.validName("Anne@Marie"));
+        assertFalse(blacklistServices.validName("Émilie#du#Châtelet"));
+        assertFalse(blacklistServices.validName("John_Doe"));
     }
 
-
-    //Testa även att rätt strängar returneras när man försöker lägga till en email som redan finns
 }
