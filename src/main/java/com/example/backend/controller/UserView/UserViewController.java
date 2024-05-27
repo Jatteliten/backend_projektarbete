@@ -15,15 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping("/Users")
 public class UserViewController {
-    private UserRepository userRepo;
-    private RoleRepository roleRepository;
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepository;
+    private final UserDetailsServiceImpl userDetailsService;
     public UserViewController(UserDetailsServiceImpl userDetailsService, UserRepository userRepo, RoleRepository roleRepository) {
         this.userDetailsService = userDetailsService;
         this.userRepo = userRepo;
@@ -152,7 +151,7 @@ public class UserViewController {
 
     }
 
-    private void getUserAttributes(@PathVariable String username, Model model) {
+    private void getUserAttributes(String username, Model model) {
         User user = userRepo.getUserByUsername(username);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("password", user.getPassword());
