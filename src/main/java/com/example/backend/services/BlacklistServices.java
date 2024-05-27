@@ -11,4 +11,6 @@ public interface BlacklistServices {
     String updateBlacklistedPerson(String email, String newName, boolean newOkStatus);
     List<Blacklist> filterBlacklist(String searchWord);
     Blacklist findBlacklistObjById(Long id);
+    boolean validEmail(String email);
+    boolean validName(String name);
 }
