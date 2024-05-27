@@ -21,22 +21,27 @@
     </form>
 </div>
 <div class="container">
-    <h2 th:text="${header}">Users</h2>
+    <h2>Add New User</h2>
     <div>
         <form action="addUser" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
                 <div class="col-12 m-2">
                     <label for="username">Username</label><br>
-                    <input class="input-sizing" type="text" id="username" name="username" value="example@example.com">
+                    <input class="input-sizing" type="text" id="username" name="username" th:value="${username}">
                 </div>
                 <div class="col-12 m-2">
                     <label for="password">Password</label><br>
-                    <input class="input-sizing" type="password" id="password" name="password" value="password"> <!-- Changed type to password -->
+                    <input class="input-sizing" type="password" id="password" name="password" th:value="${password}">
                 </div>
                 <div class="col-12 m-2">
-                    <label for="enabled">Enabled</label><br>
-                    <input class="input-sizing" type="text" id="enabled" name="enabled">
+                    <label for="enabled">Enabled:</label>
+                    <input type="checkbox" id="enabled" name="enabled" th:checked="${enabled}">
+                </div>
+                <div class="col-12 m-2" >
+                    <label>Role:</label>
+                    <input readonly type="checkbox" id="admin" name="role" th:checked="${adminRole}"> Admin
+                    <input readonly type="checkbox" id="recep" name="role" th:checked="${recepRole}"> Receptionist
                 </div>
                 <div class="col-12 m-2">
                     <button class="btn btn-primary" type="submit">Add User</button>
