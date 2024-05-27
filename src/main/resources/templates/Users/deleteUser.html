@@ -24,7 +24,7 @@
     <h2>Delete User Permanently</h2>
     <div class="container">
         <div>
-            <form action="deleteUser" method="post">
+            <form action="/Users/deleteUser" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="row">
                     <div class="col-12 m-2">

@@ -24,8 +24,9 @@
     <h2>Edit Existing User</h2>
     <div class="container">
         <div>
-            <form th:action="@{/editUser/{username}(username=${username})}" th:method="post">
+            <form action="/Users/editUser" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" id="originalUsername" name="originalUsername" th:value="${username}">
                 <div class="row">
                     <div class="col-12 m-2">
                         <label for="username">Username</label><br>
@@ -41,8 +42,8 @@
                     </div>
                     <div class="col-12 m-2" >
                         <label>Role:</label>
-                        <input readonly type="checkbox" id="admin" name="role" th:checked="${adminRole}"> Admin
-                        <input readonly type="checkbox" id="recep" name="role" th:checked="${recepRole}"> Receptionist
+                        <input type="checkbox" id="admin" name="adminRole" th:checked="${adminRole}"> Admin
+                        <input type="checkbox" id="recep" name="recepRole" th:checked="${recepRole}"> Receptionist
                     </div>
                     <div class="col-12 m-2">
                         <button class="btn btn-primary" type="submit">Update User</button>

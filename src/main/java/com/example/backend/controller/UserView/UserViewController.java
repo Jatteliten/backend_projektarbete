@@ -70,7 +70,7 @@ public class UserViewController {
         try {
             UserDetails test = userDetailsService.loadUserByUsername(username);
 
-            model.addAttribute("header", "Users already exists");
+            model.addAttribute("header", "User already exists");
         } catch (UsernameNotFoundException e) {
             ArrayList<Role> roles = new ArrayList<>();
             if(admin){
@@ -105,12 +105,30 @@ public class UserViewController {
 
     @PostMapping("/editUser")
     @PreAuthorize("isAuthenticated()")
-    public String updateUser() {
+    public String editUser(@RequestParam String username, @RequestParam String originalUsername,
+                           @RequestParam String password, @RequestParam(required = false) boolean enabled,
+                           @RequestParam(required = false) boolean adminRole, @RequestParam(required = false) boolean recepRole) {
 
-        //lägg till kod för att uppdatera user
+        User user = userRepo.getUserByUsername(originalUsername);
+        User newUser = new User();
 
-        return "Users/manageUsers.html";
+        ArrayList<Role> roles = new ArrayList<>();
+        if(adminRole){
+            roles.add(roleRepository.findByName("Admin"));
+        }
+        if(recepRole){
+            roles.add(roleRepository.findByName("Receptionist"));
+        }
+        newUser.setId(user.getId());
+        newUser.setUsername(username);
+        newUser.setEnabled(enabled);
+        newUser.setPassword(password);
+        newUser.setRoles(roles);
 
+        userRepo.delete(user);
+        userRepo.save(newUser);
+
+        return "Users/manageUsers";
     }
 
     @GetMapping("/deleteUser/{username}")
@@ -123,7 +141,10 @@ public class UserViewController {
 
     @PostMapping("/deleteUser")
     @PreAuthorize("isAuthenticated()")
-    public String deleteUser() {
+    public String deleteUser(@RequestParam String username) {
+
+        User user = userRepo.getUserByUsername(username);
+        userRepo.deleteById(user.getId());
 
         return "Users/manageUsers.html";
 
