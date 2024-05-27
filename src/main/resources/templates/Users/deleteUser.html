@@ -37,12 +37,12 @@
                     </div>
                     <div class="col-12 m-2">
                         <label for="enabled">Enabled:</label>
-                        <input readonly type="checkbox" id="enabled" name="enabled" th:checked="${enabled}">
+                        <input disabled type="checkbox" id="enabled" name="enabled" th:checked="${enabled}">
                     </div>
                     <div class="col-12 m-2" >
                         <label>Role:</label>
-                        <input readonly type="checkbox" id="admin" name="role" th:checked="${adminRole}"> Admin
-                        <input readonly type="checkbox" id="recep" name="role" th:checked="${recepRole}"> Receptionist
+                        <input disabled type="checkbox" id="admin" name="role" th:checked="${adminRole}"> Admin
+                        <input disabled type="checkbox" id="recep" name="role" th:checked="${recepRole}"> Receptionist
                     </div>
                     <div class="col-12 m-2">
                         <button class="btn btn-primary" type="submit" style="background: red">Delete user</button>

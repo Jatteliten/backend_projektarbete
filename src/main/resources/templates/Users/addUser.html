@@ -23,7 +23,7 @@
 <div class="container">
     <h2>Add New User</h2>
     <div>
-        <form action="addUser" method="post">
+        <form action="/Users/addUser" method="post" id="addUserForm">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
                 <div class="col-12 m-2">
@@ -36,12 +36,15 @@
                 </div>
                 <div class="col-12 m-2">
                     <label for="enabled">Enabled:</label>
-                    <input type="checkbox" id="enabled" name="enabled" th:checked="${enabled}">
+                    <input type="hidden" name="enabled" value="false">
+                    <input type="checkbox" id="enabled" name="enabled" value="true" th:checked="${enabled}">
                 </div>
-                <div class="col-12 m-2" >
-                    <label>Role:</label>
-                    <input readonly type="checkbox" id="admin" name="role" th:checked="${adminRole}"> Admin
-                    <input readonly type="checkbox" id="recep" name="role" th:checked="${recepRole}"> Receptionist
+                <div class="col-12 m-2">
+                    <label>Role:</label><br>
+                    <input type="hidden" name="admin" value="false">
+                    <input readonly type="checkbox" id="admin" name="admin" th:checked="${adminRole}"> Admin
+                    <input type="hidden" name="recep" value="false">
+                    <input readonly type="checkbox" id="recep" name="recep" th:checked="${recepRole}"> Receptionist
                 </div>
                 <div class="col-12 m-2">
                     <button class="btn btn-primary" type="submit">Add User</button>
@@ -50,6 +53,21 @@
         </form>
     </div>
 </div>
-</body>
 
+<script>
+    document.getElementById('addUserForm').addEventListener('submit', function() {
+        var enabledCheckbox = document.getElementById('enabled');
+        var adminCheckbox = document.getElementById('admin');
+        var recepCheckbox = document.getElementById('recep');
+        var hiddenEnabledInput = document.querySelector('input[type="hidden"][name="enabled"]');
+        var hiddenAdminInput = document.querySelector('input[type="hidden"][name="admin"]')
+        var hiddenRecepInput = document.querySelector('input[type="hidden"][name="recep"]')
+        hiddenEnabledInput.value = enabledCheckbox.checked ? 'true' : 'false';
+        hiddenAdminInput.value = adminCheckbox.checked ? 'true' : 'false';
+        hiddenRecepInput.value = recepCheckbox.checked ? 'true' : 'false';
+    });
+
+</script>
+
+</body>
 </html>
