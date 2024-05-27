@@ -7,7 +7,6 @@ import com.example.backend.security.User;
 import com.example.backend.security.UserDetailsServiceImpl;
 import com.example.backend.security.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +31,7 @@ public class UserViewController {
     }
 
     @GetMapping("/viewUsers")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String getAllUsers(Model model){
 
         List<User> users = (List<User>) userRepo.findAll();
@@ -49,7 +48,7 @@ public class UserViewController {
 
     }
     @GetMapping("/addUser")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String addUser(Model model) {
         model.addAttribute("username", " ");
         model.addAttribute("password", "   ");
@@ -59,7 +58,7 @@ public class UserViewController {
 
 
     @PostMapping("/addUser")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String addUser(@RequestParam String username, @RequestParam String password,
                           @RequestParam boolean enabled, @RequestParam boolean admin,
                           @RequestParam boolean recep,  Model model){
@@ -96,7 +95,7 @@ public class UserViewController {
     }
 
     @GetMapping("/editUser/{username}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String editUser(@PathVariable String username, Model model) {
         getUserAttributes(username, model);
 
@@ -104,7 +103,7 @@ public class UserViewController {
     }
 
     @PostMapping("/editUser")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String editUser(@RequestParam String username, @RequestParam String originalUsername,
                            @RequestParam String password, @RequestParam String originalPassword,
                            @RequestParam(required = false) boolean enabled, @RequestParam(required = false) boolean adminRole,
@@ -135,7 +134,7 @@ public class UserViewController {
     }
 
     @GetMapping("/deleteUser/{username}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String deleteUser(@PathVariable String username, Model model) {
         getUserAttributes(username, model);
 
@@ -143,7 +142,7 @@ public class UserViewController {
     }
 
     @PostMapping("/deleteUser")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('Admin')")
     public String deleteUserById(@RequestParam String username, Model model) {
 
         User user = userRepo.getUserByUsername(username);
