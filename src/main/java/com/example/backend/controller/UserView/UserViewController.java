@@ -113,7 +113,6 @@ public class UserViewController {
 
     }
 
-    //funkar ej, fälten blir tomma
     @GetMapping("/deleteUser/{username}")
     @PreAuthorize("isAuthenticated()")
     public String deleteUser(@PathVariable String username, Model model) {
