@@ -1,6 +1,8 @@
 package com.example.backend.controller.UserView;
 
 import com.example.backend.security.ConcreteUserDetails;
+import com.example.backend.security.PasswordLink;
+import com.example.backend.security.PasswordLinkRepository;
 import com.example.backend.security.Role;
 import com.example.backend.security.RoleRepository;
 import com.example.backend.security.User;
@@ -114,9 +116,8 @@ public class UserViewController {
                            @RequestParam(required = false) boolean recepRole, Model model) {
 
         User user = userRepo.getUserByUsername(originalUsername);
-        User newUser = new User();
-
         ArrayList<Role> roles = new ArrayList<>();
+
         if(adminRole){
             roles.add(roleRepository.findByName("Admin"));
         }
