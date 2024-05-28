@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "email": "birgitta.olsson@hotmail.com",
+    "companyName": "Svensson-Karlsson",
+    "contactName": "Erik Östlund",
+    "contactTitle": "painter",
+    "streetAddress": "Järnvägsallén 955",
+    "city": "Gävhult",
+    "postalCode": "07427",
+    "country": "Sverige",
+    "phone": "070-569-3764",
+    "fax": "2634-25376"
+  },
+  {
+    "id": 2,
+    "email": "lars.aslund@hotmail.com",
+    "companyName": "Änglund, Svensson AB",
+    "contactName": "Nils Östlund",
+    "contactTitle": "newsreader",
+    "streetAddress": "Åsas Gata 15",
+    "city": "Kristby",
+    "postalCode": "84699",
+    "country": "Sverige",
+    "phone": "073-820-0856",
+    "fax": "8238-27759"
+  },
+  {
+    "id": 3,
+    "email": "karin.ostlund@yahoo.com",
+    "companyName": "Karlsson Gruppen",
+    "contactName": "Anders Johansson",
+    "contactTitle": "dentist",
+    "streetAddress": "Östlunds Gata 0",
+    "city": "Faltuna",
+    "postalCode": "85980",
+    "country": "Sverige",
+    "phone": "076-869-7192",
+    "fax": "7430-900849"
+  }
+  ]
