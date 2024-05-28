@@ -4,6 +4,7 @@ import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.services.XmlStreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,6 +24,10 @@ class FetchContractCustomersTestIntegration {
     ContractCustomerRepo contractCustomerRepo;
     @Autowired
     XmlStreamProvider xmlStreamProvider;
+    @Value("${integrations.contractCustomers.testData}")
+            private String contractCustomersTestDataUrl;
+
+
 
     FetchContractCustomers sut;
 

@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class ContractCustomersProperties {
     private String url;
+    private String contractCustomerTestUrl;
 }
