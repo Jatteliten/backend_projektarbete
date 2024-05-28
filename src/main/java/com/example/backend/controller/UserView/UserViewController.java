@@ -120,7 +120,9 @@ public class UserViewController {
             roles.add(roleRepository.findByName("Receptionist"));
         }
         if (!originalPassword.equals(password)) {
-            user.setPassword(password);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String hash = encoder.encode(password);
+            user.setPassword(hash);
         }
         user.setUsername(username);
         user.setEnabled(enabled);
