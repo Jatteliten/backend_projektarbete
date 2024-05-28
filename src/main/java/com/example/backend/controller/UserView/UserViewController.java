@@ -7,6 +7,7 @@ import com.example.backend.security.User;
 import com.example.backend.security.UserDetailsServiceImpl;
 import com.example.backend.security.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,18 +16,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping("/Users")
 public class UserViewController {
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepository;
-    private final UserDetailsServiceImpl userDetailsService;
-    public UserViewController(UserDetailsServiceImpl userDetailsService, UserRepository userRepo, RoleRepository roleRepository) {
+    private UserRepository userRepo;
+    private RoleRepository roleRepository;
+    private UserDetailsServiceImpl userDetailsService;
+    private PasswordLinkRepository passwordLinkRepository;
+    public UserViewController(UserDetailsServiceImpl userDetailsService, UserRepository userRepo,
+                              RoleRepository roleRepository, PasswordLinkRepository passwordLinkRepository) {
         this.userDetailsService = userDetailsService;
         this.userRepo = userRepo;
         this.roleRepository = roleRepository;
+        this.passwordLinkRepository = passwordLinkRepository;
     }
 
     @GetMapping("/viewUsers")
@@ -119,15 +124,15 @@ public class UserViewController {
             roles.add(roleRepository.findByName("Receptionist"));
         }
         if (!originalPassword.equals(password)) {
-            newUser.setPassword(password);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String hash = encoder.encode(password);
+            user.setPassword(hash);
         }
-        newUser.setId(user.getId());
-        newUser.setUsername(username);
-        newUser.setEnabled(enabled);
-        newUser.setRoles(roles);
+        user.setUsername(username);
+        user.setEnabled(enabled);
+        user.setRoles(roles);
 
-        userRepo.delete(user);
-        userRepo.save(newUser);
+        userRepo.save(user);
 
         return getAllUsers(model);
     }
@@ -145,6 +150,8 @@ public class UserViewController {
     public String deleteUserById(@RequestParam String username, Model model) {
 
         User user = userRepo.getUserByUsername(username);
+        List<PasswordLink> passwordRequests = passwordLinkRepository.findAllByUserId(user.getId());
+        passwordLinkRepository.deleteAll(passwordRequests);
         userRepo.deleteById(user.getId());
 
         return getAllUsers(model);
