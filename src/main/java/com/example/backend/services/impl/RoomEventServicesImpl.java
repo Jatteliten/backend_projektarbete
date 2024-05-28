@@ -7,7 +7,6 @@ import com.example.backend.repos.DoorEventRepo;
 import com.example.backend.services.RoomEventServices;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

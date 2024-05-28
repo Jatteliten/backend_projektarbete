@@ -23,6 +23,7 @@ import com.rabbitmq.client.DeliverCallback;
 import com.example.backend.events.RoomEvent;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 @ComponentScan
@@ -54,7 +55,7 @@ public class FetchEventQueue implements CommandLineRunner {
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
             if(roomEvent instanceof RoomCleaningFinished){
                 saveRoomCleaningFinished(roomEvent);

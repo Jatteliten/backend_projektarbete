@@ -1,6 +1,5 @@
 package com.example.backend;
 
-import com.example.backend.model.ContractCustomer;
 import com.example.backend.model.Shipper;
 import com.example.backend.model.modelUti.ShipperDto;
 import com.example.backend.repos.ShipperRepo;
@@ -15,7 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.util.InputMismatchException;
 import java.util.Set;
 

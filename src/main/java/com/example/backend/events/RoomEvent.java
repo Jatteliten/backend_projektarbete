@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = RoomClosed.class, name = "RoomClosed"),

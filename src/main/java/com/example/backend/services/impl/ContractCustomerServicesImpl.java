@@ -7,8 +7,6 @@ import com.example.backend.repos.ContractCustomerRepo;
 import com.example.backend.services.ContractCustomerServices;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ContractCustomerServicesImpl implements ContractCustomerServices {
     private final ContractCustomerRepo ccr;

@@ -2,7 +2,6 @@ package com.example.backend.services.impl;
 
 import com.example.backend.Dto.BookingViews.DetailedBookingDto;
 import com.example.backend.Dto.BookingViews.MiniBookingDto;
-import com.example.backend.Dto.CustomerViews.MiniCustomerDto;
 import com.example.backend.Dto.RoomViews.MiniRoomDto;
 import com.example.backend.model.Booking;
 import com.example.backend.model.Customer;
