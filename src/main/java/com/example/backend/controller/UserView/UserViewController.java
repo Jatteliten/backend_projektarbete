@@ -111,7 +111,6 @@ public class UserViewController {
                            @RequestParam(required = false) boolean recepRole, Model model) {
 
         User user = userRepo.getUserByUsername(originalUsername);
-        User newUser = new User();
 
         ArrayList<Role> roles = new ArrayList<>();
         if(adminRole){
@@ -121,15 +120,13 @@ public class UserViewController {
             roles.add(roleRepository.findByName("Receptionist"));
         }
         if (!originalPassword.equals(password)) {
-            newUser.setPassword(password);
+            user.setPassword(password);
         }
-        newUser.setId(user.getId());
-        newUser.setUsername(username);
-        newUser.setEnabled(enabled);
-        newUser.setRoles(roles);
+        user.setUsername(username);
+        user.setEnabled(enabled);
+        user.setRoles(roles);
 
-        userRepo.delete(user);
-        userRepo.save(newUser);
+        userRepo.save(user);
 
         return getAllUsers(model);
     }
