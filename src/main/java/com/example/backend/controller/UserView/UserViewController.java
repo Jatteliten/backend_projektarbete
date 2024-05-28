@@ -1,6 +1,8 @@
 package com.example.backend.controller.UserView;
 
 import com.example.backend.security.ConcreteUserDetails;
+import com.example.backend.security.PasswordLink;
+import com.example.backend.security.PasswordLinkRepository;
 import com.example.backend.security.Role;
 import com.example.backend.security.RoleRepository;
 import com.example.backend.security.User;
@@ -25,10 +27,13 @@ public class UserViewController {
     private UserRepository userRepo;
     private RoleRepository roleRepository;
     private UserDetailsServiceImpl userDetailsService;
-    public UserViewController(UserDetailsServiceImpl userDetailsService, UserRepository userRepo, RoleRepository roleRepository) {
+    private PasswordLinkRepository passwordLinkRepository;
+    public UserViewController(UserDetailsServiceImpl userDetailsService, UserRepository userRepo,
+                              RoleRepository roleRepository, PasswordLinkRepository passwordLinkRepository) {
         this.userDetailsService = userDetailsService;
         this.userRepo = userRepo;
         this.roleRepository = roleRepository;
+        this.passwordLinkRepository = passwordLinkRepository;
     }
 
     @GetMapping("/viewUsers")
@@ -146,6 +151,8 @@ public class UserViewController {
     public String deleteUserById(@RequestParam String username, Model model) {
 
         User user = userRepo.getUserByUsername(username);
+        List<PasswordLink> passwordRequests = passwordLinkRepository.findAllByUserId(user.getId());
+        passwordLinkRepository.deleteAll(passwordRequests);
         userRepo.deleteById(user.getId());
 
         return getAllUsers(model);
