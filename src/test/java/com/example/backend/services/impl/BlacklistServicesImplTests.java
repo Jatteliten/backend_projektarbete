@@ -30,7 +30,7 @@ public class BlacklistServicesImplTests {
     @Autowired
     private IntegrationProperties integrationProperties;
 
-    private HttpClient mockHttpClient = mock(HttpClient.class);
+    private final HttpClient mockHttpClient = mock(HttpClient.class);
 
     private BlacklistServicesImpl blacklistServices;
 

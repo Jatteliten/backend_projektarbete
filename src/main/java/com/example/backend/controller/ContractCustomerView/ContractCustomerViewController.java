@@ -22,7 +22,7 @@ import java.util.List;
 public class ContractCustomerViewController {
 
     private final ContractCustomerServices contractCustomerServices;
-    private ContractCustomerRepo repo;
+    private final ContractCustomerRepo repo;
 
     public ContractCustomerViewController(ContractCustomerServices contractCustomerServices, ContractCustomerRepo repo) {
         this.contractCustomerServices = contractCustomerServices;

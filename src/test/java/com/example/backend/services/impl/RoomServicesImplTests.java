@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,20 +55,20 @@ class RoomServicesImplTests {
 
     @Test
     void getAllDetailedRoomsTest() {
-        when(roomRepo.findAll()).thenReturn(Arrays.asList(r1));
+        when(roomRepo.findAll()).thenReturn(Collections.singletonList(r1));
         RoomServicesImpl services = new RoomServicesImpl(roomRepo);
         List<DetailedRoomDto> allDRD = services.getAllDetailedRooms();
 
-        assertTrue(allDRD.size() == 1);
+        assertEquals(1, allDRD.size());
     }
 
     @Test
     void getAllMiniRoomsTest() {
-        when(roomRepo.findAll()).thenReturn(Arrays.asList(r1));
+        when(roomRepo.findAll()).thenReturn(Collections.singletonList(r1));
         RoomServicesImpl services = new RoomServicesImpl(roomRepo);
         List<MiniRoomDto> allMR = services.getAllMiniRooms();
 
-        assertTrue(allMR.size() == 1);
+        assertEquals(1, allMR.size());
     }
 
     @Test
