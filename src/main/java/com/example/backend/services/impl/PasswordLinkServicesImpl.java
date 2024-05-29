@@ -25,14 +25,12 @@ public class PasswordLinkServicesImpl implements PasswordLinkServices{
     public String saveNewPassword(String email, String newPassword){
         User user = userRepository.getUserByUsername(email);
         if(user != null && newPassword.length() > 5){
-            System.out.println("wiie");
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             String hash = encoder.encode(newPassword);
             user.setPassword(hash);
             userRepository.save(user);
             return "success";
         }else{
-            System.out.println("woo");
             return "password too short";
         }
     }
