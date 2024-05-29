@@ -23,16 +23,16 @@
 <div class="container">
     <h2>Add New User</h2>
     <div>
-        <form action="/Users/addUser" method="post" id="addUserForm">
+        <form action="/Users/addUser" method="post" id="addUserForm" autocomplete="off">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
                 <div class="col-12 m-2">
                     <label for="username">Username</label><br>
-                    <input class="input-sizing" type="text" id="username" name="username" th:value="${username}">
+                    <input class="input-sizing" type="text" id="username" name="username" th:value="${username}" autocomplete="off">
                 </div>
                 <div class="col-12 m-2">
                     <label for="password">Password</label><br>
-                    <input class="input-sizing" type="password" id="password" name="password" th:value="${password}">
+                    <input class="input-sizing" type="password" id="password" name="password" th:value="${password}" autocomplete="new-password">
                 </div>
                 <div class="col-12 m-2">
                     <label for="enabled">Enabled:</label>

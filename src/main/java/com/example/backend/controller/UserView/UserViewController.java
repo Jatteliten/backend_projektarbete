@@ -55,9 +55,7 @@ public class UserViewController {
     }
     @GetMapping("/addUser")
     @PreAuthorize("hasAuthority('Admin')")
-    public String addUser(Model model) {
-        model.addAttribute("username", " ");
-        model.addAttribute("password", "   ");
+    public String addUser() {
 
         return "Users/addUser.html";
     }
