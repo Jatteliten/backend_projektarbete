@@ -47,6 +47,8 @@ public class UserViewControllerTests {
                 .roles(roles)
                 .build();
 
+        userRepo.save(user);
+
         userRepo.deleteById(user.getId());
         verify(userRepo, times(1)).deleteById(user.getId());
 
