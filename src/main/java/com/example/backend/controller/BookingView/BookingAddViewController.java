@@ -112,11 +112,14 @@ public class BookingAddViewController {
                                  @RequestParam LocalDate endDateB, Model model) {
         String error = null;
         Customer c = customerServices.findByEmail(email);
-        if (c == null) {
-            error = "No customer with email: " + email + " found.";
-        } else if (blacklistServices.isBlacklisted(email)) {
+
+
+        if (blacklistServices.isBlacklisted(email)) {
             error = "Customer with email " + email + " is blacklisted.";
+        } else if (c == null) {
+            error = "No customer with email: " + email + " found.";
         }
+
         if (error != null) {
             List<Room> rooms = List.of(roomServices.findById(roomId));
             model.addAttribute("title", "Available rooms");
