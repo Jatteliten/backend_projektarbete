@@ -4,83 +4,113 @@ import com.example.backend.security.PasswordLink;
 import com.example.backend.security.PasswordLinkRepository;
 import com.example.backend.security.User;
 import com.example.backend.security.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class PasswordLinkServicesImplTests {
 
     @Mock
-    PasswordLinkRepository passwordLinkRepository;
+    private UserRepository userRepository;
+
     @Mock
-    UserRepository userRepository;
+    private PasswordLinkRepository passwordLinkRepository;
+
     @InjectMocks
-    PasswordLinkServicesImpl pls;
-
-    User u1 = User.builder().id(UUID.randomUUID()).password("password").build();
-    PasswordLink p1 = PasswordLink.builder()
-            .linkKey("testLinkKey")
-            .alreadyUsed(false)
-            .timeSent(LocalDate.now())
-            .id(UUID.randomUUID())
-            .user(u1)
-            .build();
-
+    private PasswordLinkServicesImpl passwordLinkServices;
 
     @BeforeEach
-    public void init() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
+    void saveNewPasswordShouldSave() {
+        String email = "test@example.com";
+        String newPassword = "newPassword123";
+        User user = User.builder().username(email).build();
+
+        when(userRepository.getUserByUsername(email)).thenReturn(user);
+
+        String result = passwordLinkServices.saveNewPassword(email, newPassword);
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+
+        User savedUser = userCaptor.getValue();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        assertTrue(encoder.matches(newPassword, savedUser.getPassword()));
+        assertEquals("success", result);
+    }
+
+    @Test
+    void saveNewPasswordShouldNotSaveIfPasswordIsTooShort() {
+        String email = "test@example.com";
+        String newPassword = "short";
+
+        String result = passwordLinkServices.saveNewPassword(email, newPassword);
+
+        assertEquals("password too short", result);
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void saveNewPasswordUserDoesNotExist() {
+        String email = "test@example.com";
+        String newPassword = "newPassword123";
+
+        when(userRepository.getUserByUsername(email)).thenReturn(null);
+
+        String result = passwordLinkServices.saveNewPassword(email, newPassword);
+
+        assertEquals("password too short", result);
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
     void generateCreateNewPasswordLinkShouldGenerateCorrectLink() {
-        String newLink = pls.generateCreateNewPasswordLink(p1);
+        PasswordLink passwordLink = PasswordLink.builder().linkKey("someKey").build();
 
-        Assertions.assertEquals("http://localhost:8080/newPassword/" + p1.getLinkKey(), newLink);
+        String result = passwordLinkServices.generateCreateNewPasswordLink(passwordLink);
+
+        assertEquals("http://localhost:8080/newPassword/someKey", result);
     }
 
     @Test
-    void findByLinkKeyShouldFindCorrectPasswordLink() {
-        when(pls.findByLinkKey("testLinkKey")).thenReturn(p1);
+    void findByLinkKeyShouldReturnCorrectPasswordLink() {
+        String linkKey = "someKey";
+        PasswordLink passwordLink = PasswordLink.builder().linkKey(linkKey).build();
 
-        PasswordLink p2 = pls.findByLinkKey("testLinkKey");
+        when(passwordLinkRepository.findByLinkKey(linkKey)).thenReturn(passwordLink);
 
-        Assertions.assertEquals(p1.getLinkKey(), p2.getLinkKey());
-        Assertions.assertEquals(p1.isAlreadyUsed(), p2.isAlreadyUsed());
-        Assertions.assertEquals(p1.getTimeSent(), p2.getTimeSent());
-        Assertions.assertEquals(p1.getId(), p2.getId());
-        Assertions.assertEquals(p1.getUser(), p2.getUser());
+        PasswordLink result = passwordLinkServices.findByLinkKey(linkKey);
+
+        assertEquals(passwordLink, result);
     }
 
     @Test
-    void saveNewPasswordShouldNotSavePasswordsShorterThanFiveCharacters(){
-        String test = pls.saveNewPassword("Mail@mail.se", "hej");
+    void savePassWordLinkShouldSave() {
+        PasswordLink passwordLink = new PasswordLink();
 
-        Assertions.assertEquals(test, "password too short");
+        passwordLinkServices.savePassWordLink(passwordLink);
+
+        verify(passwordLinkRepository).save(passwordLink);
     }
 
     @Test
-    void saveNewPasswordShouldSavePasswordsLongerThanFiveCharacters(){
-        when(userRepository.getUserByUsername("Mail@mail.se")).thenReturn(u1);
-        String test = pls.saveNewPassword("Mail@mail.se", "hejsansvejsan");
+    void setPassWordLinkToUsedShouldSetPasswordLinkToUsed() {
+        PasswordLink passwordLink = new PasswordLink();
 
-        Assertions.assertEquals(test, "success");
-        u1.setPassword("password");
-    }
+        passwordLinkServices.setPassWordLinkToUsed(passwordLink);
 
-    @Test
-    void setPasswordLinkToUsedShouldSetPasswordLinkToUsed(){
-        pls.setPassWordLinkToUsed(p1);
-
-        Assertions.assertEquals(p1.isAlreadyUsed(), true);
-        p1.setAlreadyUsed(false);
+        assertTrue(passwordLink.isAlreadyUsed());
+        verify(passwordLinkRepository).save(passwordLink);
     }
 }
