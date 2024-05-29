@@ -54,10 +54,12 @@
                     <input class="mb-4" type="hidden" id="email" name="email" th:field="${blacklistObj.email}">
 
                     <label for="name">Name: </label>
-                    <input class="input-sizing mb-3" type="text" id="name" name="name" th:field="${blacklistObj.name}"><br>
+                    <input class="input-sizing mb-3" type="text" id="name" name="name"
+                           th:field="${blacklistObj.name}"><br>
 
                     <label for="isOk">Allow customer in system:</label>
-                    <input class="checkbox-size" type="checkbox" id="isOk" name="isOk" th:checked="${blacklistObj.isOk}"><br><br>
+                    <input class="checkbox-size" type="checkbox" id="isOk" name="isOk"
+                           th:checked="${blacklistObj.isOk}"><br><br>
 
                     <input type="submit" class="btn btn-outline-secondary" value="Update"><br>
                 </div>
