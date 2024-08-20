@@ -31,8 +31,8 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
-    implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
     implementation ("jakarta.validation:jakarta.validation-api:3.0.0")
+    implementation("org.hibernate:hibernate-core:6.2.0.Final")
     implementation ("org.hibernate.validator:hibernate-validator:7.0.1.Final")
     implementation ("org.glassfish:jakarta.el:4.0.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
@@ -45,8 +45,6 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("jakarta.mail:jakarta.mail-api:2.1.2")
-    // https://mvnrepository.com/artifact/org.eclipse.angus/jakarta.mail
-//    implementation("org.eclipse.angus:jakarta.mail:2.0.2")
     implementation("com.sun.mail:jakarta.mail:2.0.1")
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
